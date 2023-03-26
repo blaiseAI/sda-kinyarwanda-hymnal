@@ -1,0 +1,7 @@
+{
+  "name": "sda-hymnal-2.0",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
