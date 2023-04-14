@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>v{{ appVersion }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-divider>About</ion-item-divider>
+    <ion-item>
+      <ion-label>
+        <ion-text color="primary">
+          <h2>{{ appName }}</h2>
+        </ion-text>
+        <p>{{ appDescription }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item button href="https://github.com/yourusername/yourappname">
+      <ion-icon slot="start" name="logo-github"></ion-icon>
+      <ion-label>
+        <ion-text color="primary">
+          <h2>GitHub Repository</h2>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item button href="https://twitter.com/yourusername">
+      <ion-icon slot="start" name="logo-twitter"></ion-icon>
+      <ion-label>
+        <ion-text color="primary">
+          <h2>Twitter</h2>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-item-divider>More</ion-item-divider>
+    <ion-item button>
+      <ion-icon slot="start" name="chatbox-ellipses"></ion-icon>
+      <ion-label>
+        <ion-text color="primary">
+          <h2>Feedback</h2>
+        </ion-text>
+        <p>Send us your feedback</p>
+      </ion-label>
+    </ion-item>
+    <ion-item button>
+      <ion-icon slot="start" name="star"></ion-icon>
+      <ion-label>
+        <ion-text color="primary">
+          <h2>Rate this App</h2>
+        </ion-text>
+        <p>Give us a 5-star rating</p>
+      </ion-label>
+    </ion-item>
+    <ion-item-sliding *ngIf="isMobile">
+      <ion-item button (click)="shareApp()">
+        <ion-icon slot="start" name="share-social"></ion-icon>
+        <ion-label>
+          <ion-text color="primary">
+            <h2>Share this App</h2>
+          </ion-text>
+          <p>Share this app with your friends</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="shareApp('twitter')">
+          <ion-icon slot="icon-only" name="logo-twitter"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="primary" (click)="shareApp('facebook')">
+          <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="primary" (click)="shareApp('whatsapp')">
+          <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    <ion-item lines="none">
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-text color="primary">
+            <h2>Special Message</h2>
+          </ion-text>
+          <ion-text><b>SDA Kinyarwanda Hymnal app</b> - created with passion by <b>Blaise Sebagabo</b> , a solo software
+            developer
+            based in
+            Edmonton, Canada. If you find this app helpful, please leave a review and share it with your friends and
+            family. Thank you for your support!</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

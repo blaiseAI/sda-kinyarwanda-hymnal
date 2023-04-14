@@ -1,0 +1,16 @@
+cdk-virtual-scroll-viewport {
+  height: 100%;
+  width: 100%;
+}
+cdk-virtual-scroll-viewport ::ng-deep .cdk-virtual-scroll-content-wrapper {
+  max-width: 100%;
+}
+ion-spinner {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 8px;
+}
+// ion-searchbar {
+//   background-color: var(--ion-color-tertiary);
+//   color: var(--ion-color-light);
+// }

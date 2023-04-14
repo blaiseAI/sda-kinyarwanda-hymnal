@@ -1,10 +1,16 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'sda-hymnal-2.0',
+  appId: 'com.devseb.sdaKinyarwandaHymnal',
+  appName: 'SDA Kinyarwanda Hymnal App',
+  bundledWebRuntime: false,
   webDir: 'www',
-  bundledWebRuntime: false
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: true,
+      launchShowDuration: 3000,
+    },
+  },
 };
 
 export default config;

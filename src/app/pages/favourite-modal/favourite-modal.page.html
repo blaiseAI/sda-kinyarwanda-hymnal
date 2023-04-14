@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Add to Favorites
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-radio-group [(ngModel)]="selectedFavoriteId" [allowEmptySelection]="true">
+    <ion-list>
+      <ion-item *ngFor="let favorite of favourites">
+        <ion-label>
+          <ion-text color="primary">{{ favorite.name }}</ion-text>
+          <p class="hymn-count">{{ favorite.hymnIds.length }} hymn(s)</p>
+        </ion-label>
+        <ion-radio [value]="favorite.id"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </ion-radio-group>
+
+  <ion-item>
+    <ion-input placeholder="New Favorite List" [(ngModel)]="newFavoriteName"></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" color="primary" [disabled]="!(favourites.length > 0 || newFavoriteName !== '')"
+    (click)="addHymnToFavourite()">Add</ion-button>
+</ion-content>

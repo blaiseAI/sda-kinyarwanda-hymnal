@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Indirimbo za 350</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search"
+      showCancelButton="always"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="(filteredHymns ) as hymns; else skeleton">
+    <ion-item *ngFor="let hymn of hymns ; trackBy: trackByFn" [routerLink]="['/tabs/hymns', hymn.hymnNumber]"
+      routerLinkActive="router-link-active">
+      <ion-label>
+        <h2>{{hymn.hymnNumber}} - {{hymn.hymnTitle}}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="(filteredHymns )?.length === 0">
+      <ion-label>
+        <h2>No hymns found</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ng-template #skeleton>
+    <ion-list>
+      <ion-item>
+        <ion-skeleton-text [animated]="true" count="10"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text [animated]="true" count="10"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text [animated]="true" count="10"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-content>

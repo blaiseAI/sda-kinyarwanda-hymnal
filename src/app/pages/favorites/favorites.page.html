@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Favorites</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleEditMode()">
+        {{ editMode ? 'Done' : 'Edit' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="filteredFavorites.length; else emptyList">
+    <ion-list #myList>
+      <ion-item-sliding *ngFor="let fav of filteredFavorites">
+        <ion-item>
+          <ion-label [routerLink]="['/tabs/favorites', fav.id]">
+            <ion-text color="primary">{{ fav.name }}</ion-text>
+            <p class="hymn-count">{{ fav.hymnIds.length }} hymn(s)</p>
+          </ion-label>
+          <ion-badge slot="end">{{ fav.id | date }}</ion-badge>
+          <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="deleteFavorite(fav)">
+            <ion-icon name="remove-circle"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" expandable (click)="deleteFavorite(fav)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </ng-container>
+  <ng-template #emptyList>
+    <ion-item>
+      <ion-text color="medium" class="ion-text-center">
+        No favorites found.
+      </ion-text>
+    </ion-item>
+  </ng-template>
+</ion-content>
