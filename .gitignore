@@ -13,6 +13,7 @@ $RECYCLE.BIN/
 log.txt
 
 
+
 /.sourcemaps
 /.versions
 /coverage
@@ -28,6 +29,10 @@ log.txt
 /tmp
 /out-tsc
 /bazel-out
+
+# Data
+/data
+
 
 # Node
 /node_modules
