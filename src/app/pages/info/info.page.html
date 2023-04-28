@@ -1,82 +1,103 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>v{{ appVersion }}</ion-title>
+    <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-item-divider>About</ion-item-divider>
-    <ion-item>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-list [inset]="true">
+    <ion-item color="light">
+      <ion-icon slot="start" name="moon"></ion-icon>
       <ion-label>
-        <ion-text color="primary">
-          <h2>{{ appName }}</h2>
+        <ion-text>
+          <h2>Dark Mode</h2>
         </ion-text>
-        <p>{{ appDescription }}</p>
       </ion-label>
+      <ion-toggle name="darkMode" (ionChange)="toggleDarkMode($event)"></ion-toggle>
     </ion-item>
-    <ion-item button href="https://github.com/yourusername/yourappname">
+  </ion-list>
+  <ion-list [inset]="true">
+    <ion-item color="light" button href="https://github.com/blaiseAI/sda-kinyarwanda-hymnal">
       <ion-icon slot="start" name="logo-github"></ion-icon>
       <ion-label>
-        <ion-text color="primary">
+        <ion-text>
           <h2>GitHub Repository</h2>
         </ion-text>
       </ion-label>
     </ion-item>
-    <ion-item button href="https://twitter.com/yourusername">
-      <ion-icon slot="start" name="logo-twitter"></ion-icon>
+    <ion-item color="light" color="light" button href="https://seblaise.dev">
+      <ion-icon slot="start" name="globe-outline"></ion-icon>
       <ion-label>
-        <ion-text color="primary">
-          <h2>Twitter</h2>
+        <ion-text>
+          <h2>Website</h2>
         </ion-text>
       </ion-label>
     </ion-item>
-
-    <ion-item-divider>More</ion-item-divider>
-    <ion-item button>
+  </ion-list>
+  <ion-list [inset]="true">
+    <ion-item color="light" button>
       <ion-icon slot="start" name="chatbox-ellipses"></ion-icon>
       <ion-label>
-        <ion-text color="primary">
+        <ion-text>
           <h2>Feedback</h2>
         </ion-text>
         <p>Send us your feedback</p>
       </ion-label>
     </ion-item>
-    <ion-item button>
+    <ion-item color="light" button>
       <ion-icon slot="start" name="star"></ion-icon>
       <ion-label>
-        <ion-text color="primary">
+        <ion-text>
           <h2>Rate this App</h2>
         </ion-text>
         <p>Give us a 5-star rating</p>
       </ion-label>
     </ion-item>
     <ion-item-sliding *ngIf="isMobile">
-      <ion-item button (click)="shareApp()">
+      <ion-item color="light" button (click)="shareApp()">
         <ion-icon slot="start" name="share-social"></ion-icon>
         <ion-label>
-          <ion-text color="primary">
+          <ion-text>
             <h2>Share this App</h2>
           </ion-text>
           <p>Share this app with your friends</p>
         </ion-label>
       </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="shareApp('twitter')">
-          <ion-icon slot="icon-only" name="logo-twitter"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="primary" (click)="shareApp('facebook')">
-          <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="primary" (click)="shareApp('whatsapp')">
-          <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
     </ion-item-sliding>
+  </ion-list>
+
+  <ion-list [inset]="true">
+    <ion-item color="light" button href="https://seblaise.dev/privacy-policy">
+      <ion-icon slot="start" name="document-text-outline"></ion-icon>
+      <ion-label>
+        <ion-text>
+          <h2>Privacy Policy</h2>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item color="light" button href="https://seblaise.dev/terms-and-conditions">
+      <ion-icon slot="start" name="document-text-outline"></ion-icon>
+      <ion-label>
+        <ion-text>
+          <h2>Terms and Conditions</h2>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!--Developer Info Made with Love By Blaise-->
+
+  <ion-list [inset]="true">
     <ion-item lines="none">
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-text color="primary">
+          <ion-text>
             <h2>Special Message</h2>
           </ion-text>
           <ion-text><b>SDA Kinyarwanda Hymnal app</b> - created with passion by <b>Blaise Sebagabo</b> , a solo software

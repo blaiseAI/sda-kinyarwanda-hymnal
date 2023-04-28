@@ -84,7 +84,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Abarokots'Ibyago Byo Hasi.",
+    hymnTitle: "Abarokots'Ibyago Byo Hasi",
     hymnNumber: 8,
     verses: [
       '1. Abarokots’ ibyago byo hasi hazakoranywa,\nAb’ azatumir’ azajyana na bo.\nUmwami n’agaruk’ ikondera rye rizavuga,\natek’ azab’ agiye gucibwa.',
@@ -216,7 +216,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Ba Mas' Udacumusa",
+    hymnTitle: "Ba Mas' Udacumura",
     hymnNumber: 19,
     verses: [
       '1. Ba mas’ udacumura! Ibyaha bigota,\nBihora bikwegera cyane, Ng’ utajya mw ijuru.',
@@ -1358,7 +1358,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: 'NyigizaHafi',
+    hymnTitle: 'Nyigiza Hafi',
     hymnNumber: 122,
     verses: [
       '1. Nyigiza hafi, mbane nawe;\nNta cyandutira kubana nawe.\nNgumisha mu gituza cyawe;\nMpisha nibere mu buhungiro.(bis)',
@@ -1840,7 +1840,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Mwa Bern B' Umwami",
+    hymnTitle: "Mwa Bera B' Umwami",
     hymnNumber: 167,
     verses: [
       '1. Mwa bera b’ Umwami, mwishimir’ Ijambo rye;\nNi ryo rufatiro rwo kwizera kwanyu.\nDore, yababwiye byose; nta cyo yabahishe.\nNtitwabasha kongera kur’ iryo jambo ryiza,\nCyangwa kuritubya, kukw ar’ iry’ Imana.',
@@ -1910,14 +1910,14 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Hahirw' Ufit' Tbyiringiro",
+    hymnTitle: "Hahirw' Ufit' Ibyiringiro",
     hymnNumber: 174,
     verses: [
-      '1. Hahirw’ ufit’ ibyiringiro bishyitse,\nAkiri mu miruho y’ iyi si;\nBimukomez’ agatsind’ ibishuko by’ umwanzi. (bis)',
-      '2. Ni byo bitwibuts’ iby’uburuhukiro,\nAhw abakiranutsi bazaba;\nBakibanira n’ inshut’ ubudatandukana. (bis)',
-      '3. N’ igihugu kitazarangwamw icyaha;\nAhw ibishuko bitazagera;\nNi na hw ibyishimo bitazagir’ impinduka. (bis)',
-      '4. Nta n’ umw’ uzahabogorez’ amarira;\nNta bw’ urupfu ruzahahangara;\nAbaturage baho baziberahw iteka. (bis)',
-      '5. Icyaduh’ igihe kikihuta bwangu!\nTukabon’ Umukiza wac’ aje,\nAkatujyana muri cya gihugu cy’ ibyiza. (bis)',
+      '1. Hahirw’ ufit’ ibyiringiro bishyitse,\nAkiri mu miruho y’ iyi si;\nBimukomez’ agatsind’ ibishuko by’ umwanzi.\nBimukomez’ agatsinda ibishuko n’ amakuba menshi.',
+      '2. Ni byo bitwibuts’ iby’uburuhukiro,\nAhw’ abakiranutsi bazaba;\nBakibanira n’ inshut’ ubudatandukana. \nBakibanira n’ inshuti ntibatandukane.',
+      '3. N’ igihugu kitazarangwamw icyaha;\nAhw ibishuko bitazagera;\nNi na hw ibyishimo bitazagir’ impinduka. \nNihw’ ibyishimo bitazongera kugira kirogoya.',
+      '4. Nta n’ umw’ uzahabogorez’ amarira;\nNta bw’ urupfu ruzahahangara;\nAbaturage baho baziberahw iteka. \nAbaturage baho bazamera nk’ abamarayika.',
+      '5. Icyaduh’ igihe kikihuta bwangu!\nTukabon’ Umukiza wac’ aje,\nAkatujyana muri cya gihugu cy’ ibyiza. \nAkatugez’ aho tuzibanira n’ Umukiza wacu. ',
     ],
   },
   {
@@ -2068,12 +2068,12 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: 'Twabuze Gakondo',
+    hymnTitle: 'Twabuze Gakondo Mur’ Iyi Si',
     hymnNumber: 189,
     verses: [
-      '1. Twabuze gakondo mur’iyi si;\nTuyirimo tut’ abasuhuke;\nArikw ikitunezeza,\nN’uko dushaka gakondo\nIrushaho kuba nziza.',
-      '2. Twabuze gakondo mur’iyi si;\nTugamij’ iy’ i wacu mw ijuru;\nNi yo Sion’ ihoraho,\nIfit’ umucy’ udashira,\nIhor’irabagirana.',
-      '3. Mbeg’ uburyo tuzanezererwa\nAhw abagenzi bat’ umuruho.\nIcyamp’ amababa none,\nNkaguruka, nkigirayo,\nNkibanira nawe, Mwami.',
+      '1. Twabuze gakondo mur’iyi si;\nTuyirimo tur’ abasuhuke;\nArikw ikitunezeza,\nN’uko dushaka gakondo\nIrushaho kuba nziza.',
+      '2. Twabuze gakondo mur’iyi si;\nTugamij’ iy’ i wacu mw ijuru;\nNi yo Siyon’ ihoraho,\nIfit’ umucy’ udashira,\nIhor’irabagirana.',
+      '3. Mbeg’ uburyo tuzanezererwa\nAhw’ abagenzi bat’ umuruho.\nIcyamp’ amababa none,\nNkaguruka, Nkigirayo,\nNkibanira nawe, Mwami.',
       '4. Mutima wanjye, reka kuganya!\nDor’ igih’ Imana yangeneye\nNi cyo cyiza, ni cyo cyiza;\nNjye nkomeza kwiringira,\nNgez’ubw’ izampamagara.',
     ],
   },
@@ -2157,7 +2157,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Yesu N' Az' Umwijim' ...",
+    hymnTitle: "Yesu N' Az' Umwijim' Uzahunga",
     hymnNumber: 197,
     verses: [
       '1. Yesu n’az’ umwijim’ uzahunga,\nYesu n’az’ umwijim’ uzahunga,\nImpundu zizavuga Yes’ aje,\ngukorany’ intore ze.',
@@ -3278,7 +3278,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: 'Igitekerezo Cviza',
+    hymnTitle: 'Igitekerezo Cyiza',
     hymnNumber: 298,
     verses: [
       '1. Igitekerezo cyiza cya Yesu Mukiza, Kivug’ uburyo yahoranye n’ abantu,\nN’ uko yahamagarag’ abana nk’intarna re, Mare bigatuma nkumbura Yesu,\nNumva nifuza kw’ aba yaranshyizehw’ ibiganza, Ngw’ abe yaranzengurukij’ amaboko,\nYemwe mba narahiriw’iyo numv’ avug’ ati: Nimurek’ abana bato bansange!',

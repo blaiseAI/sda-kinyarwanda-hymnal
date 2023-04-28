@@ -15,6 +15,7 @@ export class FavouriteModalPage implements OnInit {
   favourites: Favourite[] = [];
   selectedFavoriteId: string | undefined;
   newFavoriteName: string = '';
+  favoriteActionSuccess: boolean = false;
   @Input() hymnNumber: string = '';
   @Input() hymnTitle: string = '';
 
@@ -51,6 +52,7 @@ export class FavouriteModalPage implements OnInit {
         (c) => c.id === this.selectedFavoriteId
       );
       if (favorite && favorite.hymnIds.includes(parseInt(this.hymnNumber))) {
+        this.favoriteActionSuccess = false;
         this.presentToast('Hymn already exists in the selected favorite');
         return;
       }
@@ -60,6 +62,7 @@ export class FavouriteModalPage implements OnInit {
         this.hymnNumber
       );
       await this.getFavorites(); // <--- recall getFavorites to update the list
+      this.favoriteActionSuccess = true;
       this.presentToast('Hymn added to favorite successfully');
       this.modalController.dismiss({ success: true });
     } else if (this.newFavoriteName) {
@@ -68,6 +71,7 @@ export class FavouriteModalPage implements OnInit {
       );
       if (favoriteExists) {
         this.presentToast('Favorite with the same name already exists');
+        this.favoriteActionSuccess = false;
         return;
       }
 
@@ -78,9 +82,11 @@ export class FavouriteModalPage implements OnInit {
       };
       await this.favouriteService.addFavourite(newFavorite);
       await this.getFavorites(); // <--- recall getFavorites to update the list
+      this.favoriteActionSuccess = true;
       this.presentToast('Favorite created and hymn added successfully');
       this.modalController.dismiss({ success: true });
     } else {
+      this.favoriteActionSuccess = false;
       this.presentToast(
         'Please select an existing favorite or enter a new favorite name'
       );
@@ -91,7 +97,9 @@ export class FavouriteModalPage implements OnInit {
     const toast = await this.toastController.create({
       message,
       duration: 2000,
-      position: 'top',
+      position: 'bottom',
+      color: this.favoriteActionSuccess ? 'primary' : 'warning',
+      icon: this.favoriteActionSuccess ? 'checkmark-circle-outline' : 'alert',
     });
     toast.present();
   }

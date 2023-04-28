@@ -11,34 +11,36 @@
 
 <ion-content>
   <form [formGroup]="feedbackForm" (ngSubmit)="submitForm()" class="ion-padding">
-    <ion-item>
-      <ion-label position="stacked">Email</ion-label>
-      <ion-input formControlName="email" type="email" placeholder="Your Email Address"></ion-input>
-    </ion-item>
+    <ion-list lines="none" [inset]="true">
+      <ion-item color="light">
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input formControlName="email" type="email" placeholder="Your Email Address"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Hymn Number</ion-label>
-      <ion-input formControlName="hymnNumber" type="text" readonly></ion-input>
-    </ion-item>
+      <ion-item color="light">
+        <ion-label position="stacked">Hymn Number</ion-label>
+        <ion-input formControlName="hymnNumber" type="text" readonly></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Hymn Title</ion-label>
-      <ion-input formControlName="hymnTitle" type="text" readonly></ion-input>
-    </ion-item>
+      <ion-item color="light">
+        <ion-label position="stacked">Hymn Title</ion-label>
+        <ion-input formControlName="hymnTitle" type="text" readonly></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Feedback Type</ion-label>
-      <ion-select formControlName="feedbackType">
-        <ion-select-option value="suggestion">Suggestion</ion-select-option>
-        <ion-select-option value="error">Error</ion-select-option>
-      </ion-select>
-    </ion-item>
+      <ion-item color="light">
+        <ion-label position="stacked">Feedback Type</ion-label>
+        <ion-select formControlName="feedbackType">
+          <ion-select-option value="suggestion">Suggestion</ion-select-option>
+          <ion-select-option value="error">Error</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Feedback Message</ion-label>
-      <ion-textarea formControlName="feedbackMessage" rows="5"></ion-textarea>
-    </ion-item>
+      <ion-item color="light">
+        <ion-label position="stacked">Feedback Message</ion-label>
+        <ion-textarea formControlName="feedbackMessage" rows="5"></ion-textarea>
+      </ion-item>
 
+    </ion-list>
     <ion-button type="submit" [disabled]="feedbackForm.invalid" expand="block">Submit</ion-button>
   </form>
 </ion-content>

@@ -1,17 +1,12 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="openFeedbackModal()">
-        <ion-icon slot="icon-only" name="chatbox-ellipses"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="addToFavorites()">
-        <ion-icon name="heart-outline"></ion-icon>
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

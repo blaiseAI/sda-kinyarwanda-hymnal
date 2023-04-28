@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { HymnDetailPageRoutingModule } from './hymn-detail-routing.module';
 
 import { HymnDetailPage } from './hymn-detail.page';
+import { SharedModule } from 'src/app/components/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HymnDetailPageRoutingModule
+    HymnDetailPageRoutingModule,
+    SharedModule,
   ],
-  declarations: [HymnDetailPage]
+  declarations: [HymnDetailPage],
 })
 export class HymnDetailPageModule {}

@@ -1,14 +1,20 @@
-<ion-header>
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true">
+  <ion-toolbar>
     <ion-title>Indirimbo za 350</ion-title>
   </ion-toolbar>
-  <ion-toolbar color="primary">
-    <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search"
-      showCancelButton="always"></ion-searchbar>
-  </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Indirimbo za 350</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search"
+        showCancelButton="always"></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
   <ion-list *ngIf="(filteredHymns ) as hymns; else skeleton">
     <ion-item *ngFor="let hymn of hymns ; trackBy: trackByFn" [routerLink]="['/tabs/hymns', hymn.hymnNumber]"
       routerLinkActive="router-link-active">

@@ -1,53 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ this.favourite.name }}</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="toggleEditMode()">{{ editMode ? 'Done' : 'Edit' }}</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-list *ngIf="(hymns$ | async) as hymns; else skeleton">
-    <ng-container *ngIf="hymns.length > 0; else emptyList">
-      <ion-item-sliding *ngFor="let hymn of hymns">
-        <ion-item>
-          <ion-label [routerLink]="['/tabs/favorites', favourite.id, 'hymns', hymn.hymnNumber]">
-            <ion-text>
-              {{hymn.hymnNumber}} - {{ hymn.hymnTitle }}
-            </ion-text>
-          </ion-label>
-          <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="removeHymnFromFavorite(hymn)">
-            <ion-icon name="remove-circle"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option color="danger" expandable (click)="removeHymnFromFavorite(hymn)">
-            <ion-icon slot="icon-only" name="trash"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ng-container>
-  </ion-list>
-  <ng-template #emptyList>
-    <ion-item>
-      <ion-text color="medium" class="ion-text-center">
-        No hymns found in this favorite list.
-      </ion-text>
-    </ion-item>
-  </ng-template>
-  <ng-template #skeleton>
-    <ion-list>
-      <ion-item *ngFor="let i of getHymnIdsCount()">
-        <ion-skeleton-text [animated]="true" count="10"></ion-skeleton-text>
-      </ion-item>
-    </ion-list>
-  </ng-template>
-</ion-content> -->
-
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ favourite.name }}</ion-title>
@@ -63,15 +13,17 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="(hymns$ | async) as hymns; else skeleton">
+  <ion-list [inset]="true">
+    <ion-item-divider>
+      <ion-label>
+        <p>Created on: {{ favourite.id | date }}</p>
+      </ion-label>
+    </ion-item-divider>
+  </ion-list>
+  <ion-list [inset]="true" *ngIf="(hymns$ | async) as hymns; else skeleton">
     <ng-container *ngIf="hymns.length > 0; else emptyList">
-      <ion-item-divider>
-        <ion-label>
-          <p>Created on: {{ favourite.id | date }}</p>
-        </ion-label>
-      </ion-item-divider>
       <ion-item-sliding *ngFor="let hymn of hymns">
-        <ion-item>
+        <ion-item color="light">
           <ion-label [routerLink]="['/tabs/favorites', favourite.id, 'hymns', hymn.hymnNumber]">
             <ion-text>
               {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
@@ -90,7 +42,7 @@
     </ng-container>
   </ion-list>
   <ng-template #emptyList>
-    <ion-item>
+    <ion-item color="light">
       <ion-text color="medium" class="ion-text-center">
         No hymns found in this favorite list.
       </ion-text>

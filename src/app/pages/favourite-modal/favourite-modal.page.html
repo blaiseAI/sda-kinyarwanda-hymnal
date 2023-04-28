@@ -13,8 +13,8 @@
 
 <ion-content>
   <ion-radio-group [(ngModel)]="selectedFavoriteId" [allowEmptySelection]="true">
-    <ion-list>
-      <ion-item *ngFor="let favorite of favourites">
+    <ion-list [inset]="true">
+      <ion-item color="light" *ngFor="let favorite of favourites">
         <ion-label>
           <ion-text color="primary">{{ favorite.name }}</ion-text>
           <p class="hymn-count">{{ favorite.hymnIds.length }} hymn(s)</p>
@@ -24,9 +24,12 @@
     </ion-list>
   </ion-radio-group>
 
-  <ion-item>
-    <ion-input placeholder="New Favorite List" [(ngModel)]="newFavoriteName"></ion-input>
-  </ion-item>
+  <ion-list [inset]="true">
+    <ion-item color="light">
+      <ion-label position="stacked">New Favorite Name</ion-label>
+      <ion-input type="text" [(ngModel)]="newFavoriteName"></ion-input>
+    </ion-item>
+  </ion-list>
 
   <ion-button expand="block" color="primary" [disabled]="!(favourites.length > 0 || newFavoriteName !== '')"
     (click)="addHymnToFavourite()">Add</ion-button>

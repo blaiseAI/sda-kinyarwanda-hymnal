@@ -11,6 +11,9 @@ const config: CapacitorConfig = {
       launchShowDuration: 3000,
     },
   },
+  ios: {
+    preferredContentMode: 'mobile',
+  },
 };
 
 export default config;
