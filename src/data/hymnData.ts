@@ -391,8 +391,8 @@ export const hymnData: Hymn[] = [
     verses: [
       '1. Ni mbon’ amahoro yomboka nk’ uruzi,\nNaho naba mfit’ ishavu,\nUko mba kose, njya nkunda kuvuga Nti:\nNguwe neza mu mutima.',
       'Gusubiramo',
-      'Ni neza ndatuje;\nKo nguwe neza mu mutima.',
-      '2. Satani n’antera, Nkagira n’ibyago,\nNkomezwa no kwiringira,\nKuko Kristo yabonye ko nd’ intebyi;\nNi yo kumvir’ amaraso ye.',
+      'Ni neza (ni neza) ndatuje (ndatuje);\nKo nguwe neza mu mutima.',
+      '2. Satani n’antera, Nkagira n’ibyago,\nNkomezwa no kwiringira,\nKuko Kristo yabonye ko nd’ intebyi;\nNi ko kumvir’ amaraso ye.',
       '3. Nshima cyane kuko mbabariw’ ibyaha,\nNta na kimwe cyasigaye;\nByabambanywe na we ku musaraba;\nMutima wanjye shim’ Umwami.',
       '4. Mwami tebuts’ umuns’ uzagarukamo,\nUbw’ ibicu bizarundwa,\nImpand’ ivuzwe, Umwam’ amanuke Nti:\nNguwe neza mu mutima',
     ],
@@ -2408,12 +2408,12 @@ export const hymnData: Hymn[] = [
     hymnTitle: "Mbese Yesu Ajy' Anyitaho?",
     hymnNumber: 220,
     verses: [
-      '1. Mbese Yesu ajy’ anyitaho, Mu byago no mu mahoro,\nMu mibabaro no mu miruho, No mu rugendo rurushya',
+      '1. Mbese Yesu ajy’ anyitaho, Mu byago no mu mahoro,\nMu mibabaro no mu miruho, No mu rugendo rurushya?',
       'Gusubiramo',
-      'Anyitaho, Arandinda, Mu mibabaro yanjye,\nMu bihe mereuie nabi, Umukiza wanjy’ anyitaho.',
-      '2. Mbese Yesu ajy’ anyitaho, Iyo ngenda mu mwijima,\nN’ iy’ umwijima w’ akag’ ungose, Mbese Yes’ amba',
-      '3. Mbese Yesu ajy’ anyitaho, Iyo nguye mu bishuko,\nIyo mbabaye, N’ iyo mbogoza, Mbese Yes’',
-      '4. Mbese Yesu ajy’ anyitaho, Iyo nsezeye ku nshuti,\nIyo mbabazwa, Simpumurizwe, Mbese Yes’ ab’ abireba',
+      'Anyitaho, Arandinda, Mu mibabaro yanjye,\nMu bihe merewe nabi, Umukiza wanjy’ anyitaho.',
+      '2. Mbese Yesu ajy’ anyitaho, Iyo ngenda mu mwijima,\nN’ iy’ umwijima w’ akag’ ungose, Mbese Yes’ amba bugufi?',
+      '3. Mbese Yesu ajy’ anyitaho, Iyo nguye mu bishuko,\nIyo mbabaye, N’ iyo mbogoza, Mbese Yes’ arantabara?',
+      '4. Mbese Yesu ajy’ anyitaho, Iyo nsezeye ku nshuti,\nIyo mbabazwa, Simpumurizwe, Mbese Yes’ ab’ abireba?',
     ],
   },
   {
