@@ -30,6 +30,10 @@ ion-radio.radio-checked::part(mark) {
 
   transform: rotate(45deg);
 }
-* {
-  font-family: "Josefin Sans", sans-serif;
+// * {
+//   font-family: "Josefin Sans", sans-serif;
+// }
+
+ion-content {
+  --font-family: "Space Grotesk", sans-serif;
 }

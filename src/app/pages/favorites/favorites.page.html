@@ -28,7 +28,7 @@
             </ion-text>
             <p class="hymn-count">{{ fav.hymnIds.length }} hymn(s)</p>
           </ion-label>
-          <ion-badge slot="end">{{ fav.id | date }}</ion-badge>
+          <ion-badge [routerLink]="['/tabs/favorites', fav.id]" slot="end">{{ fav.id | date }}</ion-badge>
           <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="deleteFavorite(fav)">
             <ion-icon name="remove-circle"></ion-icon>
           </ion-button>
