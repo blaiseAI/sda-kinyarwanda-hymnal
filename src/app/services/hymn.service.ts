@@ -22,18 +22,28 @@ export class HymnService {
     return hymnData.slice(page * pageSize, page * pageSize + pageSize);
   }
 
+  // The following code is for pagination and caching
+  // getHymns(page = 0, pageSize = 100) {
+  //   if (pageSize === -1) {
+  //     return of(hymnData);
+  //   } else {
+  //     return timer(this.cache.length === 0 ? 0 : 1000).pipe(
+  //       tap((_) => (this.cache[page] = this.getData(page, pageSize))),
+  //       map((_) => {
+  //         return this.cache.reduce((acc, current) => {
+  //           return acc.concat(current);
+  //         }, []);
+  //       })
+  //     );
+  //   }
+  // }
   getHymns(page = 0, pageSize = 100) {
     if (pageSize === -1) {
       return of(hymnData);
     } else {
-      return timer(this.cache.length === 0 ? 0 : 1000).pipe(
-        tap((_) => (this.cache[page] = this.getData(page, pageSize))),
-        map((_) => {
-          return this.cache.reduce((acc, current) => {
-            return acc.concat(current);
-          }, []);
-        })
-      );
+      const start = page * pageSize;
+      const end = start + pageSize;
+      return of(hymnData.slice(start, end));
     }
   }
 

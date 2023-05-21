@@ -11,8 +11,8 @@
       <ion-title size="large">Indirimbo za 350</ion-title>
     </ion-toolbar>
     <ion-toolbar>
-      <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search"
-        showCancelButton="always"></ion-searchbar>
+      <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search" showCancelButton="always"
+        debounce="300"></ion-searchbar>
     </ion-toolbar>
   </ion-header>
   <ion-list *ngIf="(filteredHymns ) as hymns; else skeleton">
