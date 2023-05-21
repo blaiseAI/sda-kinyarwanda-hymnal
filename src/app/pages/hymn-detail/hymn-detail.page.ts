@@ -4,7 +4,11 @@ import { Share } from '@capacitor/share';
 import { TextZoom, SetOptions, GetResult } from '@capacitor/text-zoom';
 import { Hymn } from 'src/app/models/hymn';
 import { HymnService } from 'src/app/services/hymn.service';
-import { ModalController, PopoverController } from '@ionic/angular';
+import {
+  IonRouterOutlet,
+  ModalController,
+  PopoverController,
+} from '@ionic/angular';
 import { FavouriteModalPage } from '../favourite-modal/favourite-modal.page';
 import { FeedbackModalPage } from '../feedback-modal/feedback-modal.page';
 import { HymnOptionsComponent } from 'src/app/components/hymn-options/hymn-options.component';
@@ -26,7 +30,8 @@ export class HymnDetailPage implements OnInit {
     private route: ActivatedRoute,
     private hymnService: HymnService,
     private modalController: ModalController,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    public readonly ionRouterOutlet: IonRouterOutlet
   ) {}
 
   ngOnInit() {
@@ -40,6 +45,7 @@ export class HymnDetailPage implements OnInit {
   async openAddToFavoriteModal() {
     const modal = await this.modalController.create({
       component: FavouriteModalPage,
+      presentingElement: this.ionRouterOutlet.nativeEl,
       cssClass: 'my-custom-modal-css', // you can add your own CSS class
       componentProps: {
         hymnNumber: this.hymn.hymnNumber,
@@ -52,6 +58,7 @@ export class HymnDetailPage implements OnInit {
   async openFeedbackModal() {
     const modal = await this.modalController.create({
       component: FeedbackModalPage,
+      presentingElement: this.ionRouterOutlet.nativeEl,
       cssClass: 'my-custom-modal-css',
       componentProps: {
         hymnNumber: this.hymn.hymnNumber,

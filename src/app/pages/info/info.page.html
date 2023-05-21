@@ -31,7 +31,7 @@
         </ion-text>
       </ion-label>
     </ion-item>
-    <ion-item color="light" color="light" button href="https://seblaise.dev">
+    <ion-item color="light" button href="https://seblaise.dev">
       <ion-icon slot="start" name="globe-outline"></ion-icon>
       <ion-label>
         <ion-text>
@@ -41,7 +41,7 @@
     </ion-item>
   </ion-list>
   <ion-list [inset]="true">
-    <ion-item color="light" button>
+    <ion-item color="light" button (click)="sendFeedback()">
       <ion-icon slot="start" name="chatbox-ellipses"></ion-icon>
       <ion-label>
         <ion-text>
@@ -50,6 +50,7 @@
         <p>Send us your feedback</p>
       </ion-label>
     </ion-item>
+
     <ion-item color="light" button>
       <ion-icon slot="start" name="star"></ion-icon>
       <ion-label>
@@ -73,7 +74,7 @@
   </ion-list>
 
   <ion-list [inset]="true">
-    <ion-item color="light" button href="https://seblaise.dev/privacy-policy">
+    <ion-item color="light" button (click)="openPrivacyPolicy()">
       <ion-icon slot="start" name="document-text-outline"></ion-icon>
       <ion-label>
         <ion-text>
@@ -81,7 +82,7 @@
         </ion-text>
       </ion-label>
     </ion-item>
-    <ion-item color="light" button href="https://seblaise.dev/terms-and-conditions">
+    <ion-item color="light" button (click)="openTermsAndConditions()">
       <ion-icon slot="start" name="document-text-outline"></ion-icon>
       <ion-label>
         <ion-text>
@@ -109,5 +110,4 @@
       </ion-row>
     </ion-item>
   </ion-list>
-
 </ion-content>

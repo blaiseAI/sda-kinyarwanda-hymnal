@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppInfoService } from 'src/app/services/app-info.service';
-import { ThemeService } from 'src/app/services/theme.service';
+import { ModalController, IonRouterOutlet } from '@ionic/angular';
+import { PrivayPolicyPage } from '../privay-policy/privay-policy.page';
+import { TermsAndConditionsPage } from '../terms-and-conditions/terms-and-conditions.page';
 
 @Component({
   selector: 'app-info',
@@ -18,7 +20,8 @@ export class InfoPage implements OnInit {
 
   constructor(
     private appInfoService: AppInfoService,
-    private themeService: ThemeService
+    public readonly ionRouterOutlet: IonRouterOutlet,
+    private readonly modalController: ModalController
   ) {
     this.appName = this.appInfoService.getAppName();
     this.appDescription = this.appInfoService.getAppDescription();
@@ -43,5 +46,28 @@ export class InfoPage implements OnInit {
     } else {
       document.body.setAttribute('data-theme', 'light');
     }
+  }
+
+  async openPrivacyPolicy() {
+    const modal = await this.modalController.create({
+      component: PrivayPolicyPage,
+      presentingElement: this.ionRouterOutlet.nativeEl,
+    });
+    return await modal.present();
+  }
+
+  async openTermsAndConditions() {
+    const modal = await this.modalController.create({
+      component: TermsAndConditionsPage,
+      presentingElement: this.ionRouterOutlet.nativeEl,
+    });
+    return await modal.present();
+  }
+
+  sendFeedback() {
+    const emailAddress = 'blaise@hellothe.re';
+    const subject = encodeURIComponent('General Feedback');
+    const mailtoLink = `mailto:${emailAddress}?subject=${subject}`;
+    window.open(mailtoLink, '_system');
   }
 }

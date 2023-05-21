@@ -998,7 +998,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: 'Gibe Cyiza Cyo Gusenga',
+    hymnTitle: 'Gihe Cyiza Cyo Gusenga',
     hymnNumber: 89,
     verses: [
       '1. Gihe cyiza cyo gusenga, Kintarura mu mpagarara;\nNgo nigir’ aho Dat’ ari, Muganyir’ ibyo nkennye byose.\nMu bihe by’ umubabaro, Nabony’ ibimpumuriza.\nNtsind’ ubukana bw’ Umwanzi, Mu bihe byiza byo gusenga.',
@@ -1546,7 +1546,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Nahony' Inshut' Ihebuje",
+    hymnTitle: "Nabony' Inshut' Ihebuje",
     hymnNumber: 139,
     verses: [
       '1. Nabony’ inshut’ ihebuje! Yankunze ntarabaho;\nYanyiyegereshej’ ineza n’urukundo rw’iteka,\nBituma dushyikirana ubudatandukana;\nKuko nd’ uwe, na we n’ uwanjye, ibihe bidashira.',
@@ -1673,7 +1673,7 @@ export const hymnData: Hymn[] = [
     ],
   },
   {
-    hymnTitle: "Ngamij' Iby' Igihugu Cy&#0...",
+    hymnTitle: "Ngamij' Iby' Igihugu Cy'igikundiro",
     hymnNumber: 151,
     verses: [
       '1. Ngamij’ iby’igihugu cy’igikundiro;\nNzageray’ izuba rirenze.\nAriko s’ ikamba Yes’ azamperayo,\nAzaritakahw inyenyeri?',

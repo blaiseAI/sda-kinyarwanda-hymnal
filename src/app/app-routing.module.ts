@@ -106,6 +106,14 @@ const routes: Routes = [
         (m) => m.FavouriteHymnDetailPageModule
       ),
   },
+  {
+    path: 'privay-policy',
+    loadChildren: () => import('./pages/privay-policy/privay-policy.module').then( m => m.PrivayPolicyPageModule)
+  },
+  {
+    path: 'terms-and-conditions',
+    loadChildren: () => import('./pages/terms-and-conditions/terms-and-conditions.module').then( m => m.TermsAndConditionsPageModule)
+  },
 ];
 
 @NgModule({
