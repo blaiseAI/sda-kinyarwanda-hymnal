@@ -12,22 +12,20 @@
 <ion-content>
   <form [formGroup]="feedbackForm" (ngSubmit)="submitForm()" class="ion-padding">
     <ion-list lines="none" [inset]="true">
-      <ion-item color="light">
-        <ion-label position="stacked">Email</ion-label>
+      <ion-item>
+        <ion-label position="stacked">Email <span class="required">*</span></ion-label>
         <ion-input formControlName="email" type="email" placeholder="Your Email Address"></ion-input>
       </ion-item>
-
-      <ion-item color="light">
+      <ion-item>
         <ion-label position="stacked">Hymn Number</ion-label>
         <ion-input formControlName="hymnNumber" type="text" readonly></ion-input>
       </ion-item>
-
-      <ion-item color="light">
+      <ion-item>
         <ion-label position="stacked">Hymn Title</ion-label>
         <ion-input formControlName="hymnTitle" type="text" readonly></ion-input>
       </ion-item>
 
-      <ion-item color="light">
+      <ion-item>
         <ion-label position="stacked">Feedback Type</ion-label>
         <ion-select formControlName="feedbackType">
           <ion-select-option value="suggestion">Suggestion</ion-select-option>
@@ -35,12 +33,18 @@
         </ion-select>
       </ion-item>
 
-      <ion-item color="light">
+      <!-- <ion-item>
         <ion-label position="stacked">Feedback Message</ion-label>
         <ion-textarea formControlName="feedbackMessage" rows="5"></ion-textarea>
+      </ion-item> -->
+      <ion-item>
+        <ion-label position="stacked">Feedback Message <span class="required">*</span></ion-label>
+        <ion-textarea formControlName="feedbackMessage" rows="5" maxlength="500"></ion-textarea>
+        <ion-note>{{ feedbackForm.get('feedbackMessage')?.value?.length || 0 }}/500</ion-note>
       </ion-item>
 
+
     </ion-list>
-    <ion-button type="submit" [disabled]="feedbackForm.invalid" expand="block">Submit</ion-button>
+    <ion-button type="submit" [disabled]="feedbackForm.invalid" expand="block" color="primary">Submit</ion-button>
   </form>
 </ion-content>
