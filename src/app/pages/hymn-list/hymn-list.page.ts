@@ -38,20 +38,7 @@ export class HymnListPage implements OnInit {
     });
   }
   ngOnInit() {
-    const batchMap = this.pager$.pipe(
-      throttleTime(500),
-      tap((_) => (this.page += 1)),
-      tap((_) => (this.showLoading = true)),
-      mergeMap((page) =>
-        this.hymnService
-          .getHymns(page ?? 0, -1) // pass -1 for pageSize to get all hymns
-          .pipe(tap((_) => (this.showLoading = false)))
-      ),
-      scan((acc, batch) => {
-        return { ...acc, ...batch };
-      }, {})
-    );
-    this.hymns$ = batchMap.pipe(map((v) => Object.values(v)));
+    this.hymns$ = this.hymnService.getHymns();
     this.hymns$.subscribe((hymns) => {
       this.hymns = hymns;
       this.filterHymns();

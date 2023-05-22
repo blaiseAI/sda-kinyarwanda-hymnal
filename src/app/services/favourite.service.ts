@@ -68,7 +68,7 @@ export class FavouriteService {
     page = 0,
     pageSize = -1
   ): Observable<Hymn[]> {
-    return this.hymnalService.getHymns(page, pageSize).pipe(
+    return this.hymnalService.getHymns().pipe(
       map((hymns) => {
         const hymnNumbers = favourite.hymnIds.map((id) => id.toString());
         return hymns.filter((hymn) =>
