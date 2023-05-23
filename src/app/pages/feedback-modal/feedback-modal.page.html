@@ -13,32 +13,47 @@
   <form [formGroup]="feedbackForm" (ngSubmit)="submitForm()" class="ion-padding">
     <ion-list lines="none" [inset]="true">
       <ion-item>
-        <ion-label position="stacked">Email <span class="required">*</span></ion-label>
+        <ion-label position="stacked">
+          <ion-text color="primary">
+            <h2>Your Email <span class="required">*</span></h2>
+          </ion-text>
+        </ion-label>
         <ion-input formControlName="email" type="email" placeholder="Your Email Address"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="stacked">Hymn Number</ion-label>
+        <ion-label position="stacked">
+          <ion-text color="primary">
+            <h2>Hymn Number</h2>
+          </ion-text>
+        </ion-label>
         <ion-input formControlName="hymnNumber" type="text" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="stacked">Hymn Title</ion-label>
+        <ion-label position="stacked">
+          <ion-text color="primary">
+            <h2>Hymn Title</h2>
+          </ion-text>
+        </ion-label>
         <ion-input formControlName="hymnTitle" type="text" readonly></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Feedback Type</ion-label>
+        <ion-label position="stacked">
+          <ion-text color="primary">
+            <h2>Feedback Type <span class="required">*</span></h2>
+          </ion-text>
+        </ion-label>
         <ion-select formControlName="feedbackType">
           <ion-select-option value="suggestion">Suggestion</ion-select-option>
           <ion-select-option value="error">Error</ion-select-option>
         </ion-select>
       </ion-item>
-
-      <!-- <ion-item>
-        <ion-label position="stacked">Feedback Message</ion-label>
-        <ion-textarea formControlName="feedbackMessage" rows="5"></ion-textarea>
-      </ion-item> -->
       <ion-item>
-        <ion-label position="stacked">Feedback Message <span class="required">*</span></ion-label>
+        <ion-label position="stacked">
+          <ion-text color="primary">
+            <h2> Feedback Message <span class="required">*</span></h2>
+          </ion-text>
+        </ion-label>
         <ion-textarea formControlName="feedbackMessage" rows="5" maxlength="500"></ion-textarea>
         <ion-note>{{ feedbackForm.get('feedbackMessage')?.value?.length || 0 }}/500</ion-note>
       </ion-item>
