@@ -7,6 +7,7 @@ import { HymnListPageRoutingModule } from './hymn-list-routing.module';
 
 import { HymnListPage } from './hymn-list.page';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { RecentlyViewedListComponent } from 'src/app/components/recently-viewed-list/recently-viewed-list.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     HymnListPageRoutingModule,
     ScrollingModule,
   ],
-  declarations: [HymnListPage],
+  declarations: [HymnListPage, RecentlyViewedListComponent],
 })
 export class HymnListPageModule {}

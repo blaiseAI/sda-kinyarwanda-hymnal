@@ -1,0 +1,27 @@
+<ion-item *ngIf="this.recentlyViewedHymns.length>0">
+  <ion-label>
+    <h2 class="heading-title">
+      Recently Viewed
+    </h2>
+  </ion-label>
+  <ion-button slot="end" (click)="clearAllRecentlyViewedHymns()">
+    Clear All
+  </ion-button>
+</ion-item>
+<ion-slides [options]="options" #slides>
+  <ion-slide *ngFor="let hymn of recentlyViewedHymns; let i = index" class="hymn-slide">
+    <ion-card [routerLink]="['/tabs/hymns', hymn.hymnNumber]">
+      <div>
+        <!-- Show the spinner while the image is loading -->
+        <ion-spinner *ngIf="imageLoading"></ion-spinner>
+        <ion-img class="hymn-image" [src]="'https://source.unsplash.com/random/900x700/?nature,'+hymn.hymnNumber+'_'+i"
+          (ionImgDidLoad)="imageLoaded()" lazy></ion-img>
+        <ion-card-content class="hymn-title">
+          {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
+          <br>
+          <small *ngIf="hymn.viewedAt">Viewed at: {{ hymn.viewedAt | date:'medium' }}</small>
+        </ion-card-content>
+      </div>
+    </ion-card>
+  </ion-slide>
+</ion-slides>

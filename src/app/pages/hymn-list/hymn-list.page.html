@@ -1,23 +1,25 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>Indirimbo za 350</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search" showCancelButton="always"
+      debounce="300"></ion-searchbar>
+  </ion-toolbar>
 
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Indirimbo za 350</ion-title>
-    </ion-toolbar>
-    <ion-toolbar>
-      <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search" showCancelButton="always"
-        debounce="300"></ion-searchbar>
-    </ion-toolbar>
-  </ion-header>
-  <ion-list *ngIf="(filteredHymns ) as hymns; else skeleton">
-    <ion-item *ngFor="let hymn of hymns ; trackBy: trackByFn" [routerLink]="['/tabs/hymns', hymn.hymnNumber]"
-      routerLinkActive="router-link-active">
+<ion-content>
+  <app-recently-viewed-list *ngIf="!isSearching"></app-recently-viewed-list>
+  <ion-item>
+    <ion-label>
+      <h2 class="heading-title">
+        Hymn List
+      </h2>
+    </ion-label>
+  </ion-item>
+  <ion-list *ngIf="(filteredHymns ) as hymns; else skeleton" [inset]="true">
+    <ion-item color="primary" *ngFor="let hymn of hymns ; trackBy: trackByFn"
+      [routerLink]="['/tabs/hymns', hymn.hymnNumber]" routerLinkActive="router-link-active">
       <ion-label>
         <h2>{{hymn.hymnNumber}} - {{hymn.hymnTitle}}</h2>
       </ion-label>

@@ -36,33 +36,10 @@ export class FavouriteHymnDetailPage implements OnInit {
 
     this.hymnService.getHymn(id).subscribe((hymn) => {
       this.hymn = hymn;
+      // add hymn to recently viewed
+      this.hymnService.addToRecentlyViewed(this.hymn);
     });
   }
-  // addToFavorites() {
-  //   this.presentModal();
-  // }
-  // async presentModal() {
-  //   const modal = await this.modalController.create({
-  //     component: FavouriteModalPage,
-  //     cssClass: 'my-custom-modal-css', // you can add your own CSS class
-  //     componentProps: {
-  //       hymnNumber: this.hymn.hymnNumber,
-  //       hymnTitle: this.hymn.hymnTitle,
-  //     },
-  //   });
-  //   return await modal.present();
-  // }
-  // async openFeedbackModal() {
-  //   const modal = await this.modalController.create({
-  //     component: FeedbackModalPage,
-  //     cssClass: 'my-custom-modal-css',
-  //     componentProps: {
-  //       hymnNumber: this.hymn.hymnNumber,
-  //       hymnTitle: this.hymn.hymnTitle,
-  //     },
-  //   });
-  //   return await modal.present();
-  // }
   async openAddToFavoriteModal() {
     const modal = await this.modalController.create({
       component: FavouriteModalPage,

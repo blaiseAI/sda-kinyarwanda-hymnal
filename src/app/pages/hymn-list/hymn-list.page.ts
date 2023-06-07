@@ -18,10 +18,13 @@ export class HymnListPage implements OnInit {
   showScrollButton = false;
   pager$ = new BehaviorSubject<number | null>(null);
   currentSearchQuery: string = '';
+  isSearching = false;
 
   constructor(private hymnService: HymnService) {}
   handleSearchChange(event: Event) {
     this.currentSearchQuery = (event.target as HTMLInputElement).value;
+    this.isSearching = this.currentSearchQuery ? true : false;
+
     this.filterHymns();
   }
 
