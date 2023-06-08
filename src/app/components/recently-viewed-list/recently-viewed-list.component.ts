@@ -36,10 +36,6 @@ export class RecentlyViewedListComponent implements OnInit {
     lazy: true, // enable lazy loading of images
     watchSlidesVisibility: true, // needed for lazy loading to work
     watchSlidesProgress: true, // needed for lazy loading to work
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: true,
-    },
     speed: 400, // speed of transition in ms. You can increase/decrease this
   };
   imageLoaded() {

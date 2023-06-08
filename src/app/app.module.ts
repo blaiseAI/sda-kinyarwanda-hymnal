@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+// import { AppRate } from '@ionic-native/app-rate';
 
 @NgModule({
   declarations: [AppComponent],

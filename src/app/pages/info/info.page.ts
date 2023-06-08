@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Share } from '@capacitor/share';
 import { AppInfoService } from 'src/app/services/app-info.service';
 import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { PrivayPolicyPage } from '../privay-policy/privay-policy.page';
@@ -10,9 +11,6 @@ import { TermsAndConditionsPage } from '../terms-and-conditions/terms-and-condit
   styleUrls: ['./info.page.scss'],
 })
 export class InfoPage implements OnInit {
-  shareApp() {
-    throw new Error('Method not implemented.');
-  }
   appName: string;
   appDescription: string;
   appVersion: string;
@@ -62,6 +60,25 @@ export class InfoPage implements OnInit {
       presentingElement: this.ionRouterOutlet.nativeEl,
     });
     return await modal.present();
+  }
+  async shareApp() {
+    try {
+      await Share.share({
+        title: 'SDA Kinyarwanda Hymnal App',
+        text: 'Check out this app I am using, "SDA Kinyarwanda Hymnal"!',
+        url: 'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873',
+        dialogTitle: 'Share App',
+      });
+    } catch (error) {
+      console.log('Share failed:', error);
+    }
+  }
+
+  rateApp() {
+    window.open(
+      'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873?action=write-review',
+      '_system'
+    );
   }
 
   sendFeedback() {

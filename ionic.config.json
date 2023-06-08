@@ -1,7 +1,8 @@
 {
   "name": "SDA Kinyarwanda Hymnal",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
