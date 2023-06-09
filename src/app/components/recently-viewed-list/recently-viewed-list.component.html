@@ -15,7 +15,7 @@
         <!-- Show the spinner while the image is loading -->
         <ion-spinner *ngIf="imageLoading"></ion-spinner>
         <ion-img class="hymn-image" [src]="'https://source.unsplash.com/random/900x700/?nature,'+hymn.hymnNumber+'_'+i"
-          (ionImgDidLoad)="imageLoaded()" lazy></ion-img>
+          (ionImgDidLoad)="imageLoaded()" (ionError)="useFallbackImage($event)" lazy></ion-img>
         <ion-card-content class="hymn-title">
           {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
           <br>

@@ -6,4 +6,5 @@ export class Feedback {
   feedbackType?: string;
   feedbackMessage?: string;
   dateSubmitted?: string;
+  status?: string;
 }

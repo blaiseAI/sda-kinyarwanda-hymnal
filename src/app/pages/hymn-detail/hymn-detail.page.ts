@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Share } from '@capacitor/share';
 import { TextZoom, SetOptions, GetResult } from '@capacitor/text-zoom';
 import { Hymn } from 'src/app/models/hymn';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HymnService } from 'src/app/services/hymn.service';
 import {
   IonRouterOutlet,
@@ -31,7 +32,8 @@ export class HymnDetailPage implements OnInit {
     private hymnService: HymnService,
     private modalController: ModalController,
     private popoverController: PopoverController,
-    public readonly ionRouterOutlet: IonRouterOutlet
+    public readonly ionRouterOutlet: IonRouterOutlet,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -99,5 +101,10 @@ export class HymnDetailPage implements OnInit {
     });
 
     return await popover.present();
+  }
+  getBackgroundImageUrl(hymnNumber: number): SafeStyle {
+    return this.sanitizer.bypassSecurityTrustStyle(
+      `url('https://source.unsplash.com/random/900x700/?nature,${hymnNumber}')`
+    );
   }
 }

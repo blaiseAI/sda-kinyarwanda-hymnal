@@ -30,7 +30,7 @@ export class RecentlyViewedListComponent implements OnInit {
     spaceBetween: 16,
     centeredSlides: false,
     loop: false, // enabling loop can improve performance
-    freeMode: true, // allows slides to freely move instead of snapping to slides
+    freeMode: false, // allows slides to freely move instead of snapping to slides
     grabCursor: true, // changes the cursor to a "grab" style for better UX
     preloadImages: false, // don't preload all images
     lazy: true, // enable lazy loading of images
@@ -74,5 +74,8 @@ export class RecentlyViewedListComponent implements OnInit {
     this.hymnService.clearAllRecentlyViewedHymns().then(() => {
       this.loadRecentlyViewedHymns();
     });
+  }
+  useFallbackImage(event: any) {
+    event.target.src = '/assets/fallback_placeholder.jpg'; // path to your fallback image
   }
 }
