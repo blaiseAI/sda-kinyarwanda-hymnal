@@ -20,7 +20,7 @@
   </ion-item>
   <ion-list *ngIf="(filteredHymns ) as hymns; else skeleton" [inset]="true">
     <ion-item color="primary" *ngFor="let hymn of hymns ; trackBy: trackByFn"
-      [routerLink]="['/tabs/hymns', hymn.hymnNumber]" routerLinkActive="router-link-active">
+      [routerLink]="['/tabs/hymns', hymn.hymnNumber]" routerLinkActive="router-link-active" (click)="playHapticFeedback()">
       <ion-label>
         <h2>{{hymn.hymnNumber}} - {{hymn.hymnTitle}}</h2>
       </ion-label>
