@@ -3,7 +3,7 @@
     <ion-title>Indirimbo za 350</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search" showCancelButton="always"
+    <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search by hymn# or title" showCancelButton="always"
       debounce="300"></ion-searchbar>
   </ion-toolbar>
 
@@ -13,6 +13,7 @@
   <ion-item>
     <ion-label>
       <h2 class="heading-title">
+        <ion-icon name="list-outline" color="primary"></ion-icon>
         Hymn List
       </h2>
     </ion-label>

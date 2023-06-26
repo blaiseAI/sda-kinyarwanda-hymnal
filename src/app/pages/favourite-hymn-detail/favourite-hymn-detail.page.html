@@ -12,15 +12,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content id="content" fullscreen="">
+<ion-content id="content" class="hymn-details">
   <ion-item lines="none">
     <ion-text>
-      <h3>{{ hymn.hymnNumber }} {{ hymn.hymnTitle }}</h3>
-      <div>
-        <p *ngFor="let verse of hymn?.verses">
+      <h3 class="hymn-title">{{ hymn.hymnNumber }} {{ hymn.hymnTitle }}</h3>
+      <div class="verse-container">
+        <p *ngFor="let verse of hymn?.verses" class="verse">
           <ng-container *ngIf="verse.includes('Gusubiramo')">
             {{ verse.slice(0, verse.indexOf('Gusubiramo')) }}
-            <strong>{{ 'Gusubiramo' }}</strong>
+            <strong>Gusubiramo</strong>
             {{ verse.slice(verse.indexOf('Gusubiramo') + 'Gusubiramo'.length) }}
           </ng-container>
           <ng-container *ngIf="!verse.includes('Gusubiramo')">
