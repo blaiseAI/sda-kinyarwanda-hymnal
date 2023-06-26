@@ -42,7 +42,7 @@ export class HymnDetailPage implements OnInit {
 
     this.hymnService.getHymn(id).subscribe((hymn) => {
       this.hymn = hymn;
-      console.log(this.hymn);
+      // console.log(this.hymn);
       // add hymn to recently viewed
       this.hymnService.addToRecentlyViewed(this.hymn);
     });
