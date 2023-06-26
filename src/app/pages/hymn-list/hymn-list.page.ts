@@ -3,6 +3,7 @@ import { Hymn } from '../../models/hymn';
 import { HymnService } from '../../services/hymn.service';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { tap, throttleTime, mergeMap, scan, map } from 'rxjs/operators';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-hymn-list',
@@ -51,4 +52,8 @@ export class HymnListPage implements OnInit {
   trackByFn(_: any, item: { hymnNumber: any }) {
     return item.hymnNumber;
   }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
+  }
 }
+

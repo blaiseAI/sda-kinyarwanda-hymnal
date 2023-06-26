@@ -5,6 +5,7 @@ import { HymnService } from 'src/app/services/hymn.service';
 import { DUMMY_FEATURED_LISTINGS } from 'src/app/dummy_data';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-recently-viewed-list',
@@ -36,7 +37,7 @@ export class RecentlyViewedListComponent implements OnInit {
     lazy: true, // enable lazy loading of images
     watchSlidesVisibility: true, // needed for lazy loading to work
     watchSlidesProgress: true, // needed for lazy loading to work
-    speed: 400, // speed of transition in ms. You can increase/decrease this
+    speed: 400, // speed of transition in ms.
   };
   imageLoaded() {
     this.imageLoading = false;
@@ -77,5 +78,8 @@ export class RecentlyViewedListComponent implements OnInit {
   }
   useFallbackImage(event: any) {
     event.target.src = '/assets/fallback_placeholder.jpg'; // path to your fallback image
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }

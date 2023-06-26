@@ -10,7 +10,7 @@
   </ion-button>
 </ion-item>
 <ion-slides [options]="options" #slides>
-  <ion-slide *ngFor="let hymn of recentlyViewedHymns; let i = index" class="hymn-slide">
+  <ion-slide *ngFor="let hymn of recentlyViewedHymns; let i = index" class="hymn-slide" (click)="playHapticFeedback()">
     <ion-card [routerLink]="['/tabs/hymns', hymn.hymnNumber]">
       <div>
         <!-- Show the spinner while the image is loading -->
