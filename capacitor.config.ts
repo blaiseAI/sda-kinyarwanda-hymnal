@@ -14,6 +14,13 @@ const config: CapacitorConfig = {
   ios: {
     preferredContentMode: 'mobile',
   },
-};
+,
+    android: {
+       buildOptions: {
+          keystorePath: 'undefined',
+          keystoreAlias: 'undefined',
+       }
+    }
+  };
 
 export default config;
