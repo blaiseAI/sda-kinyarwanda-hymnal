@@ -7,6 +7,7 @@ import { FavouriteModalPage } from '../favourite-modal/favourite-modal.page';
 import { FeedbackModalPage } from '../feedback-modal/feedback-modal.page';
 import { Location } from '@angular/common';
 import { Share } from '@capacitor/share';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { HymnOptionsComponent } from 'src/app/components/hymn-options/hymn-options.component';
 
 @Component({
@@ -41,6 +42,7 @@ export class FavouriteHymnDetailPage implements OnInit {
     });
   }
   async openAddToFavoriteModal() {
+    this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: FavouriteModalPage,
       cssClass: 'my-custom-modal-css', // you can add your own CSS class
@@ -53,6 +55,7 @@ export class FavouriteHymnDetailPage implements OnInit {
     return await modal.present();
   }
   async openFeedbackModal() {
+    this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: FeedbackModalPage,
       cssClass: 'my-custom-modal-css',
@@ -66,6 +69,7 @@ export class FavouriteHymnDetailPage implements OnInit {
   }
   // share Hymn
   async shareHymn() {
+    this.playHapticFeedback();
     const shareRet = await Share.share({
       title: `SDA Kinyarwanda Hymnal App: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
       text: `Check out this hymn: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
@@ -92,5 +96,8 @@ export class FavouriteHymnDetailPage implements OnInit {
     });
 
     return await popover.present();
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Share } from '@capacitor/share';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { TextZoom, SetOptions, GetResult } from '@capacitor/text-zoom';
 import { Hymn } from 'src/app/models/hymn';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -48,6 +49,7 @@ export class HymnDetailPage implements OnInit {
     });
   }
   async openAddToFavoriteModal() {
+    this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: FavouriteModalPage,
       presentingElement: this.ionRouterOutlet.nativeEl,
@@ -61,6 +63,7 @@ export class HymnDetailPage implements OnInit {
     return await modal.present();
   }
   async openFeedbackModal() {
+    this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: FeedbackModalPage,
       presentingElement: this.ionRouterOutlet.nativeEl,
@@ -75,6 +78,7 @@ export class HymnDetailPage implements OnInit {
   }
   // share Hymn
   async shareHymn() {
+    this.playHapticFeedback();
     const shareRet = await Share.share({
       title: `SDA Kinyarwanda Hymnal App: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
       text: `Check out this hymn: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
@@ -106,5 +110,8 @@ export class HymnDetailPage implements OnInit {
     return this.sanitizer.bypassSecurityTrustStyle(
       `url('https://source.unsplash.com/random/900x700/?nature,${hymnNumber}')`
     );
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }
