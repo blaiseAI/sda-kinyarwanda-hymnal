@@ -1,11 +1,3 @@
-.verse-section {
-  background-color: #f2f2f2; /* change to the color you prefer */
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #e0e0e0; /* change to the color you prefer */
-  border-radius: 5px;
-}
-
 .hymn-details {
   padding: 16px;
 }
@@ -17,10 +9,17 @@
 }
 
 .verse-container {
-  background-color: #f5f5f5;
+  background-color: var(--ion-color-light); /* Use --ion-color-light for light mode */
   padding: 16px;
   border-radius: 8px;
+  // color: #000; /* Set the text color to black */
 }
+
+.dark-mode .verse-container {
+  background-color: var(--ion-color-dark); /* Use --ion-color-dark for dark mode */
+  color: #fff; /* Set the text color to white */
+}
+
 
 .verse {
   margin-bottom: 8px;

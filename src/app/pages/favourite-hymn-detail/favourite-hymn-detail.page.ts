@@ -85,7 +85,7 @@ export class FavouriteHymnDetailPage implements OnInit {
         hymn: this.hymn,
         options: {
           shareHymn: this.shareHymn.bind(this),
-          addToFavorites: this.openAddToFavoriteModal.bind(this),
+          // addToFavorites: this.openAddToFavoriteModal.bind(this), // Removed this line because I don't want to add to favorites from the popover
           openFeedbackModal: this.openFeedbackModal.bind(this),
         },
       },
