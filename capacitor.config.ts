@@ -14,7 +14,6 @@ const config: CapacitorConfig = {
   ios: {
     preferredContentMode: 'mobile',
   },
-,
     android: {
        buildOptions: {
           keystorePath: 'undefined',
