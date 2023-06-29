@@ -27,9 +27,21 @@ export class AppComponent {
     const result = await AppUpdate.getAppUpdateInfo();
     console.log('Current app version:', result.currentVersion);
   };
+  async simulateCheckForUpdate() {
+    return {
+      updateAvailability: AppUpdateAvailability.UPDATE_AVAILABLE,
+      immediateUpdateAllowed: true,
+      flexibleUpdateAllowed: true,
+      currentVersion: '1.0.0',
+      availableVersion: '2.0.0'
+    };
+  }
+  
 
   async checkForUpdate() {
     const result = await AppUpdate.getAppUpdateInfo();
+    //const result = await this.simulateCheckForUpdate(); // for testing
+    console.log('Update available:', result.updateAvailability === AppUpdateAvailability.UPDATE_AVAILABLE);
 
     if (result.updateAvailability === AppUpdateAvailability.UPDATE_AVAILABLE) {
       if (this.platform.is('android')) {
