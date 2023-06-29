@@ -48,6 +48,11 @@ export class HymnService {
 
       hymn.viewedAt = new Date(); // Add this line
 
+    const availableImagesCount = 13; // Set the number of available images
+    const randomImageIndex = Math.floor(Math.random() * availableImagesCount) + 1;
+    hymn.image = `/assets/images/image${randomImageIndex}.jpg`; 
+
+
       const updatedList = [hymn, ...recentlyViewedHymns.slice(0, 9)];
       this.saveRecentlyViewedHymns(updatedList);
     });

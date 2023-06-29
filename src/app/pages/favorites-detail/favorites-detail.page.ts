@@ -8,6 +8,7 @@ import {
 import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AlertController, IonList } from '@ionic/angular';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-favorites-detail',
@@ -51,6 +52,7 @@ export class FavoritesDetailPage implements OnInit {
     this.getHymnIdsCount();
   }
   async removeHymnFromFavorite(hymn: Hymn) {
+    this.playHapticFeedback();
     const alert = await this.alertController.create({
       header: 'Confirm Remove',
       message: `Are you sure you want to remove ${hymn.hymnNumber} - ${hymn.hymnTitle} from ${this.favourite.name} favourite list?`,
@@ -86,5 +88,8 @@ export class FavoritesDetailPage implements OnInit {
     } else {
       return [];
     }
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }

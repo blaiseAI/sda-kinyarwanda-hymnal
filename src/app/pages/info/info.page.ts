@@ -4,6 +4,7 @@ import { AppInfoService } from 'src/app/services/app-info.service';
 import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { PrivayPolicyPage } from '../privay-policy/privay-policy.page';
 import { TermsAndConditionsPage } from '../terms-and-conditions/terms-and-conditions.page';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-info',
@@ -33,8 +34,10 @@ export class InfoPage implements OnInit {
     let systemDark = window.matchMedia('(prefers-color-scheme: dark)');
     systemDark.addListener(this.colorTest);
     if (event.detail.checked) {
+      this.playHapticFeedback();
       document.body.setAttribute('data-theme', 'dark');
     } else {
+      this.playHapticFeedback();
       document.body.setAttribute('data-theme', 'light');
     }
   }
@@ -47,6 +50,7 @@ export class InfoPage implements OnInit {
   }
 
   async openPrivacyPolicy() {
+    this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: PrivayPolicyPage,
       presentingElement: this.ionRouterOutlet.nativeEl,
@@ -55,6 +59,7 @@ export class InfoPage implements OnInit {
   }
 
   async openTermsAndConditions() {
+    this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: TermsAndConditionsPage,
       presentingElement: this.ionRouterOutlet.nativeEl,
@@ -63,6 +68,7 @@ export class InfoPage implements OnInit {
   }
   async shareApp() {
     try {
+      this.playHapticFeedback();
       await Share.share({
         title: 'SDA Kinyarwanda Hymnal App',
         text: 'Check out this app I am using, "SDA Kinyarwanda Hymnal"!',
@@ -75,6 +81,7 @@ export class InfoPage implements OnInit {
   }
 
   rateApp() {
+    this.playHapticFeedback();
     window.open(
       'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873?action=write-review',
       '_system'
@@ -86,5 +93,8 @@ export class InfoPage implements OnInit {
     const subject = encodeURIComponent('General Feedback');
     const mailtoLink = `mailto:${emailAddress}?subject=${subject}`;
     window.open(mailtoLink, '_system');
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }

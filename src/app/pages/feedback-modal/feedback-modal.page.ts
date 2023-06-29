@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Feedback } from 'src/app/models/feedback.model';
 import { AirtableService } from 'src/app/services/airtable.service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-feedback-modal',
@@ -53,6 +54,7 @@ export class FeedbackModalPage {
 
     this.airtableService.addFeedback(feedback).subscribe(
       (res) => {
+        this.playHapticFeedback();
         console.log('Feedback submitted successfully:', res);
         this.feedbackForm.reset();
         this.modalController.dismiss();
@@ -60,6 +62,7 @@ export class FeedbackModalPage {
         toast.present();
       },
       (err) => {
+        this.playHapticFeedback();
         console.error('Error submitting feedback:', err);
         toast.message = 'Error submitting feedback';
         toast.present();
@@ -69,5 +72,8 @@ export class FeedbackModalPage {
 
   dismiss() {
     this.modalController.dismiss();
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }

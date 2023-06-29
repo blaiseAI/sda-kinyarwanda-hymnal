@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Share } from '@capacitor/share';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { TextZoom, SetOptions, GetResult } from '@capacitor/text-zoom';
 import { Hymn } from 'src/app/models/hymn';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HymnService } from 'src/app/services/hymn.service';
@@ -89,6 +88,7 @@ export class HymnDetailPage implements OnInit {
   }
 
   async presentPopover(ev: any) {
+    this.playHapticFeedback();
     const popover = await this.popoverController.create({
       component: HymnOptionsComponent,
       cssClass: 'hymn-options-popover',

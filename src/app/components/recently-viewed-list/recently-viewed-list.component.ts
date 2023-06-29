@@ -39,21 +39,6 @@ export class RecentlyViewedListComponent implements OnInit {
     watchSlidesProgress: true, // needed for lazy loading to work
     speed: 400, // speed of transition in ms.
   };
-  localImages: string[] = [
-    '/assets/images/image1.jpg',
-    '/assets/images/image2.jpg',
-    '/assets/images/image3.jpg',
-    '/assets/images/image4.jpg',
-    '/assets/images/image5.jpg',
-    '/assets/images/image6.jpg',
-    '/assets/images/image7.jpg',
-    '/assets/images/image8.jpg',
-    '/assets/images/image9.jpg',
-    '/assets/images/image10.jpg',
-    '/assets/images/image11.jpg',
-    '/assets/images/image12.jpg',
-    '/assets/images/image13.jpg',
-  ];
   imageLoaded() {
     this.imageLoading = false;
   }
@@ -77,6 +62,7 @@ export class RecentlyViewedListComponent implements OnInit {
   loadRecentlyViewedHymns() {
     this.hymnService.getRecentlyViewedHymns().then((hymns) => {
       this.recentlyViewedHymns = hymns;
+
       this.changeDetectorRef.detectChanges(); // manually trigger change detection
     });
   }

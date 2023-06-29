@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonList } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import {
   Favourite,
   FavouriteService,
@@ -30,6 +31,7 @@ export class FavoritesPage {
   }
 
   async deleteFavorite(favorite: Favourite) {
+    this.playHapticFeedback();
     const alert = await this.alertController.create({
       header: 'Confirm Delete',
       message: `Are you sure you want to delete ${favorite.name}? This will remove all ${favorite.hymnIds.length} hymn(s) from the favorite list.`,
@@ -71,5 +73,8 @@ export class FavoritesPage {
         favorite.name.toLowerCase().includes(query)
       );
     });
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }

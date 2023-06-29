@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, NavParams, ToastController } from '@ionic/angular';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import {
   Favourite,
   FavouriteService,
@@ -53,6 +54,7 @@ export class FavouriteModalPage implements OnInit {
       );
       if (favorite && favorite.hymnIds.includes(parseInt(this.hymnNumber))) {
         this.favoriteActionSuccess = false;
+        this.playHapticFeedback();
         this.presentToast('Hymn already exists in the selected favorite');
         return;
       }
@@ -63,6 +65,7 @@ export class FavouriteModalPage implements OnInit {
       );
       await this.getFavorites(); // <--- recall getFavorites to update the list
       this.favoriteActionSuccess = true;
+      this.playHapticFeedback();
       this.presentToast('Hymn added to favorite successfully');
       this.modalController.dismiss({ success: true });
     } else if (this.newFavoriteName) {
@@ -70,6 +73,7 @@ export class FavouriteModalPage implements OnInit {
         (c) => c.name.toLowerCase() === this.newFavoriteName.toLowerCase()
       );
       if (favoriteExists) {
+        this.playHapticFeedback();
         this.presentToast('Favorite with the same name already exists');
         this.favoriteActionSuccess = false;
         return;
@@ -83,10 +87,12 @@ export class FavouriteModalPage implements OnInit {
       await this.favouriteService.addFavourite(newFavorite);
       await this.getFavorites(); // <--- recall getFavorites to update the list
       this.favoriteActionSuccess = true;
+      this.playHapticFeedback();
       this.presentToast('Favorite created and hymn added successfully');
       this.modalController.dismiss({ success: true });
     } else {
       this.favoriteActionSuccess = false;
+      this.playHapticFeedback();
       this.presentToast(
         'Please select an existing favorite or enter a new favorite name'
       );
@@ -102,5 +108,8 @@ export class FavouriteModalPage implements OnInit {
       icon: this.favoriteActionSuccess ? 'checkmark-circle-outline' : 'alert',
     });
     toast.present();
+  }
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 }
