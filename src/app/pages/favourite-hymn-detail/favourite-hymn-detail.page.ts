@@ -80,6 +80,7 @@ export class FavouriteHymnDetailPage implements OnInit {
   }
 
   async presentPopover(ev: any) {
+    this.playHapticFeedback();
     const popover = await this.popoverController.create({
       component: HymnOptionsComponent,
       cssClass: 'hymn-options-popover',

@@ -5,6 +5,11 @@ import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { PrivayPolicyPage } from '../privay-policy/privay-policy.page';
 import { TermsAndConditionsPage } from '../terms-and-conditions/terms-and-conditions.page';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Platform } from '@ionic/angular';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+
+
 
 @Component({
   selector: 'app-info',
@@ -16,16 +21,20 @@ export class InfoPage implements OnInit {
   appDescription: string;
   appVersion: string;
   isMobile: boolean;
+  isIOS: boolean;
 
   constructor(
     private appInfoService: AppInfoService,
     public readonly ionRouterOutlet: IonRouterOutlet,
-    private readonly modalController: ModalController
+    private readonly modalController: ModalController,
+    private platform: Platform
   ) {
     this.appName = this.appInfoService.getAppName();
     this.appDescription = this.appInfoService.getAppDescription();
     this.appVersion = this.appInfoService.getAppVersion();
     this.isMobile = this.appInfoService.isMobile();
+    this.isIOS = Capacitor.getPlatform() === 'ios';
+
   }
 
   ngOnInit() {}
@@ -67,16 +76,33 @@ export class InfoPage implements OnInit {
     return await modal.present();
   }
   async shareApp() {
-    try {
-      this.playHapticFeedback();
-      await Share.share({
-        title: 'SDA Kinyarwanda Hymnal App',
-        text: 'Check out this app I am using, "SDA Kinyarwanda Hymnal"!',
-        url: 'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873',
-        dialogTitle: 'Share App',
-      });
-    } catch (error) {
-      console.log('Share failed:', error);
+    if (Capacitor.isNativePlatform()) {
+      try {
+        this.playHapticFeedback();
+  
+        const platform = Capacitor.getPlatform();
+        let storeUrl = '';
+  
+        if (platform === 'ios') {
+          // iOS platform, link to App Store
+          storeUrl = 'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873';
+        } else if (platform === 'android') {
+          // Android platform, link to Google Play Store
+          storeUrl = 'https://play.google.com/store/apps/details?id=com.devseb.sdaKinyarwandaHymnal';
+        }
+  
+        await Share.share({
+          title: 'SDA Kinyarwanda Hymnal App',
+          text: 'Check out this app I am using, "SDA Kinyarwanda Hymnal"!',
+          url: storeUrl,
+          dialogTitle: 'Share App',
+        });
+      } catch (error) {
+        console.log('Share failed:', error);
+      }
+    } else {
+      // Handle the case when the Share plugin is not available or when not running on a mobile device
+      console.log('Share functionality is not available');
     }
   }
 

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/src/assets/icon/sda_hymnal_logo.png" alt="SDA Kinyarwanda Hymnal App Logo" width="200">
+  <img src="/resources/icon.png" alt="SDA Kinyarwanda Hymnal App Logo" width="200">
 </div>
 
 # SDA Kinyarwanda Hymnal App
