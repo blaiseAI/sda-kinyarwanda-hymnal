@@ -6,6 +6,7 @@ import {
   Favourite,
   FavouriteService,
 } from 'src/app/services/favourite.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-favourite-modal',
@@ -26,7 +27,8 @@ export class FavouriteModalPage implements OnInit {
     private formBuilder: FormBuilder,
     private modalController: ModalController,
     private favouriteService: FavouriteService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private router: Router
   ) {
     this.favoriteForm = this.formBuilder.group({
       favoriteName: ['', Validators.required],
@@ -67,7 +69,8 @@ export class FavouriteModalPage implements OnInit {
       this.favoriteActionSuccess = true;
       this.playHapticFeedback();
       this.presentToast('Hymn added to favorite successfully');
-      this.modalController.dismiss({ success: true });
+      //this.modalController.dismiss({ success: true });
+      this.dismiss();
     } else if (this.newFavoriteName) {
       const favoriteExists = this.favourites.some(
         (c) => c.name.toLowerCase() === this.newFavoriteName.toLowerCase()
@@ -111,5 +114,13 @@ export class FavouriteModalPage implements OnInit {
   }
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
+  }
+  navigateToAllFavorites() {
+  this.modalController.dismiss().then(() => {
+    this.router.navigate(['/tabs/favorites']);
+  });
+}
+  ionViewWillLeave() {
+    this.dismiss();
   }
 }
