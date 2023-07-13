@@ -2,9 +2,12 @@
   <ion-toolbar>
     <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
+      <ion-button (click)="openAddToFavoriteModal()">
+        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
@@ -13,27 +16,7 @@
 </ion-header>
 
 <ion-content id="content" class="hymn-details">
-  <ion-item lines="none">
-    <ion-text>
-      <h3 class="hymn-title">{{ hymn.hymnNumber }} {{ hymn.hymnTitle }}</h3>
-      <div class="verse-container">
-        <p *ngFor="let verse of hymn?.verses" class="verse">
-          <ng-container *ngIf="verse.includes('Gusubiramo')">
-            {{ verse.slice(0, verse.indexOf('Gusubiramo')) }}
-            <strong>Gusubiramo</strong>
-            {{ verse.slice(verse.indexOf('Gusubiramo') + 'Gusubiramo'.length) }}
-          </ng-container>
-          <ng-container *ngIf="!verse.includes('Gusubiramo')">
-            {{ verse }}
-          </ng-container>
-        </p>
-      </div>
-    </ion-text>
-  </ion-item>
-  <ion-fab  slot="fixed" vertical="bottom" horizontal="center" (click)="openAddToFavoriteModal()">
-    <ion-fab-button>
-      <ion-icon name="heart-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-  
+  <!-- Hymn Details component start -->
+  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+  <!-- Hymn Details component end -->
 </ion-content>

@@ -1,3 +1,4 @@
+import { SharedModule } from 'src/app/components/shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,8 @@ import { FavouriteHymnDetailPage } from './favourite-hymn-detail.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    FavouriteHymnDetailPageRoutingModule
+    FavouriteHymnDetailPageRoutingModule,
+    SharedModule
   ],
   declarations: [FavouriteHymnDetailPage]
 })
