@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ParallaxDirective } from './directives/parallax.directive';
 // import { AppRate } from '@ionic-native/app-rate';
 
 @NgModule({

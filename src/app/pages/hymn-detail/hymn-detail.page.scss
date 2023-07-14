@@ -1,33 +1,24 @@
-.hymn-details {
-  padding: 16px;
+ion-toolbar {
+	ion-icon {
+		font-size: 25px;
+	}
 }
 
-.hymn-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
+ion-content {
+	position: absolute;
+	// --background: #f1f1f1;
+	--padding-bottom: 50px;
 }
 
-.verse-container {
-  background-color: var(--ion-color-light); /* Use --ion-color-light for light mode */
-  padding: 16px;
-  border-radius: 8px;
-  // color: #000; /* Set the text color to black */
+.light-bg {
+	background: #ffffff;
+	z-index: 10;
 }
 
-.dark-mode .verse-container {
-  background-color: var(--ion-color-dark); /* Use --ion-color-dark for dark mode */
-  color: #fff; /* Set the text color to white */
-}
-
-
-.verse {
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-.hymn-details {
-  -webkit-user-select: text;  /* Safari */
-  -moz-user-select: text;     /* Firefox */
-  -ms-user-select: text;      /* IE 10+ */
-  user-select: text;          /* Standard syntax */
+.header-image {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	height: 30vh;
+	will-change: transform;
 }

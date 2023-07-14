@@ -1,0 +1,35 @@
+.hymn-details {
+    padding: 16px;
+  }
+  
+  .hymn-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .verse-container {
+    background-color: var(--ion-color-light); /* Use --ion-color-light for light mode */
+    padding: 16px;
+    border-radius: 8px;
+    margin: 20px 0;
+    // color: #000; /* Set the text color to black */
+  }
+  
+  .dark-mode .verse-container {
+    background-color: var(--ion-color-dark); /* Use --ion-color-dark for dark mode */
+    color: #fff; /* Set the text color to white */
+  }
+  
+  
+  .verse {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .hymn-details {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* IE 10+ */
+    user-select: text;          /* Standard syntax */
+  }
+  

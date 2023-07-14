@@ -5,6 +5,8 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Hymn } from 'src/app/models/hymn';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HymnService } from 'src/app/services/hymn.service';
+import { Platform } from '@ionic/angular';
+
 import {
   IonRouterOutlet,
   ModalController,
@@ -33,7 +35,8 @@ export class HymnDetailPage implements OnInit {
     private modalController: ModalController,
     private popoverController: PopoverController,
     public readonly ionRouterOutlet: IonRouterOutlet,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private platform: Platform
   ) {}
 
   ngOnInit() {
@@ -114,4 +117,5 @@ export class HymnDetailPage implements OnInit {
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
   }
+  
 }
