@@ -1,0 +1,24 @@
+ion-toolbar {
+	ion-icon {
+		font-size: 25px;
+	}
+}
+
+ion-content {
+	position: absolute;
+	// --background: #f1f1f1;
+	--padding-bottom: 50px;
+}
+
+.light-bg {
+	background: #ffffff;
+	z-index: 10;
+}
+
+.header-image {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	height: 30vh;
+	will-change: transform;
+}

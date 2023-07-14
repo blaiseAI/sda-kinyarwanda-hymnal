@@ -1,14 +1,19 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Indirimbo za 350</ion-title>
+    <ion-title>Indirimbo za 350
+    </ion-title>
   </ion-toolbar>
   <ion-toolbar>
     <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search by hymn# or title" showCancelButton="always"
       debounce="300"></ion-searchbar>
   </ion-toolbar>
-
 </ion-header>
-<ion-content>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Indirimbo za 350</ion-title>
+    </ion-toolbar>
+  </ion-header>
   <app-recently-viewed-list *ngIf="!isSearching"></app-recently-viewed-list>
   <ion-item>
     <ion-label>

@@ -1,22 +1,40 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+      <!-- <ion-back-button defaultHref="/"></ion-back-button> -->
+      <ion-button fill="solid" shape="round" color="light" routerLink="/">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="openAddToFavoriteModal()">
-        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+      <ion-button fill="solid" shape="round" color="light" (click)="openAddToFavoriteModal()">
+        <ion-icon  slot="icon-only" name="heart-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="presentPopover($event)">
+      <ion-button fill="solid" shape="round" color="light"  (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content id="content" class="hymn-details">
+<ion-content
+	[fullscreen]="true"
+	scrollEvents="true"
+>
+  <div #img class="header-image" [style.background-image]="'url(assets/images/image1.jpg)'"></div>
+
+  <ion-header collapse="condense" class="ion-no-border">
+		<ion-toolbar>
+			<ion-title size="medium">
+        {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
+      </ion-title>
+		</ion-toolbar>
+	</ion-header>
   <!-- Hymn Details component start -->
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+  <!-- <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail> -->
   <!-- Hymn Details component end -->
 </ion-content>
