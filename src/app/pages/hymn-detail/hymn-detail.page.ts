@@ -15,6 +15,7 @@ import {
 import { FavouriteModalPage } from '../favourite-modal/favourite-modal.page';
 import { FeedbackModalPage } from '../feedback-modal/feedback-modal.page';
 import { HymnOptionsComponent } from 'src/app/components/hymn-options/hymn-options.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-hymn-detail',
@@ -28,6 +29,8 @@ export class HymnDetailPage implements OnInit {
     verses: [],
   };
   showHymnOptions = false;
+  recentlyViewedHymns: Hymn[] = [];
+  recentlyViewedHymnsSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +52,14 @@ export class HymnDetailPage implements OnInit {
       // add hymn to recently viewed
       this.hymnService.addToRecentlyViewed(this.hymn);
     });
+
+    // Get recently viewed hymns
+    this.recentlyViewedHymnsSubscription =
+      this.hymnService.recentlyViewedHymns.subscribe((hymns) => {
+        this.recentlyViewedHymns = hymns;
+      }
+    );
+    
   }
   async openAddToFavoriteModal() {
     this.playHapticFeedback();
@@ -84,7 +95,7 @@ export class HymnDetailPage implements OnInit {
     const shareRet = await Share.share({
       title: `SDA Kinyarwanda Hymnal App: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
       text: `Check out this hymn: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
-      url: 'https://sda-kinyarwanda-hymnal.surge.sh/',
+      url: 'https://sda-kinyarwanda-hymnal.vercel.app/',
       dialogTitle: 'Share Hymn',
     });
     console.log('Share Return:', shareRet);
@@ -109,13 +120,27 @@ export class HymnDetailPage implements OnInit {
 
     return await popover.present();
   }
-  getBackgroundImageUrl(hymnNumber: number): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle(
-      `url('https://source.unsplash.com/random/900x700/?nature,${hymnNumber}')`
-    );
-  }
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
   }
-  
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    this.recentlyViewedHymnsSubscription.unsubscribe();
+  }
+  // Filter the recently viewed hymns to get the current hymn image 
+  getBackgroundImageUrl(hymnNumber: number): SafeStyle {
+  const currentHymn = this.recentlyViewedHymns.find(
+    (hymn) => hymn.hymnNumber === hymnNumber
+  );
+  if (currentHymn && currentHymn.image) {
+    return this.sanitizer.bypassSecurityTrustStyle(`url(${currentHymn.image})`);
+  } else {
+    const images = ['image1.jpg', 'image2.jpg', 'image3.jpg', 'image4.jpg', 'image5.jpg', 'image6.jpg', 'image7.jpg', 'image8.jpg'];
+    const randomIndex = Math.floor(Math.random() * images.length);
+    return this.sanitizer.bypassSecurityTrustStyle(
+      `url(assets/images/${images[randomIndex]})`
+    );
+  }
+}
 }

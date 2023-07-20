@@ -15,10 +15,45 @@ ion-content {
 	z-index: 10;
 }
 
+// .header-image {
+// 	background-repeat: no-repeat;
+// 	background-position: center;
+// 	background-size: cover;
+// 	height: 30vh;
+// 	will-change: transform;
+// }
 .header-image {
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-	height: 30vh;
-	will-change: transform;
+  position: relative;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+.hymn-details {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* IE 10+ */
+    user-select: text;          /* Standard syntax */
+  }
+ion-back-button {
+  --background: var(--ion-color-light);
+  --border-radius: 50%;
+  height: 45px;
+  width: 45px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --icon-color: var(--ion-color-dark);
+}
+ion-back-button::part(text) {
+  display: none;
 }

@@ -2,10 +2,7 @@
   <ion-toolbar color="light">
     <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
     <ion-buttons slot="start">
-      <!-- <ion-back-button defaultHref="/"></ion-back-button> -->
-      <ion-button fill="solid" shape="round" color="light" routerLink="/">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
+      <ion-back-button  defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="solid" shape="round" color="light" (click)="openAddToFavoriteModal()">
@@ -19,22 +16,20 @@
 </ion-header>
 
 <ion-content
-	[fullscreen]="true"
-	scrollEvents="true"
+    [fullscreen]="true"
+    scrollEvents="true"
+  id="content" class="hymn-details"
 >
-  <div #img class="header-image" [style.background-image]="'url(assets/images/image1.jpg)'"></div>
+  <div class="header-image" [style.background-image]="getBackgroundImageUrl(hymn.hymnNumber)">
+    <ion-title class="overlay">{{ hymn.hymnTitle }}</ion-title>
+  </div>
 
   <ion-header collapse="condense" class="ion-no-border">
-		<ion-toolbar>
-			<ion-title size="medium">
+        <ion-toolbar>
+            <ion-title size="small">
         {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
       </ion-title>
-		</ion-toolbar>
-	</ion-header>
-  <!-- Hymn Details component start -->
+        </ion-toolbar>
+    </ion-header>
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
-  <!-- <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
-  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
-  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail> -->
-  <!-- Hymn Details component end -->
 </ion-content>
