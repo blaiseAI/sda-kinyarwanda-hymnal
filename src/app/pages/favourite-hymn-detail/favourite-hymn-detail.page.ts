@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Hymn } from 'src/app/models/hymn';
 import { HymnService } from 'src/app/services/hymn.service';
@@ -18,6 +18,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./favourite-hymn-detail.page.scss'],
 })
 export class FavouriteHymnDetailPage implements OnInit {
+  @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
+  audioPlayer!: HTMLAudioElement;
+  audioUrl!: string;
+  audioError: boolean = false;
+  audioProgress!: number;
   hymn: Hymn = {
     hymnNumber: 0,
     hymnTitle: '',
@@ -46,6 +51,18 @@ export class FavouriteHymnDetailPage implements OnInit {
       // console.log(this.hymn);
       // add hymn to recently viewed
       this.hymnService.addToRecentlyViewed(this.hymn);
+      // Check audio availability and set audioUrl if available
+      if (hymnNumber) {
+        this.audioUrl = `https://bibiliya.com/bibiliya-media/hymns-audio/guhimbaza/${hymnNumber.padStart(
+          3,
+          '0'
+        )}.mp3`;
+        // Attempt to fetch the audio to check availability
+        const audioElement = new Audio(this.audioUrl);
+        audioElement.addEventListener('error', () => {
+          this.audioError = true;
+        });
+      }
     });
 
     // Get recently viewed hymns
@@ -55,6 +72,34 @@ export class FavouriteHymnDetailPage implements OnInit {
       }
     );
     
+  }
+  playAudio() {
+    if (!this.audioPlayer) {
+      this.audioPlayer = this.audioPlayerRef.nativeElement;
+    }
+    if (this.audioPlayer.paused) {
+      if (this.audioPlayer.src !== this.audioUrl) {
+        this.audioPlayer.src = this.audioUrl;
+      }
+      this.audioPlayer.play();
+    } else {
+      this.audioPlayer.pause();
+    }
+  }
+
+  onAudioEnded() {
+    this.audioPlayer.currentTime = 0;
+    this.audioProgress = 0;
+  }
+
+  onAudioTimeUpdate() {
+    if (this.audioPlayer) {
+      const currentTime = this.audioPlayer.currentTime;
+      const duration = this.audioPlayer.duration;
+      if (duration) {
+        this.audioProgress = (currentTime / duration) * 100;
+      }
+    }
   }
   async openAddToFavoriteModal() {
     this.playHapticFeedback();
@@ -131,7 +176,11 @@ export class FavouriteHymnDetailPage implements OnInit {
   if (currentHymn && currentHymn.image) {
     return this.sanitizer.bypassSecurityTrustStyle(`url(${currentHymn.image})`);
   } else {
-    const images = ['image1.jpg', 'image2.jpg', 'image3.jpg', 'image4.jpg', 'image5.jpg', 'image6.jpg', 'image7.jpg', 'image8.jpg'];
+    const images = [];
+      for (let i = 1; i <= 21; i++) {
+        const imageName = `image${i}.jpg`;
+        images.push(imageName);
+      }
     const randomIndex = Math.floor(Math.random() * images.length);
     return this.sanitizer.bypassSecurityTrustStyle(
       `url(assets/images/${images[randomIndex]})`

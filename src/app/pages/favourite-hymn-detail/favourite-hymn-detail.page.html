@@ -1,55 +1,64 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="openAddToFavoriteModal()">
-        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
-      </ion-button>
-      <ion-button (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="ellipsis-horizontal-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content id="content" class="hymn-details">
-  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
-</ion-content> -->
 <ion-header>
   <ion-toolbar color="light">
     <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button  defaultHref="/"></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="solid" shape="round" color="light" (click)="openAddToFavoriteModal()">
-        <ion-icon  slot="icon-only" name="heart-outline"></ion-icon>
+        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
       </ion-button>
-      <ion-button fill="solid" shape="round" color="light"  (click)="presentPopover($event)">
+      <ion-button fill="solid" shape="round" color="light" (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content
-    [fullscreen]="true"
-    scrollEvents="true"
-  id="content" class="hymn-details"
->
+<ion-content [fullscreen]="true" scrollEvents="true" id="content" class="hymn-details">
   <div class="header-image" [style.background-image]="getBackgroundImageUrl(hymn.hymnNumber)">
     <ion-title class="overlay">{{ hymn.hymnTitle }}</ion-title>
   </div>
 
   <ion-header collapse="condense" class="ion-no-border">
-        <ion-toolbar>
-            <ion-title size="small">
+    <ion-toolbar>
+      <ion-title size="small">
         {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
       </ion-title>
-        </ion-toolbar>
-    </ion-header>
+    </ion-toolbar>
+  </ion-header>
+  <!-- Add a new section with a card for the audio feature -->
+  <ng-container *ngIf="audioUrl && !audioError">
+    <ion-card class="audio-feature-card">
+      <ion-item lines="none">
+        <!-- <ion-icon slot="start" name="mic-outline"></ion-icon> -->
+        <ion-button slot="start" (click)="playAudio()">
+          <ion-icon *ngIf="audioPlayer && audioPlayer.paused" name="play-circle-outline"></ion-icon>
+          <ion-icon *ngIf="audioPlayer && !audioPlayer.paused" name="pause-circle-outline"></ion-icon>
+        </ion-button>
+        <ion-label>
+          <h2 class="audio-feature-title">Audio (Experimental Feature)</h2>
+          <p class="audio-feature-description">Listen to the hymn being sung</p>
+        </ion-label>
+        <!-- <ion-button slot="end" (click)="playAudio()">
+          <ion-icon *ngIf="audioPlayer && audioPlayer.paused" name="play-circle-outline"></ion-icon>
+          <ion-icon *ngIf="audioPlayer && !audioPlayer.paused" name="pause-circle-outline"></ion-icon>
+        </ion-button> -->
+      </ion-item>
+      <div class="audio-progress-bar" [style.width]="audioProgress + '%'"></div>
+      <audio #audioPlayer  [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
+    </ion-card>
+  </ng-container>
+  <ng-container *ngIf="!audioUrl || audioError">
+    <ion-card>
+      <ion-item>
+        <ion-icon slot="start" name="alert-circle-outline"></ion-icon>
+        <ion-label>
+          <h2 class="audio-feature-title">Audio Not Available</h2>
+          <p class="audio-feature-description">Sorry, audio is not yet available.</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ng-container>
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
 </ion-content>
