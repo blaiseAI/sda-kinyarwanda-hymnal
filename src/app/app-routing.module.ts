@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { TabnavPage } from './tabnav/tabnav.page';
+import { NumberTabComponent } from './components/number-tab/number-tab.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,9 @@ const routes: Routes = [
               ),
           },
         ],
+      },
+      {
+        path: 'number', component: NumberTabComponent 
       },
       {
         path: 'favorites',

@@ -40,10 +40,6 @@
           <h2 class="audio-feature-title">Audio (Experimental Feature)</h2>
           <p class="audio-feature-description">Listen to the hymn being sung</p>
         </ion-label>
-        <!-- <ion-button slot="end" (click)="playAudio()">
-          <ion-icon *ngIf="audioPlayer && audioPlayer.paused" name="play-circle-outline"></ion-icon>
-          <ion-icon *ngIf="audioPlayer && !audioPlayer.paused" name="pause-circle-outline"></ion-icon>
-        </ion-button> -->
       </ion-item>
       <div class="audio-progress-bar" [style.width]="audioProgress + '%'"></div>
       <audio #audioPlayer  [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
@@ -61,4 +57,25 @@
     </ion-card>
   </ng-container>
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+  <!-- Add navigation buttons-->
+  <!-- Navigation Buttons Section -->
+  <ng-container *ngIf="showNavigationButtons">
+    <ion-card>
+      <ion-item class="ion-no-padding navigation-buttons" lines="none">
+        <!-- Previous button appears correct -->
+        <ion-button fill="clear" slot="start" *ngIf="showPreviousButton" (click)="navigateToPreviousHymn()">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Previous
+        </ion-button>
+        <!-- Adjusted Next button with text before the icon -->
+        <ion-button fill="clear" slot="end" *ngIf="showNextButton" (click)="navigateToNextHymn()">
+          Next
+          <ion-icon slot="end" name="chevron-forward"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </ng-container>
+  
+  
+  
 </ion-content>

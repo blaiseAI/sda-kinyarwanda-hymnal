@@ -61,4 +61,21 @@
     </ion-card>
   </ng-container>
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+    <!-- Add navigation buttons-->
+   <!-- Navigation Buttons Section -->
+   <ng-container *ngIf="showNavigationButtons">
+    <ion-card>
+      <ion-item class="ion-no-padding navigation-buttons" lines="none">
+        <ion-button fill="clear" slot="start" *ngIf="showPreviousButton" (click)="navigateToPreviousHymn()">
+          Previous
+          <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" slot="end" *ngIf="showNextButton" (click)="navigateToNextHymn()">
+          <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+          Next
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </ng-container>
+  
 </ion-content>

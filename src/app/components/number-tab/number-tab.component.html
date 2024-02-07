@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Search By #</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Search By #</ion-title>
+    </ion-toolbar>
+        <!-- <div *ngIf="shouldDisplayBadge()" class="new-features-badge">
+      New Feature
+    </div> -->
+  </ion-header>
+  <div class="container">
+    <ion-item lines="full" class="hymn-input-item">
+      <ion-label position="floating">Enter Hymn Number</ion-label>
+      <ion-input [(ngModel)]="hymnNumber" (ngModelChange)="onHymnNumberChange()" type="number"></ion-input>
+    </ion-item>
+    <div *ngIf="hymnTitle" class="hymn-title">
+      <span *ngFor="let word of words; let i = index">
+        <span class="animated-word" style="--delay: {{i * 0.2}}s;">{{ word }}</span>&nbsp;
+      </span>
+    </div>
+    
+    <ion-button expand="block" class="open-button" (click)="openHymn()" [disabled]="!hymnNumber || hymnNumber <= 0">
+      Open Hymn
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+  }
+  
+  .hymn-input-item {
+    margin-bottom: 20px;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    // --border-radius: 8px;
+  }
+  
+  .hymn-title {
+    text-align: center;
+  }
+  
+  .animated-word {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInUp 0.5s forwards;
+    animation-delay: var(--delay);
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  .open-button {
+    --border-radius: 8px;
+    margin-top: 20px;
+    font-weight: bold;
+    --background: var(--ion-color-primary); /* Use your theme's primary color */
+    --background-activated: var(--ion-color-primary-shade); /* Slightly darker variant for activated state */
+    --background-focused: var(--ion-color-primary-tint); /* Slightly lighter variant for focused state */
+  }
+
+  /* In your-component.component.scss */
+.new-features-badge {
+    padding: 8px;
+    background-color: var(--ion-color-primary-tint); /* Primary color or any color that signifies new or important features */
+    color: white;
+    border-radius: 4px;
+    text-align: center;
+    width: max-content;
+    margin: auto; /* Center the badge horizontally */
+    margin-top: 16px; /* Space from top */
+  }
+  
+  

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Share } from '@capacitor/share';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Hymn } from 'src/app/models/hymn';
@@ -36,6 +36,10 @@ export class HymnDetailPage implements OnInit {
   showHymnOptions = false;
   recentlyViewedHymns: Hymn[] = [];
   recentlyViewedHymnsSubscription!: Subscription;
+  showNavigationButtons: boolean = true;
+  showPreviousButton: boolean = true;
+  showNextButton: boolean = true;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -44,15 +48,20 @@ export class HymnDetailPage implements OnInit {
     private popoverController: PopoverController,
     public readonly ionRouterOutlet: IonRouterOutlet,
     private sanitizer: DomSanitizer,
-    private platform: Platform
+    private platform: Platform,
+    private router: Router
   ) {}
 
   ngOnInit() {
     const hymnNumber = this.route.snapshot.paramMap.get('hymnNumber');
     const id = typeof hymnNumber === 'string' ? parseInt(hymnNumber, 10) : 0;
 
+    this.checkUrlAndSetVisibility();
+    //this.setNavigationButtonVisibility();
+
     this.hymnService.getHymn(id).subscribe((hymn) => {
       this.hymn = hymn;
+      this.setNavigationButtonVisibility(); // Update navigation button visibility based on the fetched hymn
       // console.log(this.hymn);
       // add hymn to recently viewed
       this.hymnService.addToRecentlyViewed(this.hymn);
@@ -195,4 +204,38 @@ export class HymnDetailPage implements OnInit {
       );
     }
   }
+
+  // Navigate to the previous hymn
+navigateToPreviousHymn() {
+  const previousHymnNumber = this.hymn.hymnNumber - 1;
+  if (previousHymnNumber >= 1) {
+    this.navigateToHymn(previousHymnNumber);
+  }
+}
+
+// Navigate to the next hymn
+navigateToNextHymn() {
+  const nextHymnNumber = this.hymn.hymnNumber + 1;
+  // You can add logic to limit the maximum hymn number if needed.
+  this.navigateToHymn(nextHymnNumber);
+}
+
+// Helper method to navigate to a specific hymn
+navigateToHymn(hymnNumber: number) {
+  // Navigate to the HymnDetailPage for the specified hymn number
+  this.router.navigate(['/tabs/hymns', hymnNumber]);
+}
+
+checkUrlAndSetVisibility() {
+  // Get the current URL
+  const currentUrl = this.router.url;
+  // Check if it matches the condition
+  this.showNavigationButtons = !currentUrl.startsWith('/tabs/favorites/');
+}
+setNavigationButtonVisibility() {
+    this.showPreviousButton = this.hymn.hymnNumber > 1;
+    this.showNextButton = this.hymn.hymnNumber < 350;
+  }
+
+
 }
