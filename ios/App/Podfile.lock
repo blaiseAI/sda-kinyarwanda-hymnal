@@ -20,6 +20,8 @@ PODS:
     - Capacitor
   - CapawesomeCapacitorAppUpdate (5.0.0):
     - Capacitor
+  - CordovaPlugins (5.0.5):
+    - CapacitorCordova
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -33,6 +35,7 @@ DEPENDENCIES:
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorTextZoom (from `../../node_modules/@capacitor/text-zoom`)"
   - "CapawesomeCapacitorAppUpdate (from `../../node_modules/@capawesome/capacitor-app-update`)"
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -57,6 +60,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/text-zoom"
   CapawesomeCapacitorAppUpdate:
     :path: "../../node_modules/@capawesome/capacitor-app-update"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
   Capacitor: b1248915663add1bd6567e2b67c1c1fa3abcf5e8
@@ -70,7 +75,8 @@ SPEC CHECKSUMS:
   CapacitorStatusBar: 190e0321b8734f4244d0c81baa183a00d5806ddf
   CapacitorTextZoom: b1fb624a67d3a487a4b5783d18aaa7b2898bab77
   CapawesomeCapacitorAppUpdate: b49ba541bc33085c758af19207ce2e0ac5c376d0
+  CordovaPlugins: 22742ae7253dfccf584dc7ba979ba90e3c8edea4
 
-PODFILE CHECKSUM: 2a56f2d0152b5eff2d66b200c34c57a364c43896
+PODFILE CHECKSUM: e342e64728152aef2fe55d5a6c038932b43a7f00
 
 COCOAPODS: 1.13.0

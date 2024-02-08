@@ -75,15 +75,27 @@ words: string[] = [];
     this.hymnTitle = null;
   }
 }
-onHymnNumberChange() {
-  if (this.hymnNumber > 350) {
-    this.hymnNumber = null; // Reset the input if the number exceeds 350
-    this.hymnTitle = null;
-    this.presentToast(); // Inform the user about the valid input range
+onHymnNumberChange(newValue: string) {
+  // Attempt to parse the newValue to an integer, or default to null if not possible
+  const numericValue = newValue ? parseInt(newValue, 10) : null;
+
+  // Check if numericValue is not null and perform further operations
+  if (numericValue !== null) {
+    if (numericValue > 350) {
+      this.presentToast();
+      this.resetState();
+    } else {
+      this.hymnNumber = numericValue;
+      this.fetchHymnDetails(); // Proceed to fetch hymn details
+    }
   } else {
-    this.fetchHymnDetails(); // Proceed to fetch hymn details
+    // Handle the case where numericValue is null, which could mean the input was cleared or invalid
+    this.resetState();
+    // Optionally clear the hymn details or handle this scenario as needed
   }
 }
+
+
   
   openHymn() {
     if (this.hymnNumber && this.hymnNumber > 0) {

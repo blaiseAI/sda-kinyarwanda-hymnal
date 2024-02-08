@@ -53,5 +53,30 @@
     margin: auto; /* Center the badge horizontally */
     margin-top: 16px; /* Space from top */
   }
+
+
+  /* Input Field Styles */
+  .ionic-input {
+    background: transparent; /* Ensure no background color */
+    border: none; /* Remove border */
+    box-shadow: none; /* Remove shadow */
+    padding: 13px 15px; /* Adjust padding to match ionic input */
+    font-size: 18px; /* Increased font size for bigger text */
+    width: calc(100% - 30px); /* Adjust width if padding is added */
+    margin: auto; /* Center the input in the container */
+    margin-bottom: 15px; /* Space below the input */
+    box-sizing: border-box; /* Include padding in width calculation */
+    outline: none; /* Remove the outline on focus */
+    text-align: center; /* Center the text */
+  }
+  
+  /* Adjust the input placeholder for better visibility */
+  .ionic-input::placeholder {
+    color: #bbb; /* Placeholder text color */
+    opacity: 1; /* Full opacity for placeholder */
+    font-size: 18px; /* Match font size of input text */
+  }
+  
+  
   
   
