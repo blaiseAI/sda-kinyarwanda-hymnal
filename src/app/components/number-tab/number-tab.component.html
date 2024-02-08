@@ -15,6 +15,15 @@
   </ion-header>
   <div class="container">
     <ion-item lines="full" class="hymn-input-item">
+      <!-- <ion-label position="floating">Enter Hymn Number</ion-label> -->
+      <!-- <ion-input [(ngModel)]="hymnNumber" (ngModelChange)="onHymnNumberChange()" type="number"></ion-input> -->
+      <!-- <input type="text"
+       pattern="\\d*"
+       [ngModel]="hymnNumber"
+       (ngModelChange)="onHymnNumberChange($event)"
+       name="hymnNumber"
+       placeholder="Enter Hymn Number"
+       class="ionic-input"> -->
        <input class="ionic-input" type="text" pattern="[0-9]*" [ngModel]="hymnNumber" (ngModelChange)="onHymnNumberChange($event)" name="hymnNumber" placeholder="Enter Hymn Number">
 
 
