@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Hymn } from 'src/app/models/hymn';
@@ -88,7 +88,7 @@ onHymnNumberChange() {
   openHymn() {
     if (this.hymnNumber && this.hymnNumber > 0) {
       this.router.navigate(['/tabs/hymns', this.hymnNumber]).then(() => {
-        this.hymnNumber = null; // Clear the input field by resetting hymnNumber
+        this.resetState(); // Call a method to reset the state
       });
     } else {
       // Optionally show an error message or alert if the hymn number is invalid
@@ -103,6 +103,13 @@ onHymnNumberChange() {
       this.words = this.hymnTitle ? this.hymnTitle.split(' ') : [];
     }
   }
+
+  resetState() {
+    this.hymnNumber = null;
+    this.hymnTitle = null; // Ensure hymnTitle is also cleared
+    this.words = []; // Clear words array to remove any remaining title words
+  }
+  
 
   // Function to check if the badge should be displayed
   shouldDisplayBadge(): boolean {
