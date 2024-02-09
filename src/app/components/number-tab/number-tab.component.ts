@@ -75,25 +75,34 @@ words: string[] = [];
     this.hymnTitle = null;
   }
 }
-onHymnNumberChange(newValue: string) {
-  // Attempt to parse the newValue to an integer, or default to null if not possible
-  const numericValue = newValue ? parseInt(newValue, 10) : null;
+// onHymnNumberChange(newValue: string) {
+//   // Attempt to parse the newValue to an integer, or default to null if not possible
+//   const numericValue = newValue ? parseInt(newValue, 10) : null;
 
-  // Check if numericValue is not null and perform further operations
-  if (numericValue !== null) {
-    if (numericValue > 350) {
-      this.presentToast();
-      this.resetState();
-    } else {
-      this.hymnNumber = numericValue;
-      this.fetchHymnDetails(); // Proceed to fetch hymn details
-    }
+//   // Check if numericValue is not null and perform further operations
+//   if (numericValue !== null) {
+//     if (numericValue > 350) {
+//       this.presentToast();
+//       this.resetState();
+//     } else {
+//       this.hymnNumber = numericValue;
+//       this.fetchHymnDetails(); // Proceed to fetch hymn details
+//     }
+//   } else {
+//     // Handle the case where numericValue is null, which could mean the input was cleared or invalid
+//     this.resetState();
+//     // Optionally clear the hymn details or handle this scenario as needed
+//   }
+// }
+onHymnNumberChange() {
+  if (this.hymnNumber > 350) {
+    this.hymnNumber = null; // Reset the input if the number exceeds 350
+    this.presentToast(); // Inform the user about the valid input range
   } else {
-    // Handle the case where numericValue is null, which could mean the input was cleared or invalid
-    this.resetState();
-    // Optionally clear the hymn details or handle this scenario as needed
+    this.fetchHymnDetails(); // Proceed to fetch hymn details
   }
 }
+
 
 
   
