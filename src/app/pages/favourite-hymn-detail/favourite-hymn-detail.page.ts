@@ -31,10 +31,11 @@ export class FavouriteHymnDetailPage implements OnInit {
   showHymnOptions = false;
   recentlyViewedHymns: Hymn[] = [];
   recentlyViewedHymnsSubscription!: Subscription;
-  showNavigationButtons: boolean = true; // Default value
+  showNavigationButtons: boolean = true;
   showPreviousButton: boolean = true;
   showNextButton: boolean = true;
-
+  lastScrollTop: number = 0;
+  private scrollTimeout: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,7 +45,7 @@ export class FavouriteHymnDetailPage implements OnInit {
     public readonly ionRouterOutlet: IonRouterOutlet,
     private sanitizer: DomSanitizer,
     private platform: Platform,
-    private router:Router
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -55,7 +56,6 @@ export class FavouriteHymnDetailPage implements OnInit {
 
     this.hymnService.getHymn(id).subscribe((hymn) => {
       this.hymn = hymn;
-      // console.log(this.hymn);
       // add hymn to recently viewed
       this.hymnService.addToRecentlyViewed(this.hymn);
       // Check audio availability and set audioUrl if available
@@ -224,5 +224,26 @@ export class FavouriteHymnDetailPage implements OnInit {
   setNavigationButtonVisibility() {
     this.showPreviousButton = this.hymn.hymnNumber > 1;
     this.showNextButton = this.hymn.hymnNumber < 355;
+  }
+
+  onScroll(event: any) {
+    // Clear the previous timeout
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+    }
+
+    // Hide buttons immediately when scrolling
+    this.showNavigationButtons = false;
+
+    // Set a timeout to show buttons after scrolling stops
+    this.scrollTimeout = setTimeout(() => {
+      this.showNavigationButtons = true;
+    }, 500); // Adjust this value as needed
+
+    // Show buttons when reaching the bottom
+    const { scrollTop, scrollHeight, clientHeight } = event.target;
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      this.showNavigationButtons = true;
+    }
   }
 }

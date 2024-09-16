@@ -1,0 +1,54 @@
+.header-image {
+  position: relative;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.favorite-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.favorite-date {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 4px 0 0;
+}
+
+.hymn-item {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  --background: var(--ion-color-light);
+
+  h2 {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item-sliding {
+  background: transparent;
+}
+
+ion-card {
+  margin-top: 20px;
+}

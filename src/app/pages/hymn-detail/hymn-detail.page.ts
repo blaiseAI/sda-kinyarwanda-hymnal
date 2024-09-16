@@ -39,7 +39,8 @@ export class HymnDetailPage implements OnInit {
   showNavigationButtons: boolean = true;
   showPreviousButton: boolean = true;
   showNextButton: boolean = true;
-
+  lastScrollTop: number = 0;
+  private scrollTimeout: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -202,6 +203,27 @@ export class HymnDetailPage implements OnInit {
       return this.sanitizer.bypassSecurityTrustStyle(
         `url(assets/images/${images[randomIndex]})`
       );
+    }
+  }
+  // Hide or show the navigation buttons based on the scroll event
+  onScroll(event: any) {
+    // Clear the previous timeout
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+    }
+
+    // Hide buttons immediately when scrolling
+    this.showNavigationButtons = false;
+
+    // Set a timeout to show buttons after scrolling stops
+    this.scrollTimeout = setTimeout(() => {
+      this.showNavigationButtons = true;
+    }, 500); // Adjust this value as needed
+
+    // Show buttons when reaching the bottom
+    const { scrollTop, scrollHeight, clientHeight } = event.target;
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      this.showNavigationButtons = true;
     }
   }
 

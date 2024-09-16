@@ -1,57 +1,68 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-title>{{ favourite.name }}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/tabs/favorites"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="toggleEditMode()">
-        {{ editMode ? 'Done' : 'Edit' }}
+      <ion-button fill="solid" shape="round" color="light" (click)="toggleEditMode()">
+        <ion-icon slot="icon-only" [name]="editMode ? 'checkmark-outline' : 'create-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list [inset]="true">
-    <ion-item-divider>
-      <ion-label>
-        <p>Created on: {{ favourite.id | date }}</p>
-      </ion-label>
-    </ion-item-divider>
-  </ion-list>
-  <ion-list [inset]="true" *ngIf="(hymns$ | async) as hymns; else skeleton">
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="header-image" [style.background-image]="getBackgroundImageUrl()">
+    <div class="overlay">
+      <h1 class="favorite-title">{{ favourite.name }}</h1>
+      <p class="favorite-date">Created on: {{ favourite.id | date }}</p>
+    </div>
+  </div>
+
+  <ion-header collapse="condense" class="ion-no-border">
+    <ion-toolbar>
+      <ion-title size="large">{{ favourite.name }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ng-container *ngIf="(hymns$ | async) as hymns; else skeleton">
     <ng-container *ngIf="hymns.length > 0; else emptyList">
-      <ion-item-sliding *ngFor="let hymn of hymns">
-        <ion-item color="light">
-          <ion-label [routerLink]="['/tabs/favorites', favourite.id, 'hymns', hymn.hymnNumber]">
-            <ion-text>
-              {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
-            </ion-text>
-          </ion-label>
-          <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="removeHymnFromFavorite(hymn)">
-            <ion-icon name="remove-circle"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option color="danger" expandable (click)="removeHymnFromFavorite(hymn)">
-            <ion-icon slot="icon-only" name="trash"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
+      <ion-list [inset]="true">
+        <ion-item-sliding *ngFor="let hymn of hymns">
+          <ion-item color="light" class="hymn-item">
+            <ion-label [routerLink]="['/tabs/favorites', favourite.id, 'hymns', hymn.hymnNumber]">
+              <h2>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</h2>
+            </ion-label>
+            <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="removeHymnFromFavorite(hymn)">
+              <ion-icon name="remove-circle"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" expandable (click)="removeHymnFromFavorite(hymn)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
     </ng-container>
-  </ion-list>
+  </ng-container>
+
   <ng-template #emptyList>
-    <ion-item color="light">
-      <ion-text color="medium" class="ion-text-center">
-        No hymns found in this favorite list.
-      </ion-text>
-    </ion-item>
+    <ion-card>
+      <ion-card-content>
+        <ion-text color="medium" class="ion-text-center">
+          <h2>No hymns found in this favorite list.</h2>
+          <p>Add some hymns to get started!</p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
+
   <ng-template #skeleton>
     <ion-list>
       <ion-item *ngFor="let i of getHymnIdsCount()">
-        <ion-skeleton-text [animated]="true" count="10"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 100%; height: 60px;"></ion-skeleton-text>
       </ion-item>
     </ion-list>
   </ng-template>

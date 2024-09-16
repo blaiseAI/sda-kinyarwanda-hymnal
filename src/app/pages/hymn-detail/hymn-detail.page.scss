@@ -6,7 +6,6 @@ ion-toolbar {
 
 ion-content {
   position: absolute;
-  // --background: #f1f1f1;
   --padding-bottom: 50px;
 }
 
@@ -17,7 +16,7 @@ ion-content {
 
 .header-image {
   position: relative;
-  height: 200px;
+  height: 250px;
   background-size: cover;
   background-position: center;
 }
@@ -27,21 +26,18 @@ ion-content {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  padding: 24px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .hymn-details {
   -webkit-user-select: text;
-  /* Safari */
   -moz-user-select: text;
-  /* Firefox */
   -ms-user-select: text;
-  /* IE 10+ */
   user-select: text;
-  /* Standard syntax */
 }
 
 ion-back-button {
@@ -61,9 +57,24 @@ ion-back-button::part(text) {
 .audio-feature-card {
   margin: 20px;
   background-color: var(--ion-color-light);
-  /* Use --ion-color-light for light mode */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+}
+
+.audio-controls ion-button {
+  font-size: 2rem;
+  margin-right: 10px;
+}
+
+.audio-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .audio-feature-title {
@@ -77,18 +88,33 @@ ion-back-button::part(text) {
   margin: 0;
 }
 
-ion-button[slot="end"] {
-  margin-right: 0;
-}
-
 .audio-progress-bar {
   padding: 0;
   height: 4px;
   background-color: var(--ion-color-primary);
-  /* Use --ion-color-primary for light mode */
   margin-top: 8px;
   border-radius: 2px;
 }
 
+ion-fab {
+  margin-bottom: 16px;
+}
 
+ion-fab-button {
+  --background: rgba(var(--ion-color-light-rgb), 0.8);
+  --color: var(--ion-color-dark);
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
+.hymn-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.hymn-number {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 4px 0 0;
+}

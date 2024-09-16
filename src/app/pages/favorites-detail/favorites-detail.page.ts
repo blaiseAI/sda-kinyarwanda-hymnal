@@ -1,14 +1,14 @@
-import { Hymn } from 'src/app/models/hymn';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  FavouriteService,
-  Favourite,
-} from 'src/app/services/favourite.service';
 import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AlertController, IonList } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+
+import { Hymn } from 'src/app/models/hymn';
+import { FavouriteService, Favourite } from 'src/app/services/favourite.service';
+import { HymnService } from 'src/app/services/hymn.service'; // Add this import
 
 @Component({
   selector: 'app-favorites-detail',
@@ -24,7 +24,9 @@ export class FavoritesDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private favouriteService: FavouriteService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private hymnService: HymnService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -91,5 +93,16 @@ export class FavoritesDetailPage implements OnInit {
   }
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
+  }
+  getBackgroundImageUrl(): SafeStyle {
+    const images = [];
+    for (let i = 1; i <= 21; i++) {
+      const imageName = `image${i}.jpg`;
+      images.push(imageName);
+    }
+    const randomIndex = Math.floor(Math.random() * images.length);
+    return this.sanitizer.bypassSecurityTrustStyle(
+      `url(assets/images/${images[randomIndex]})`
+    );
   }
 }

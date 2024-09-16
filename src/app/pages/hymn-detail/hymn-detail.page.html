@@ -15,9 +15,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" scrollEvents="true" id="content" class="hymn-details">
+<ion-content [fullscreen]="true" scrollEvents="true" id="content" class="hymn-details" (ionScroll)="onScroll($event)">
   <div class="header-image" [style.background-image]="getBackgroundImageUrl(hymn.hymnNumber)">
-    <ion-title class="overlay">{{ hymn.hymnTitle }}</ion-title>
+    <div class="overlay">
+      <h1 class="hymn-title">{{ hymn.hymnTitle }}</h1>
+      <p class="hymn-number">Hymn {{ hymn.hymnNumber }}</p>
+    </div>
   </div>
 
   <ion-header collapse="condense" class="ion-no-border">
@@ -27,11 +30,10 @@
       </ion-title>
     </ion-toolbar>
   </ion-header>
-  <!-- Add a new section with a card for the audio feature -->
+
   <ng-container *ngIf="audioUrl && !audioError">
     <ion-card class="audio-feature-card">
       <ion-item lines="none">
-        <!-- <ion-icon slot="start" name="mic-outline"></ion-icon> -->
         <ion-button slot="start" (click)="playAudio()">
           <ion-icon *ngIf="audioPlayer && audioPlayer.paused" name="play-circle-outline"></ion-icon>
           <ion-icon *ngIf="audioPlayer && !audioPlayer.paused" name="pause-circle-outline"></ion-icon>
@@ -42,9 +44,10 @@
         </ion-label>
       </ion-item>
       <div class="audio-progress-bar" [style.width]="audioProgress + '%'"></div>
-      <audio #audioPlayer  [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
+      <audio #audioPlayer [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
     </ion-card>
   </ng-container>
+
   <ng-container *ngIf="!audioUrl || audioError">
     <ion-card>
       <ion-item>
@@ -56,26 +59,19 @@
       </ion-item>
     </ion-card>
   </ng-container>
+
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
-  <!-- Add navigation buttons-->
-  <!-- Navigation Buttons Section -->
-  <ng-container *ngIf="showNavigationButtons">
-    <ion-card>
-      <ion-item class="ion-no-padding navigation-buttons" lines="none">
-        <!-- Previous button appears correct -->
-        <ion-button fill="clear" slot="start" *ngIf="showPreviousButton" (click)="navigateToPreviousHymn()">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
-          Previous
-        </ion-button>
-        <!-- Adjusted Next button with text before the icon -->
-        <ion-button fill="clear" slot="end" *ngIf="showNextButton" (click)="navigateToNextHymn()">
-          Next
-          <ion-icon slot="end" name="chevron-forward"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-card>
-  </ng-container>
-  
-  
-  
+
+  <!-- Updated Navigation Buttons -->
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed" *ngIf="showNavigationButtons && showPreviousButton">
+    <ion-fab-button (click)="navigateToPreviousHymn()" color="light" size="small">
+      <ion-icon name="chevron-back"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showNavigationButtons && showNextButton">
+    <ion-fab-button (click)="navigateToNextHymn()" color="light" size="small">
+      <ion-icon name="chevron-forward"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

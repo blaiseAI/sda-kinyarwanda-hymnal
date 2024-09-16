@@ -1,17 +1,23 @@
-  <ion-item lines="none">
-    <ion-text>
-      <!-- <h3 class="hymn-title">{{ hymn.hymnNumber }} {{ hymn.hymnTitle }}</h3> -->
+  <ion-card class="hymn-card">
+    <ion-card-content>
+      <h2 class="hymn-title">{{ hymn.hymnTitle }}</h2>
+      <p class="hymn-number">Hymn {{ hymn.hymnNumber }}</p>
+      
       <div class="verse-container">
-        <p *ngFor="let verse of hymn?.verses" class="verse">
-          <ng-container *ngIf="verse.includes('Gusubiramo')">
-            {{ verse.slice(0, verse.indexOf('Gusubiramo')) }}
-            <strong>Gusubiramo</strong>
-            {{ verse.slice(verse.indexOf('Gusubiramo') + 'Gusubiramo'.length) }}
-          </ng-container>
-          <ng-container *ngIf="!verse.includes('Gusubiramo')">
-            {{ verse }}
-          </ng-container>
-        </p>
+        <ng-container *ngFor="let verse of hymn?.verses; let i = index">
+          <div [ngClass]="{'verse': !verse.includes('Gusubiramo'), 'chorus': verse.includes('Gusubiramo')}">
+            <ng-container *ngIf="verse.includes('Gusubiramo')">
+              <div class="chorus-title">Chorus</div>
+              <p>{{ verse.slice(verse.indexOf('Gusubiramo') + 'Gusubiramo'.length) }}</p>
+            </ng-container>
+            <ng-container *ngIf="!verse.includes('Gusubiramo')">
+              <div class="verse-number" *ngIf="verse.startsWith((i+1)+'.')">Verse {{ i + 1 }}</div>
+              <p>{{ verse }}</p>
+            </ng-container>
+          </div>
+        </ng-container>
       </div>
-    </ion-text>
-  </ion-item>
+      
+      <!-- Remove the chorus section for now -->
+    </ion-card-content>
+  </ion-card>
