@@ -19,6 +19,19 @@ export class SingleHymnDetailComponent implements OnInit {
 
   ngOnInit() {}
 
+  isChorus(verse: string): boolean {
+    return verse.includes('Gusubiramo');
+  }
+
+  getChorusContent(verse: string): string {
+    return verse.slice(verse.indexOf('Gusubiramo') + 'Gusubiramo'.length).trim();
+  }
+
+  getVerseNumber(verse: string): string | null {
+    const match = verse.match(/^(\d+)\./);
+    return match ? match[1] : null;
+  }
+
   async openAddToFavoriteModal() {
     await this.playHapticFeedback();
     const modal = await this.modalController.create({

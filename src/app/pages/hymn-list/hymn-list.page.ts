@@ -22,10 +22,9 @@ export class HymnListPage implements OnInit {
   isSearching = false;
 
   constructor(private hymnService: HymnService) {}
-  handleSearchChange(event: Event) {
-    this.currentSearchQuery = (event.target as HTMLInputElement).value;
-    this.isSearching = this.currentSearchQuery ? true : false;
-
+  handleSearchChange(event: any) {
+    this.currentSearchQuery = event.detail.value.toLowerCase();
+    this.isSearching = this.currentSearchQuery.length > 0;
     this.filterHymns();
   }
 

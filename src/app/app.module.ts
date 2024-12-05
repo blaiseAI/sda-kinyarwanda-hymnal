@@ -13,6 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ParallaxDirective } from './directives/parallax.directive';
 // import { AppRate } from '@ionic-native/app-rate';
 
+import { SharedModule } from './shared/shared.module'; // Import SharedModule
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -24,6 +26,7 @@ import { ParallaxDirective } from './directives/parallax.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    SharedModule, // Add SharedModule to imports
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

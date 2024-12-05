@@ -5,19 +5,17 @@
       
       <div class="verse-container">
         <ng-container *ngFor="let verse of hymn?.verses; let i = index">
-          <div [ngClass]="{'verse': !verse.includes('Gusubiramo'), 'chorus': verse.includes('Gusubiramo')}">
-            <ng-container *ngIf="verse.includes('Gusubiramo')">
+          <div [ngClass]="{'verse': !isChorus(verse), 'chorus': isChorus(verse)}">
+            <ng-container *ngIf="isChorus(verse)">
               <div class="chorus-title">Chorus</div>
-              <p>{{ verse.slice(verse.indexOf('Gusubiramo') + 'Gusubiramo'.length) }}</p>
+              <p>{{ getChorusContent(verse) }}</p>
             </ng-container>
-            <ng-container *ngIf="!verse.includes('Gusubiramo')">
-              <div class="verse-number" *ngIf="verse.startsWith((i+1)+'.')">Verse {{ i + 1 }}</div>
+            <ng-container *ngIf="!isChorus(verse)">
+              <div class="verse-number" *ngIf="getVerseNumber(verse)">Verse {{ getVerseNumber(verse) }}</div>
               <p>{{ verse }}</p>
             </ng-container>
           </div>
         </ng-container>
       </div>
-      
-      <!-- Remove the chorus section for now -->
     </ion-card-content>
   </ion-card>

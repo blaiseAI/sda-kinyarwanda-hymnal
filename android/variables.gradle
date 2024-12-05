@@ -1,7 +1,7 @@
 ext {
     minSdkVersion = 22
-    compileSdkVersion = 33
-    targetSdkVersion = 33
+    compileSdkVersion = 34
+    targetSdkVersion = 34
     androidxActivityVersion = '1.7.0'
     androidxAppCompatVersion = '1.6.1'
     androidxCoordinatorLayoutVersion = '1.2.0'
@@ -11,6 +11,9 @@ ext {
     androidxWebkitVersion = '1.6.1'
     junitVersion = '4.13.2'
     androidxJunitVersion = '1.1.5'
-    androidxEspressoCoreVersion = '3.5.1'
+    androidxEspressoCoreVersion = '3.5.1'versionCode
     cordovaAndroidVersion = '10.1.1'
+
+    // Add the latest Google Play Core library version
+    playCoreSdkVersion = '1.10.3'
 }

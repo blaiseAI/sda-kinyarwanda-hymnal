@@ -53,6 +53,7 @@ export class FavoritesDetailPage implements OnInit {
     }
     this.getHymnIdsCount();
   }
+
   async removeHymnFromFavorite(hymn: Hymn) {
     this.playHapticFeedback();
     const alert = await this.alertController.create({
@@ -81,9 +82,11 @@ export class FavoritesDetailPage implements OnInit {
     });
     await alert.present();
   }
+
   toggleEditMode() {
     this.editMode = !this.editMode;
   }
+
   getHymnIdsCount(): number[] {
     if (this.favourite && this.favourite.hymnIds) {
       return Array.from({ length: this.favourite.hymnIds.length });
@@ -91,9 +94,11 @@ export class FavoritesDetailPage implements OnInit {
       return [];
     }
   }
+
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
   }
+
   getBackgroundImageUrl(): SafeStyle {
     const images = [];
     for (let i = 1; i <= 21; i++) {

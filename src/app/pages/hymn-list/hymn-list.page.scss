@@ -15,3 +15,67 @@ ion-spinner {
   font-size: 1.2rem;
   margin-bottom: 10px;
 }
+
+.floating-search {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+
+  &.show {
+    transform: translateY(0);
+  }
+
+  ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  ion-searchbar {
+    --box-shadow: none;
+    --background: var(--ion-item-background);
+    --border-radius: 8px;
+    padding: 0;
+  }
+}
+
+#main-searchbar {
+  transition: opacity 0.3s ease-in-out;
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  text-align: center;
+  color: var(--ion-color-medium);
+
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ion-text-color);
+  }
+
+  p {
+    font-size: 16px;
+    margin: 4px 0;
+  }
+}
