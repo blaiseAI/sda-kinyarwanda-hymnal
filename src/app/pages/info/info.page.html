@@ -1,104 +1,74 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-content [fullscreen]="true" class="settings-content">
+  <!-- Appearance Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">APPEARANCE</h2>
+    <ion-list class="settings-list">
+      <ion-item lines="none" class="settings-item">
+        <ion-icon slot="start" name="moon-outline"></ion-icon>
+        <ion-label>Dark Mode</ion-label>
+        <ion-toggle
+          slot="end"
+          mode="ios"
+          [checked]="isDarkMode"
+          (ionChange)="toggleDarkMode($event)"
+        ></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-list [inset]="true">
-    <ion-item color="light">
-      <ion-icon slot="start" name="moon"></ion-icon>
-      <ion-label>
-        <ion-text>
-          <h2>Dark Mode</h2>
-        </ion-text>
-      </ion-label>
-      <ion-toggle name="darkMode" (ionChange)="toggleDarkMode($event)"></ion-toggle>
-    </ion-item>
-  </ion-list>
-  <ion-list [inset]="true">
-    <ion-item color="light" button (click)="sendFeedback()">
-      <ion-icon slot="start" name="chatbox-ellipses"></ion-icon>
-      <ion-label>
-        <ion-text>
-          <h2>Feedback</h2>
-        </ion-text>
-        <p>Send us your feedback</p>
-      </ion-label>
-    </ion-item>
-
-    <ion-item *ngIf="isMobile && isIOS" color="light" button (click)="rateApp()">
-      <ion-icon slot="start" name="star"></ion-icon>
-      <ion-label>
-        <ion-text>
-          <h2>Rate this App</h2>
-        </ion-text>
-        <p>Give us a 5-star rating</p>
-      </ion-label>
-    </ion-item>
-    <ion-item-sliding *ngIf="isMobile">
-      <ion-item color="light" button (click)="shareApp()">
-        <ion-icon slot="start" name="share-social"></ion-icon>
+  <!-- Engagement Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">ENGAGEMENT</h2>
+    <ion-list class="settings-list">
+      <ion-item button detail lines="none" class="settings-item" (click)="sendFeedback()">
+        <ion-icon slot="start" name="chatbubble-outline"></ion-icon>
         <ion-label>
-          <ion-text>
-            <h2>Share this App</h2>
-          </ion-text>
-          <p>Share this app with your friends</p>
+          <h3>Feedback</h3>
+          <p>Share your thoughts with us</p>
         </ion-label>
       </ion-item>
-    </ion-item-sliding>
-  </ion-list>
 
-  <ion-list [inset]="true">
-    <ion-item color="light" button (click)="openPrivacyPolicy()">
-      <ion-icon slot="start" name="document-text-outline"></ion-icon>
-      <ion-label>
-        <ion-text>
-          <h2>Privacy Policy</h2>
-        </ion-text>
-      </ion-label>
-    </ion-item>
-    <ion-item color="light" button (click)="openTermsAndConditions()">
-      <ion-icon slot="start" name="document-text-outline"></ion-icon>
-      <ion-label>
-        <ion-text>
-          <h2>Terms and Conditions</h2>
-        </ion-text>
-      </ion-label>
-    </ion-item>
-    <!-- <ion-item>
-      <ion-label>
-        <ion-text>
-          <h2>Version</h2>
-        </ion-text>
-        <p>
-          {{ appVersion }}
-        </p>
-      </ion-label>
-    </ion-item> -->
-  </ion-list>
+      <ion-item *ngIf="isMobile" button detail lines="none" class="settings-item" (click)="shareApp()">
+        <ion-icon slot="start" name="share-social-outline"></ion-icon>
+        <ion-label>
+          <h3>Share App</h3>
+          <p>Share with friends and family</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 
-  <!--Developer Info Made with Love By Blaise-->
+  <!-- Legal Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">LEGAL</h2>
+    <ion-list class="settings-list">
+      <ion-item button detail lines="none" class="settings-item" (click)="openPrivacyPolicy()">
+        <ion-icon slot="start" name="shield-outline"></ion-icon>
+        <ion-label>Privacy Policy</ion-label>
+      </ion-item>
 
-  <ion-list [inset]="true">
-    <ion-item lines="none">
-      <ion-row>
-        <ion-col class="ion-text-center">
-          <ion-text>
-            <h2>Special Message</h2>
-          </ion-text>
-          <ion-text><b>SDA Kinyarwanda Hymnal app</b> - created with passion by <b>Blaise Sebagabo</b> , a solo software
-            developer
-            based in Canada. If you find this app helpful, please leave a review and share it with your friends and
-            family. Thank you for your support!</ion-text>
-        </ion-col>
-      </ion-row>
-    </ion-item>
-  </ion-list>
+      <ion-item button detail lines="none" class="settings-item" (click)="openTermsAndConditions()">
+        <ion-icon slot="start" name="document-text-outline"></ion-icon>
+        <ion-label>Terms of Service</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- About Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">ABOUT</h2>
+    <div class="about-container">
+      <img src="assets/icon/favicon.png" alt="App Icon" class="app-icon">
+      <h2 class="app-name">SDA Kinyarwanda Hymnal</h2>
+      <p class="version">Version {{ appVersion }}</p>
+      <p class="developer">Created with ❤️ by <span>Blaise Sebagabo</span></p>
+      <p class="kinyarwanda-title">Indirimbo Zo Guhimbaza Imana 500</p>
+    </div>
+  </div>
 </ion-content>

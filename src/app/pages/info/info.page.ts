@@ -9,8 +9,6 @@ import { Platform } from '@ionic/angular';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 
-
-
 @Component({
   selector: 'app-info',
   templateUrl: './info.page.html',
@@ -22,6 +20,7 @@ export class InfoPage implements OnInit {
   appVersion: string;
   isMobile: boolean;
   isIOS: boolean;
+  isDarkMode: boolean = false;
 
   constructor(
     private appInfoService: AppInfoService,
@@ -34,22 +33,22 @@ export class InfoPage implements OnInit {
     this.appVersion = this.appInfoService.getAppVersion();
     this.isMobile = this.appInfoService.isMobile();
     this.isIOS = Capacitor.getPlatform() === 'ios';
-
+    this.isDarkMode = document.body.getAttribute('data-theme') === 'dark';
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    this.isDarkMode = systemDark.matches;
+    document.body.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
+    systemDark.addListener(this.colorTest);
+  }
 
   toggleDarkMode(event: any) {
-    let systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-    systemDark.addListener(this.colorTest);
-    if (event.detail.checked) {
-      this.playHapticFeedback();
-      document.body.setAttribute('data-theme', 'dark');
-    } else {
-      this.playHapticFeedback();
-      document.body.setAttribute('data-theme', 'light');
-    }
+    this.isDarkMode = event.detail.checked;
+    this.playHapticFeedback();
+    document.body.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
   }
+
   colorTest(systemInitiatedDark: { matches: any }) {
     if (systemInitiatedDark.matches) {
       document.body.setAttribute('data-theme', 'dark');
@@ -75,22 +74,20 @@ export class InfoPage implements OnInit {
     });
     return await modal.present();
   }
+
   async shareApp() {
     if (Capacitor.isNativePlatform()) {
       try {
         this.playHapticFeedback();
-  
         const platform = Capacitor.getPlatform();
         let storeUrl = '';
-  
+
         if (platform === 'ios') {
-          // iOS platform, link to App Store
           storeUrl = 'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873';
         } else if (platform === 'android') {
-          // Android platform, link to Google Play Store
           storeUrl = 'https://play.google.com/store/apps/details?id=com.devseb.sdaKinyarwandaHymnal';
         }
-  
+
         await Share.share({
           title: 'SDA Kinyarwanda Hymnal App',
           text: 'Check out this app I am using, "SDA Kinyarwanda Hymnal"!',
@@ -100,18 +97,11 @@ export class InfoPage implements OnInit {
       } catch (error) {
         console.log('Share failed:', error);
       }
-    } else {
-      // Handle the case when the Share plugin is not available or when not running on a mobile device
-      console.log('Share functionality is not available');
     }
   }
 
-  rateApp() {
-    this.playHapticFeedback();
-    window.open(
-      'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873?action=write-review',
-      '_system'
-    );
+  async playHapticFeedback() {
+    await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 
   sendFeedback() {
@@ -120,7 +110,12 @@ export class InfoPage implements OnInit {
     const mailtoLink = `mailto:${emailAddress}?subject=${subject}`;
     window.open(mailtoLink, '_system');
   }
-  async playHapticFeedback() {
-    await Haptics.impact({ style: ImpactStyle.Heavy });
+
+  rateApp() {
+    this.playHapticFeedback();
+    window.open(
+      'https://apps.apple.com/ca/app/sda-kinyarwanda-hymnal/id6449814873?action=write-review',
+      '_system'
+    );
   }
 }

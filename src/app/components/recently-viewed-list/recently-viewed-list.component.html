@@ -11,14 +11,14 @@
 </ion-item>
 <ion-slides [options]="options" #slides>
   <ion-slide *ngFor="let hymn of recentlyViewedHymns; let i = index" class="hymn-slide" (click)="playHapticFeedback()">
-    <ion-card [routerLink]="['/tabs/hymns', hymn.hymnNumber]">
+    <ion-card [routerLink]="['/tabs/hymns', hymn.number]">
       <div>
         <!-- Show the spinner while the image is loading -->
         <ion-spinner *ngIf="imageLoading"></ion-spinner>
-        <ion-img class="hymn-image" [src]="hymn.image" [alt]="hymn.hymnTitle"
+        <ion-img class="hymn-image" [src]="hymn.image" [alt]="hymn.title.kinyarwanda"
           (ionImgDidLoad)="imageLoaded()" (ionError)="useFallbackImage($event)" lazy></ion-img>
         <ion-card-content class="hymn-title">
-          {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
+          {{ hymn.number }} - {{ hymn.title.kinyarwanda }}
           <br>
           <small *ngIf="hymn.viewedAt">Viewed at: {{ hymn.viewedAt | date:'medium' }}</small>
         </ion-card-content>

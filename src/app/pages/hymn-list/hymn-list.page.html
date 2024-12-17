@@ -1,63 +1,78 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Indirimbo za 350</ion-title>
+  <ion-toolbar color="light">
+    <ion-title class="ion-text-center">
+      <strong>Indirimbo</strong>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleLanguage()">
+        <ion-icon slot="icon-only" [name]="showEnglishTitles ? 'language-outline' : 'text-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense" class="ion-no-border">
-    <ion-toolbar>
-      <ion-title size="large">Indirimbo za 350</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-searchbar 
-    (ionChange)="handleSearchChange($event)" 
-    placeholder="Search by hymn# or title" 
-    animated
-    class="custom-searchbar"
-  ></ion-searchbar>
+<ion-content [fullscreen]="true" class="ion-padding-horizontal">
+  <div class="search-container">
+    <ion-searchbar
+      class="custom-searchbar"
+      (ionChange)="handleSearchChange($event)"
+      [placeholder]="showEnglishTitles ? 'Search by number or title' : 'Shakisha indirimbo'"
+      [debounce]="300"
+      animated
+    ></ion-searchbar>
+  </div>
 
   <app-recently-viewed-list *ngIf="!isSearching"></app-recently-viewed-list>
 
-  <div class="section-header" *ngIf="!isSearching">
-    <h2>
-      <ion-icon name="book-outline" color="primary"></ion-icon>
-      All Hymns
-    </h2>
-  </div>
-
-  <ng-container *ngIf="(filteredHymns) as hymns; else skeleton">
-    <ion-list *ngIf="hymns.length > 0; else noResults" lines="none">
-      <ion-item *ngFor="let hymn of hymns; trackBy: trackByFn" 
-                [routerLink]="['/tabs/hymns', hymn.hymnNumber]" 
-                routerLinkActive="router-link-active" 
-                (click)="playHapticFeedback()"
-                class="hymn-item">
-        <ion-label>
-          <h2>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</h2>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+  <ng-container *ngIf="hymns$ | async as hymns; else loading">
+    <div class="hymns-container" *ngIf="filteredHymns.length > 0; else noResults">
+      <ion-list class="hymn-list">
+        <ion-item
+          *ngFor="let hymn of filteredHymns; trackBy: trackByFn"
+          [routerLink]="['/tabs/hymns', hymn.number]"
+          detail="true"
+          button
+          lines="none"
+          class="hymn-item"
+        >
+          <div class="hymn-number">{{ hymn.number }}</div>
+          <ion-label>
+            <h2>{{ hymn.title.kinyarwanda }}</h2>
+            <p *ngIf="hymn.title.english" class="english-title">{{ hymn.title.english }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
 
     <ng-template #noResults>
-      <div class="no-results">
+      <div class="no-results ion-padding ion-text-center">
         <ion-icon name="search-outline" color="medium"></ion-icon>
-        <h2>No results found</h2>
-        <p *ngIf="currentSearchQuery">for "{{ currentSearchQuery }}"</p>
-        <p>Try a different search term</p>
+        <h2>{{ showEnglishTitles ? 'No hymns found' : 'Nta ndirimbo zabonetse' }}</h2>
+        <p *ngIf="currentSearchQuery">
+          {{ showEnglishTitles ? 'for' : 'kuri' }} "{{ currentSearchQuery }}"
+        </p>
+        <p>
+          {{ showEnglishTitles ? 'Try a different search term' : 'Gerageza gushakisha mu bundi buryo' }}
+        </p>
       </div>
     </ng-template>
   </ng-container>
 
-  <ng-template #skeleton>
-    <ion-list>
-      <ion-item *ngFor="let i of [1,2,3,4,5]" lines="none">
-        <ion-label>
-          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+  <ng-template #loading>
+    <div class="loading-container">
+      <ion-skeleton-text animated style="width: 60%; height: 60px; margin-bottom: 16px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 80%; height: 60px; margin-bottom: 16px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%; height: 60px; margin-bottom: 16px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 75%; height: 60px; margin-bottom: 16px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 65%; height: 60px;"></ion-skeleton-text>
+    </div>
   </ng-template>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreHymns($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      [loadingText]="showEnglishTitles ? 'Loading more hymns...' : 'Gutahura izindi ndirimbo...'"
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

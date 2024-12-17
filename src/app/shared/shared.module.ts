@@ -3,16 +3,16 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { RelativeDatePipe } from '../pipes/relative-date.pipe';
-import { RecentlyViewedListComponent } from '../components/recently-viewed-list/recently-viewed-list.component';
+import { NewlinePipe } from '../pipes/newline.pipe';
 
 @NgModule({
-  declarations: [RelativeDatePipe, RecentlyViewedListComponent],
+  declarations: [RelativeDatePipe, NewlinePipe],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule
   ],
-  exports: [RelativeDatePipe, RouterModule, RecentlyViewedListComponent],
+  exports: [RelativeDatePipe, RouterModule, NewlinePipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

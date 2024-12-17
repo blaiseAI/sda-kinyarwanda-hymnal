@@ -1,75 +1,121 @@
 <ion-header>
   <ion-toolbar color="light">
-    <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
+    <ng-container *ngIf="hymn">
+      <ion-title>{{ hymn.number }} - {{ hymn.title.kinyarwanda }}</ion-title>
+    </ng-container>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/hymns"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="solid" shape="round" color="light" (click)="openAddToFavoriteModal()">
         <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
       </ion-button>
       <ion-button fill="solid" shape="round" color="light" (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="ellipsis-horizontal-circle-outline"></ion-icon>
+        <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="hymn-details">
-  <div class="header-image" [style.background-image]="getBackgroundImageUrl(hymn.hymnNumber)">
-    <div class="overlay">
-      <h1 class="hymn-title">{{ hymn.hymnTitle }}</h1>
-      <p class="hymn-number">Hymn {{ hymn.hymnNumber }}</p>
+<ion-content [fullscreen]="true" class="ion-no-padding">
+  <ng-container *ngIf="!isLoading && !error && hymn; else loadingTemplate">
+    <div class="header-container">
+      <div class="parallax-image" [style.background-image]="getBackgroundImageUrl(hymn.number)">
+        <div class="overlay">
+          <div class="hymn-info">
+            <h1>{{ hymn.title.kinyarwanda }}</h1>
+            <p *ngIf="hymn.title.english" class="english-title">{{ hymn.title.english }}</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- <ion-header collapse="condense" class="ion-no-border">
-    <ion-toolbar>
-      <ion-title size="small">
-        {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
-      </ion-title>
-    </ion-toolbar>
-  </ion-header> -->
+    <div class="content-container">
+      <ng-container *ngIf="audioUrl && !audioError">
+        <div class="audio-player-card">
+          <div class="player-controls">
+            <ion-button fill="clear" (click)="playAudio()">
+              <ion-icon slot="icon-only" [name]="isAudioPaused ? 'play-circle' : 'pause-circle'" 
+                        class="play-icon"></ion-icon>
+            </ion-button>
+            <div class="player-info">
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress" [style.width]="audioProgress + '%'"></div>
+                </div>
+              </div>
+              <div class="status-text">
+                {{ showEnglishTitles ? 'Listen to the hymn' : 'Umva indirimbo' }}
+              </div>
+            </div>
+          </div>
+          <audio #audioPlayer [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
+        </div>
+      </ng-container>
 
-  <ng-container *ngIf="audioUrl && !audioError">
-    <ion-card class="audio-feature-card">
-      <ion-item lines="none">
-        <ion-button slot="start" (click)="playAudio()">
-          <ion-icon *ngIf="audioPlayer && audioPlayer.paused" name="play-circle-outline"></ion-icon>
-          <ion-icon *ngIf="audioPlayer && !audioPlayer.paused" name="pause-circle-outline"></ion-icon>
-        </ion-button>
-        <ion-label>
-          <h2 class="audio-feature-title">Audio (Experimental Feature)</h2>
-          <p class="audio-feature-description">Listen to the hymn being sung</p>
-        </ion-label>
-      </ion-item>
-      <div class="audio-progress-bar" [style.width]="audioProgress + '%'"></div>
-      <audio #audioPlayer [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
-    </ion-card>
+      <ng-container *ngIf="!audioUrl || audioError">
+        <div class="audio-unavailable">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>{{ showEnglishTitles ? 'Audio not available yet' : 'Amajwi ntaraba aboneka' }}</span>
+        </div>
+      </ng-container>
+
+      <div class="verses-container">
+        <ng-container *ngFor="let verse of hymn.verses.text">
+          <div class="verse-card">
+            <div class="verse-number">{{ verse.verse }}</div>
+            <div class="verse-text" [innerHTML]="verse.text | newline"></div>
+          </div>
+
+          <div class="chorus-card" *ngIf="hymn.verses.chorus && verse.verse === 1">
+            <div class="chorus-label">
+              {{ showEnglishTitles ? 'Chorus' : 'Gusubiramo' }}
+            </div>
+            <div class="chorus-text">
+              <div [innerHTML]="hymn.verses.chorus.kinyarwanda | newline"></div>
+              <ng-container *ngFor="let line of hymn.verses.chorus.subtext">
+                <div [innerHTML]="line | newline"></div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </ng-container>
 
-  <ng-container *ngIf="!audioUrl || audioError">
-    <ion-card>
-      <ion-item>
-        <ion-icon slot="start" name="alert-circle-outline"></ion-icon>
-        <ion-label>
-          <h2 class="audio-feature-title">Audio Not Available</h2>
-          <p class="audio-feature-description">Sorry, audio is not yet available.</p>
-        </ion-label>
-      </ion-item>
-    </ion-card>
-  </ng-container>
+  <ng-template #loadingTemplate>
+    <div class="loading-container" *ngIf="isLoading">
+      <ion-skeleton-text animated style="width: 100%; height: 40vh;"></ion-skeleton-text>
+      <div class="content-container">
+        <ion-skeleton-text animated style="width: 60%; height: 24px; margin: 16px 0;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 90%; height: 60px; margin: 16px 0;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 85%; height: 60px; margin: 16px 0;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%; height: 60px; margin: 16px 0;"></ion-skeleton-text>
+      </div>
+    </div>
 
-  <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
+    <div class="error-container" *ngIf="error">
+      <ion-icon name="alert-circle-outline" color="danger"></ion-icon>
+      <h2>{{ showEnglishTitles ? 'Error Loading Hymn' : 'Ikibazo mu gufungura indirimbo' }}</h2>
+      <p>{{ error }}</p>
+      <ion-button fill="clear" (click)="ngOnInit()">
+        <ion-icon slot="start" name="refresh-outline"></ion-icon>
+        {{ showEnglishTitles ? 'Try Again' : 'Ongera ugerageze' }}
+      </ion-button>
+    </div>
+  </ng-template>
 </ion-content>
 
-<ion-footer class="ion-no-border">
-  <ion-toolbar color="light">
+<ion-footer class="ion-no-border footer-nav" *ngIf="!isLoading && !error && hymn">
+  <ion-toolbar color="light" class="navigation-toolbar">
     <ion-buttons slot="start">
       <ion-button (click)="navigateToPreviousHymn()" [disabled]="!showPreviousButton">
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-title class="ion-text-center">
+      {{ hymn.number }}/{{ totalHymns }}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="navigateToNextHymn()" [disabled]="!showNextButton">
         <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>

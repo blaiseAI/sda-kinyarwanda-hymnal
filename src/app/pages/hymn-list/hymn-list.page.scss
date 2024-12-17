@@ -79,3 +79,118 @@ ion-spinner {
     margin: 4px 0;
   }
 }
+
+:host {
+  --page-margin: 16px;
+}
+
+ion-header {
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+
+    ion-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+  }
+}
+
+.search-container {
+  margin: var(--page-margin) 0;
+
+  .custom-searchbar {
+    --background: var(--ion-color-light);
+    --border-radius: 12px;
+    --box-shadow: none;
+    --placeholder-color: var(--ion-color-medium);
+    --icon-color: var(--ion-color-medium);
+    padding: 0;
+  }
+}
+
+.hymns-container {
+  margin-top: var(--page-margin);
+
+  .hymn-list {
+    background: transparent;
+    padding: 0;
+
+    .hymn-item {
+      --background: var(--ion-color-light);
+      --border-radius: 12px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --inner-padding-end: 12px;
+      margin-bottom: 12px;
+
+      .hymn-number {
+        background: var(--ion-color-primary);
+        color: white;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-weight: 600;
+        margin-right: 12px;
+        min-width: 48px;
+        text-align: center;
+      }
+
+      ion-label {
+        h2 {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+          margin-bottom: 4px;
+        }
+
+        .english-title {
+          font-size: 14px;
+          color: var(--ion-color-medium);
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.no-results {
+  padding: 48px 20px;
+
+  ion-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+    margin: 0;
+
+    &:last-child {
+      margin-top: 8px;
+    }
+  }
+}
+
+.loading-container {
+  padding: var(--page-margin);
+
+  ion-skeleton-text {
+    border-radius: 12px;
+    --background-rgb: var(--ion-color-light-rgb);
+  }
+}
+
+// Hide recently viewed when searching
+app-recently-viewed-list {
+  display: block;
+  margin-bottom: var(--page-margin);
+}

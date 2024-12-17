@@ -1,21 +1,36 @@
-  <ion-card class="hymn-card">
-    <ion-card-content>
-      <h2 class="hymn-title">{{ hymn.hymnTitle }}</h2>
-      <p class="hymn-number">Hymn {{ hymn.hymnNumber }}</p>
-      
-      <div class="verse-container">
-        <ng-container *ngFor="let verse of hymn?.verses; let i = index">
-          <div [ngClass]="{'verse': !isChorus(verse), 'chorus': isChorus(verse)}">
-            <ng-container *ngIf="isChorus(verse)">
-              <div class="chorus-title">Chorus</div>
-              <p>{{ getChorusContent(verse) }}</p>
-            </ng-container>
-            <ng-container *ngIf="!isChorus(verse)">
-              <div class="verse-number" *ngIf="getVerseNumber(verse)">Verse {{ getVerseNumber(verse) }}</div>
-              <p>{{ verse }}</p>
+<ion-card class="hymn-card">
+  <ion-card-header>
+    <ion-card-title>{{ getDisplayTitle() }}</ion-card-title>
+    <ion-card-subtitle *ngIf="getSecondaryTitle()">{{ getSecondaryTitle() }}</ion-card-subtitle>
+    <div class="language-toggle">
+      <ion-button fill="clear" size="small" (click)="toggleLanguage()">
+        <ion-icon slot="icon-only" [name]="showEnglishTitles ? 'language-outline' : 'text-outline'"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="verse-container">
+      <ng-container *ngFor="let verse of hymn.verses.text">
+        <div class="verse">
+          <div class="verse-number">
+            {{ showEnglishTitles ? 'Verse' : 'Umurongo' }} {{ verse.verse }}
+          </div>
+          <p>{{ verse.text }}</p>
+        </div>
+        
+        <ng-container *ngIf="hymn.verses.chorus && verse.verse === 1">
+          <div class="chorus">
+            <div class="chorus-title">
+              {{ showEnglishTitles ? 'Chorus' : 'Gusubiramo' }}
+            </div>
+            <p>{{ hymn.verses.chorus.kinyarwanda }}</p>
+            <ng-container *ngFor="let line of hymn.verses.chorus.subtext">
+              <p>{{ line }}</p>
             </ng-container>
           </div>
         </ng-container>
-      </div>
-    </ion-card-content>
-  </ion-card>
+      </ng-container>
+    </div>
+  </ion-card-content>
+</ion-card>

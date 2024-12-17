@@ -54,7 +54,7 @@ export class FavouriteModalPage implements OnInit {
       const favorite = this.favourites.find(
         (c) => c.id === this.selectedFavoriteId
       );
-      if (favorite && favorite.hymnIds.includes(parseInt(this.hymnNumber))) {
+      if (favorite && favorite.hymnIds.includes(this.hymnNumber)) {
         this.favoriteActionSuccess = false;
         this.playHapticFeedback();
         this.presentToast('Hymn already exists in the selected favorite');
@@ -65,11 +65,10 @@ export class FavouriteModalPage implements OnInit {
         this.selectedFavoriteId,
         this.hymnNumber
       );
-      await this.getFavorites(); // <--- recall getFavorites to update the list
+      await this.getFavorites();
       this.favoriteActionSuccess = true;
       this.playHapticFeedback();
       this.presentToast('Hymn added to favorite successfully');
-      //this.modalController.dismiss({ success: true });
       this.dismiss();
     } else if (this.newFavoriteName) {
       const favoriteExists = this.favourites.some(
@@ -85,10 +84,10 @@ export class FavouriteModalPage implements OnInit {
       const newFavorite: Favourite = {
         id: Date.now().toString(),
         name: this.newFavoriteName,
-        hymnIds: [parseInt(this.hymnNumber)],
+        hymnIds: [this.hymnNumber],
       };
       await this.favouriteService.addFavourite(newFavorite);
-      await this.getFavorites(); // <--- recall getFavorites to update the list
+      await this.getFavorites();
       this.favoriteActionSuccess = true;
       this.playHapticFeedback();
       this.presentToast('Favorite created and hymn added successfully');
@@ -112,14 +111,17 @@ export class FavouriteModalPage implements OnInit {
     });
     toast.present();
   }
+
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
   }
+
   navigateToAllFavorites() {
-  this.modalController.dismiss().then(() => {
-    this.router.navigate(['/tabs/favorites']);
-  });
-}
+    this.modalController.dismiss().then(() => {
+      this.router.navigate(['/tabs/favorites']);
+    });
+  }
+
   ionViewWillLeave() {
     this.dismiss();
   }

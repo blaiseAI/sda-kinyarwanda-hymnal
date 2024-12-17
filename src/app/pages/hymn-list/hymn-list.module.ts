@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HymnListPageRoutingModule } from './hymn-list-routing.module';
 import { HymnListPage } from './hymn-list.page';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '../../components/shared/shared.module';
 
 @NgModule({
   imports: [

@@ -1,42 +1,80 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Search By #</ion-title>
+    <ion-title>Find by Number</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Search By #</ion-title>
-    </ion-toolbar>
-        <!-- <div *ngIf="shouldDisplayBadge()" class="new-features-badge">
-      New Feature
-    </div> -->
-  </ion-header>
-  <div class="container">
-    <ion-item lines="full" class="hymn-input-item">
-      <ion-label position="floating">Enter Hymn Number</ion-label> 
-      <ion-input [(ngModel)]="hymnNumber" (ngModelChange)="onHymnNumberChange()" type="number"></ion-input>
-      <!-- <input type="text"
-       pattern="\\d*"
-       [ngModel]="hymnNumber"
-       (ngModelChange)="onHymnNumberChange($event)"
-       name="hymnNumber"
-       placeholder="Enter Hymn Number"
-       class="ionic-input"> -->
-       <!-- <input class="ionic-input" type="text" pattern="[0-9]*" [ngModel]="hymnNumber" (ngModelChange)="onHymnNumberChange($event)" name="hymnNumber" placeholder="Enter Hymn Number"> -->
+  <div class="search-container">
+    <div class="number-input-card">
+      <div class="input-header">
+        <h2>Enter Hymn Number</h2>
+        <p class="subtitle">Type a number between 1 and 500</p>
+      </div>
 
+      <div class="number-input-wrapper">
+        <ion-input
+          [(ngModel)]="hymnNumber"
+          (ngModelChange)="onHymnNumberChange()"
+          type="number"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="000"
+          class="number-input"
+          [clearInput]="true">
+        </ion-input>
+      </div>
 
-    </ion-item>
-    <div *ngIf="hymnTitle" class="hymn-title">
-      <span *ngFor="let word of words; let i = index">
-        <span class="animated-word" style="--delay: {{i * 0.2}}s;">{{ word }}</span>&nbsp;
-      </span>
+      <div *ngIf="hymnTitle" class="hymn-preview fade-in">
+        <div class="preview-label">Preview:</div>
+        <div class="hymn-title">
+          <span *ngFor="let word of words; let i = index" class="animated-word" [style.animation-delay]="i * 0.1 + 's'">
+            {{ word }}
+          </span>
+        </div>
+      </div>
+
+      <ion-button 
+        expand="block" 
+        class="open-button" 
+        (click)="openHymn()" 
+        [disabled]="!hymnNumber || hymnNumber <= 0 || hymnNumber > 500"
+        [class.pulse-animation]="hymnTitle">
+        <span>Open Hymn</span>
+        <ion-icon name="musical-notes-outline" slot="end"></ion-icon>
+      </ion-button>
     </div>
-    
-    <ion-button expand="block" class="open-button" (click)="openHymn()" [disabled]="!hymnNumber || hymnNumber <= 0">
-      Open Hymn
-      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
-    </ion-button>
+
+    <!-- Quick Number Pad -->
+    <div class="number-pad">
+      <div class="number-pad-grid">
+        <ion-button 
+          *ngFor="let num of [1,2,3,4,5,6,7,8,9]" 
+          fill="clear" 
+          class="number-pad-button"
+          (click)="appendNumber(num)">
+          {{ num }}
+        </ion-button>
+        <ion-button 
+          fill="clear" 
+          class="number-pad-button"
+          (click)="clearNumber()">
+          <ion-icon name="backspace-outline"></ion-icon>
+        </ion-button>
+        <ion-button 
+          fill="clear" 
+          class="number-pad-button"
+          (click)="appendNumber(0)">
+          0
+        </ion-button>
+        <ion-button 
+          fill="clear" 
+          class="number-pad-button go-button"
+          [disabled]="!hymnNumber || hymnNumber <= 0 || hymnNumber > 500"
+          (click)="openHymn()">
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
   </div>
 </ion-content>

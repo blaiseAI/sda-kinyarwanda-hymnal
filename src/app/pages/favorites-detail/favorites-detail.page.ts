@@ -58,7 +58,7 @@ export class FavoritesDetailPage implements OnInit {
     this.playHapticFeedback();
     const alert = await this.alertController.create({
       header: 'Confirm Remove',
-      message: `Are you sure you want to remove ${hymn.hymnNumber} - ${hymn.hymnTitle} from ${this.favourite.name} favourite list?`,
+      message: `Are you sure you want to remove ${hymn.number} - ${hymn.title.kinyarwanda} from ${this.favourite.name} favourite list?`,
       buttons: [
         {
           text: 'Cancel',
@@ -71,7 +71,7 @@ export class FavoritesDetailPage implements OnInit {
           handler: async () => {
             await this.favouriteService.removeHymnFromFavourite(
               this.favourite.id,
-              hymn.hymnNumber
+              hymn.number
             );
             this.hymns$ = this.favouriteService.getHymnsForFavourite(
               this.favourite

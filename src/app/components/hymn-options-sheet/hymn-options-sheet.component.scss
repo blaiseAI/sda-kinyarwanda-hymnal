@@ -1,0 +1,31 @@
+ion-list {
+  margin: 0;
+  padding: 8px;
+  border-radius: 12px;
+  background: white;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --min-height: 48px;
+  --background: transparent;
+  --border-color: transparent;
+  --inner-padding-end: 0;
+
+  &:not(:last-child) {
+    margin-bottom: 8px;
+  }
+
+  ion-label {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  ion-icon {
+    font-size: 20px;
+    margin: 0;
+    color: var(--ion-color-medium);
+  }
+}
