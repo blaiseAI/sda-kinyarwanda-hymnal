@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="light">
-    <ion-title>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</ion-title>
+    <ion-title>{{ hymn.number }} - {{ hymn.title.kinyarwanda }}</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
@@ -15,21 +15,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" scrollEvents="true" id="content" class="hymn-details" (ionScroll)="onScroll($event)">
-  <div class="header-image" [style.background-image]="getBackgroundImageUrl(hymn.hymnNumber)">
+<ion-content [fullscreen]="true" class="hymn-details" (ionScroll)="onScroll($event)">
+  <div class="header-image" [style.background-image]="getBackgroundImageUrl(hymn.number)">
     <div class="overlay">
-      <h1 class="hymn-title">{{ hymn.hymnTitle }}</h1>
-      <p class="hymn-number">Hymn {{ hymn.hymnNumber }}</p>
+      <h1 class="hymn-title">{{ hymn.title.kinyarwanda }}</h1>
+      <p class="hymn-number">Hymn {{ hymn.number }}</p>
+      <p class="hymn-english" *ngIf="hymn.title.english">{{ hymn.title.english }}</p>
     </div>
   </div>
-
-  <!-- <ion-header collapse="condense" class="ion-no-border">
-    <ion-toolbar>
-      <ion-title size="small">
-        {{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}
-      </ion-title>
-    </ion-toolbar>
-  </ion-header> -->
 
   <ng-container *ngIf="audioUrl && !audioError">
     <ion-card class="audio-feature-card">
@@ -61,17 +54,19 @@
   </ng-container>
 
   <app-single-hymn-detail [hymn]="hymn"></app-single-hymn-detail>
-
-  <!-- Updated Navigation Buttons -->
-  <!-- <ion-fab vertical="bottom" horizontal="start" slot="fixed" *ngIf="showNavigationButtons && showPreviousButton">
-    <ion-fab-button (click)="navigateToPreviousHymn()" color="light" size="small">
-      <ion-icon name="chevron-back"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showNavigationButtons && showNextButton">
-    <ion-fab-button (click)="navigateToNextHymn()" color="light" size="small">
-      <ion-icon name="chevron-forward"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
 </ion-content>
+
+<ion-footer class="ion-no-border" *ngIf="showNavigationButtons">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateToPreviousHymn()" [disabled]="!showPreviousButton">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="navigateToNextHymn()" [disabled]="!showNextButton">
+        <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

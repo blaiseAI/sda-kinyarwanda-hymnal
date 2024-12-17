@@ -12,58 +12,59 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
   <div class="header-image" [style.background-image]="getBackgroundImageUrl()">
     <div class="overlay">
       <h1 class="favorite-title">{{ favourite.name }}</h1>
-      <p class="favorite-date">Created on: {{ favourite.id | date }}</p>
+      <p class="favorite-date">Created on: {{ favourite.id | date:'mediumDate' }}</p>
+      <p class="hymn-count" *ngIf="(hymns$ | async) as hymns">
+        {{ hymns.length }} {{ hymns.length === 1 ? 'Hymn' : 'Hymns' }}
+      </p>
     </div>
   </div>
 
-  <ion-header collapse="condense" class="ion-no-border">
-    <ion-toolbar>
-      <ion-title size="large">{{ favourite.name }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ng-container *ngIf="(hymns$ | async) as hymns; else skeleton">
-    <ng-container *ngIf="hymns.length > 0; else emptyList">
-      <ion-list [inset]="true">
-        <ion-item-sliding *ngFor="let hymn of hymns">
-          <ion-item color="light" class="hymn-item">
-            <ion-label [routerLink]="['/tabs/favorites', favourite.id, 'hymns', hymn.hymnNumber]">
-              <h2>{{ hymn.hymnNumber }} - {{ hymn.hymnTitle }}</h2>
-            </ion-label>
-            <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="removeHymnFromFavorite(hymn)">
-              <ion-icon name="remove-circle"></ion-icon>
-            </ion-button>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" expandable (click)="removeHymnFromFavorite(hymn)">
-              <ion-icon slot="icon-only" name="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
+  <div class="content-container">
+    <ng-container *ngIf="(hymns$ | async) as hymns; else skeleton">
+      <ng-container *ngIf="hymns.length > 0; else emptyList">
+        <ion-list lines="full" class="hymn-list">
+          <ion-item-sliding *ngFor="let hymn of hymns">
+            <ion-item detail="true" button [routerLink]="['/tabs/favorites', favourite.id, 'hymns', hymn.number]">
+              <ion-label>
+                <h2>{{ hymn.number }} - {{ hymn.title.kinyarwanda }}</h2>
+                <p *ngIf="hymn.title.english">{{ hymn.title.english }}</p>
+              </ion-label>
+              <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="removeHymnFromFavorite(hymn); $event.stopPropagation()">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="danger" expandable (click)="removeHymnFromFavorite(hymn)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Remove
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </ng-container>
     </ng-container>
-  </ng-container>
 
-  <ng-template #emptyList>
-    <ion-card>
-      <ion-card-content>
-        <ion-text color="medium" class="ion-text-center">
-          <h2>No hymns found in this favorite list.</h2>
-          <p>Add some hymns to get started!</p>
-        </ion-text>
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
+    <ng-template #emptyList>
+      <div class="empty-state">
+        <ion-icon name="heart-outline" color="medium"></ion-icon>
+        <h2>No hymns yet</h2>
+        <p>Add your favorite hymns to this list</p>
+      </div>
+    </ng-template>
 
-  <ng-template #skeleton>
-    <ion-list>
-      <ion-item *ngFor="let i of getHymnIdsCount()">
-        <ion-skeleton-text [animated]="true" style="width: 100%; height: 60px;"></ion-skeleton-text>
-      </ion-item>
-    </ion-list>
-  </ng-template>
+    <ng-template #skeleton>
+      <ion-list>
+        <ion-item *ngFor="let i of [1,2,3,4,5]">
+          <ion-label>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </div>
 </ion-content>

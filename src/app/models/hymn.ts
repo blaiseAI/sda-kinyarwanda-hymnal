@@ -1,8 +1,24 @@
 export interface Hymn {
-  hymnTitle: string;
-  hymnNumber: number;
-  verses: string[];
-  viewedAt?: Date; // Make viewedAt optional
+  number: string;
+  title: {
+    kinyarwanda: string;
+    english: string;
+  };
+  verses: {
+    count: number;
+    text: Verse[];
+    chorus: Chorus | null;
+  };
+  viewedAt?: Date;
   image?: string;
-  // ... other properties
+}
+
+export interface Verse {
+  verse: number;
+  text: string;
+}
+
+export interface Chorus {
+  kinyarwanda: string;
+  subtext: string[];
 }

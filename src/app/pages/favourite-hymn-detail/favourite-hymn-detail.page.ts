@@ -5,7 +5,6 @@ import { HymnService } from 'src/app/services/hymn.service';
 import { IonRouterOutlet, ModalController, Platform, PopoverController } from '@ionic/angular';
 import { FavouriteModalPage } from '../favourite-modal/favourite-modal.page';
 import { FeedbackModalPage } from '../feedback-modal/feedback-modal.page';
-import { Location } from '@angular/common';
 import { Share } from '@capacitor/share';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { HymnOptionsComponent } from 'src/app/components/hymn-options/hymn-options.component';
@@ -24,9 +23,16 @@ export class FavouriteHymnDetailPage implements OnInit {
   audioError: boolean = false;
   audioProgress!: number;
   hymn: Hymn = {
-    hymnNumber: 0,
-    hymnTitle: '',
-    verses: [],
+    number: '0',
+    title: {
+      kinyarwanda: '',
+      english: ''
+    },
+    verses: {
+      count: 0,
+      text: [],
+      chorus: null
+    }
   };
   showHymnOptions = false;
   recentlyViewedHymns: Hymn[] = [];
@@ -36,6 +42,7 @@ export class FavouriteHymnDetailPage implements OnInit {
   showNextButton: boolean = true;
   lastScrollTop: number = 0;
   private scrollTimeout: any;
+  private backgroundImage: SafeStyle | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,36 +57,33 @@ export class FavouriteHymnDetailPage implements OnInit {
 
   ngOnInit() {
     const hymnNumber = this.route.snapshot.paramMap.get('hymnNumber');
-    const id = typeof hymnNumber === 'string' ? parseInt(hymnNumber, 10) : 0;
-    this.checkUrlAndSetVisibility();
-    this.setNavigationButtonVisibility();
+    if (hymnNumber) {
+      this.checkUrlAndSetVisibility();
+      this.setNavigationButtonVisibility();
+      this.backgroundImage = null;
 
-    this.hymnService.getHymn(id).subscribe((hymn) => {
-      this.hymn = hymn;
-      // add hymn to recently viewed
-      this.hymnService.addToRecentlyViewed(this.hymn);
-      // Check audio availability and set audioUrl if available
-      if (hymnNumber) {
-        this.audioUrl = `https://bibiliya.com/bibiliya-media/hymns-audio/guhimbaza/${hymnNumber.padStart(
-          3,
-          '0'
-        )}.mp3`;
-        // Attempt to fetch the audio to check availability
-        const audioElement = new Audio(this.audioUrl);
-        audioElement.addEventListener('error', () => {
-          this.audioError = true;
-        });
-      }
+      this.hymnService.getHymn(hymnNumber).subscribe((hymn) => {
+        if (hymn) {
+          this.hymn = hymn;
+          this.hymnService.addToRecentlyViewed(this.hymn);
+          this.setupAudio(hymnNumber);
+        }
+      });
+    }
+
+    this.recentlyViewedHymnsSubscription = this.hymnService.recentlyViewedHymns.subscribe((hymns) => {
+      this.recentlyViewedHymns = hymns;
     });
-
-    // Get recently viewed hymns
-    this.recentlyViewedHymnsSubscription =
-      this.hymnService.recentlyViewedHymns.subscribe((hymns) => {
-        this.recentlyViewedHymns = hymns;
-      }
-    );
-    
   }
+
+  setupAudio(hymnNumber: string) {
+    this.audioUrl = `https://bibiliya.com/bibiliya-media/hymns-audio/guhimbaza/${hymnNumber.padStart(3, '0')}.mp3`;
+    const audioElement = new Audio(this.audioUrl);
+    audioElement.addEventListener('error', () => {
+      this.audioError = true;
+    });
+  }
+
   playAudio() {
     if (!this.audioPlayer) {
       this.audioPlayer = this.audioPlayerRef.nativeElement;
@@ -108,20 +112,22 @@ export class FavouriteHymnDetailPage implements OnInit {
       }
     }
   }
+
   async openAddToFavoriteModal() {
     this.playHapticFeedback();
     const modal = await this.modalController.create({
       component: FavouriteModalPage,
       presentingElement: this.ionRouterOutlet.nativeEl,
-      cssClass: 'my-custom-modal-css', // you can add your own CSS class
+      cssClass: 'my-custom-modal-css',
       componentProps: {
-        hymnNumber: this.hymn.hymnNumber,
-        hymnTitle: this.hymn.hymnTitle,
+        hymnNumber: this.hymn.number,
+        hymnTitle: this.hymn.title.kinyarwanda,
       },
-      swipeToClose: true, // add this option to enable swipe to dismiss
+      swipeToClose: true,
     });
     return await modal.present();
   }
+
   async openFeedbackModal() {
     this.playHapticFeedback();
     const modal = await this.modalController.create({
@@ -129,23 +135,22 @@ export class FavouriteHymnDetailPage implements OnInit {
       presentingElement: this.ionRouterOutlet.nativeEl,
       cssClass: 'my-custom-modal-css',
       componentProps: {
-        hymnNumber: this.hymn.hymnNumber,
-        hymnTitle: this.hymn.hymnTitle,
+        hymnNumber: this.hymn.number,
+        hymnTitle: this.hymn.title.kinyarwanda,
       },
-      swipeToClose: true, // add this option to enable swipe to dismiss
+      swipeToClose: true,
     });
     return await modal.present();
   }
-  // share Hymn
+
   async shareHymn() {
     this.playHapticFeedback();
     const shareRet = await Share.share({
-      title: `SDA Kinyarwanda Hymnal App: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
-      text: `Check out this hymn: ${this.hymn.hymnNumber} - ${this.hymn.hymnTitle}`,
+      title: `SDA Kinyarwanda Hymnal App: ${this.hymn.number} - ${this.hymn.title.kinyarwanda}`,
+      text: `Check out this hymn: ${this.hymn.number} - ${this.hymn.title.kinyarwanda}`,
       url: 'https://sda-kinyarwanda-hymnal.vercel.app/',
       dialogTitle: 'Share Hymn',
     });
-    console.log('Share Return:', shareRet);
   }
 
   async presentPopover(ev: any) {
@@ -159,91 +164,96 @@ export class FavouriteHymnDetailPage implements OnInit {
         hymn: this.hymn,
         options: {
           shareHymn: this.shareHymn.bind(this),
-          // addToFavorites: this.openAddToFavoriteModal.bind(this), // Removed this line because I don't want to add to favorites from the popover
           openFeedbackModal: this.openFeedbackModal.bind(this),
         },
       },
     });
-
     return await popover.present();
   }
+
   async playHapticFeedback() {
     await Haptics.impact({ style: ImpactStyle.Heavy });
   }
 
-  ngOnDestroy() {
-    // Unsubscribe to prevent memory leaks
-    this.recentlyViewedHymnsSubscription.unsubscribe();
-  }
-  // Filter the recently viewed hymns to get the current hymn image 
-  getBackgroundImageUrl(hymnNumber: number): SafeStyle {
-  const currentHymn = this.recentlyViewedHymns.find(
-    (hymn) => hymn.hymnNumber === hymnNumber
-  );
-  if (currentHymn && currentHymn.image) {
-    return this.sanitizer.bypassSecurityTrustStyle(`url(${currentHymn.image})`);
-  } else {
-    const images = [];
+  getBackgroundImageUrl(hymnNumber: string): SafeStyle {
+    if (this.backgroundImage) {
+      return this.backgroundImage;
+    }
+
+    const currentHymn = this.recentlyViewedHymns.find(
+      (hymn) => hymn.number === hymnNumber
+    );
+
+    if (currentHymn?.image) {
+      this.backgroundImage = this.sanitizer.bypassSecurityTrustStyle(`url(${currentHymn.image})`);
+    } else {
+      const images = [];
       for (let i = 1; i <= 21; i++) {
         const imageName = `image${i}.jpg`;
         images.push(imageName);
       }
-    const randomIndex = Math.floor(Math.random() * images.length);
-    return this.sanitizer.bypassSecurityTrustStyle(
-      `url(assets/images/${images[randomIndex]})`
-    );
+      const randomIndex = Math.floor(Math.random() * images.length);
+      this.backgroundImage = this.sanitizer.bypassSecurityTrustStyle(
+        `url(assets/images/${images[randomIndex]})`
+      );
+    }
+    return this.backgroundImage;
   }
-}
-  // Navigate to the previous hymn
+
   navigateToPreviousHymn() {
-    const previousHymnNumber = this.hymn.hymnNumber - 1;
+    const currentNumber = parseInt(this.hymn.number, 10);
+    const previousHymnNumber = currentNumber - 1;
     if (previousHymnNumber >= 1) {
-      this.navigateToHymn(previousHymnNumber);
+      this.navigateToHymn(previousHymnNumber.toString());
     }
   }
-  
-  // Navigate to the next hymn
+
   navigateToNextHymn() {
-    const nextHymnNumber = this.hymn.hymnNumber + 1;
-    // You can add logic to limit the maximum hymn number if needed.
-    this.navigateToHymn(nextHymnNumber);
+    const currentNumber = parseInt(this.hymn.number, 10);
+    const nextHymnNumber = currentNumber + 1;
+    if (nextHymnNumber <= 350) {
+      this.navigateToHymn(nextHymnNumber.toString());
+    }
   }
-  
-  // Helper method to navigate to a specific hymn
-  navigateToHymn(hymnNumber: number) {
-    // Navigate to the HymnDetailPage for the specified hymn number
+
+  navigateToHymn(hymnNumber: string) {
+    this.backgroundImage = null;
     this.router.navigate(['/tabs/hymns', hymnNumber]);
   }
 
   checkUrlAndSetVisibility() {
-    // Get the current URL
     const currentUrl = this.router.url;
-    // Check if it matches the condition
     this.showNavigationButtons = !currentUrl.startsWith('/tabs/favorites/');
   }
+
   setNavigationButtonVisibility() {
-    this.showPreviousButton = this.hymn.hymnNumber > 1;
-    this.showNextButton = this.hymn.hymnNumber < 355;
+    const currentNumber = parseInt(this.hymn.number, 10);
+    this.showPreviousButton = currentNumber > 1;
+    this.showNextButton = currentNumber < 350;
   }
 
   onScroll(event: any) {
-    // Clear the previous timeout
     if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
     }
 
-    // Hide buttons immediately when scrolling
     this.showNavigationButtons = false;
 
-    // Set a timeout to show buttons after scrolling stops
     this.scrollTimeout = setTimeout(() => {
       this.showNavigationButtons = true;
-    }, 500); // Adjust this value as needed
+    }, 500);
 
-    // Show buttons when reaching the bottom
     const { scrollTop, scrollHeight, clientHeight } = event.target;
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       this.showNavigationButtons = true;
+    }
+  }
+
+  ngOnDestroy() {
+    this.recentlyViewedHymnsSubscription.unsubscribe();
+    this.backgroundImage = null;
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
     }
   }
 }

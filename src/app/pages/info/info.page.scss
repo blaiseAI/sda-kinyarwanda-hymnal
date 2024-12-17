@@ -1,0 +1,100 @@
+.settings-content {
+    --background: var(--ion-background-color);
+    
+    .settings-section {
+      margin: 24px 0;
+      
+      .settings-section-header {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--ion-color-medium);
+        margin: 0 20px 8px;
+        letter-spacing: 0.5px;
+      }
+    }
+  
+    .settings-list {
+      background: transparent;
+      margin: 0;
+      padding: 0 8px;
+  
+      .settings-item {
+        --background: var(--ion-background-color-step-50);
+        --border-radius: 10px;
+        margin: 4px 0;
+  
+        ion-icon {
+          color: var(--ion-color-medium);
+          font-size: 20px;
+          margin: 8px;
+        }
+  
+        ion-label {
+          h3 {
+            font-size: 17px;
+            margin: 0;
+            font-weight: 400;
+          }
+  
+          p {
+            font-size: 13px;
+            color: var(--ion-color-medium);
+            margin: 4px 0 0;
+          }
+        }
+      }
+    }
+  
+    .about-container {
+      padding: 24px 16px;
+      text-align: center;
+  
+      .app-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 15px;
+        margin-bottom: 16px;
+        object-fit: cover;
+      }
+  
+      .app-name {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 4px;
+        color: var(--ion-text-color);
+      }
+  
+      .version {
+        font-size: 13px;
+        color: var(--ion-color-medium);
+        margin: 0 0 16px;
+      }
+  
+      .developer {
+        font-size: 15px;
+        margin: 0 0 8px;
+        color: var(--ion-text-color);
+  
+        span {
+          font-weight: 500;
+        }
+      }
+  
+      .kinyarwanda-title {
+        font-size: 13px;
+        color: var(--ion-color-medium);
+        margin: 0;
+      }
+    }
+  
+    ion-toggle {
+      --track-background: rgba(var(--ion-color-medium-rgb), 0.3);
+      --track-background-checked: rgba(var(--ion-color-primary-rgb), 0.3);
+      --handle-background: var(--ion-background-color);
+      --handle-background-checked: var(--ion-color-primary);
+      --handle-width: 20px;
+      --handle-height: 20px;
+      --handle-border-radius: 10px;
+      padding-inline: 6px;
+    }
+  }

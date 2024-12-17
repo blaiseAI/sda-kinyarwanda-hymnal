@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, from, map } from 'rxjs';
 export interface Favourite {
   id: string;
   name: string;
-  hymnIds: number[]; // Update the type to be an array of numbers
+  hymnIds: string[]; // Update to store hymn numbers as strings to match the new model
 }
 
 @Injectable({
@@ -23,6 +23,7 @@ export class FavouriteService {
   constructor(private hymnalService: HymnService) {
     this.loadFavourites();
   }
+
   getFavourites(): Observable<Favourite[]> {
     return from(this.loadFavourites());
   }
@@ -35,13 +36,14 @@ export class FavouriteService {
   async addHymnToFavourite(favouriteId: string, hymnId: string): Promise<void> {
     const favourite = this.favourites.find((f) => f.id === favouriteId);
     if (favourite) {
-      favourite.hymnIds.push(parseInt(hymnId));
+      favourite.hymnIds.push(hymnId);
       await this.saveFavourites();
     }
   }
+
   async removeHymnFromFavourite(
     favouriteId: string,
-    hymnId: number
+    hymnId: string
   ): Promise<void> {
     const favourite = this.favourites.find((f) => f.id === favouriteId);
     if (favourite) {
@@ -57,6 +59,7 @@ export class FavouriteService {
       await this.saveFavourites();
     }
   }
+
   getFavouriteById(id: string): Observable<Favourite | undefined> {
     return this.getFavourites().pipe(
       map((favourites) => favourites.find((f) => f.id === id))
@@ -69,12 +72,7 @@ export class FavouriteService {
     pageSize = -1
   ): Observable<Hymn[]> {
     return this.hymnalService.getHymns().pipe(
-      map((hymns) => {
-        const hymnNumbers = favourite.hymnIds.map((id) => id.toString());
-        return hymns.filter((hymn) =>
-          hymnNumbers.includes(hymn.hymnNumber.toString())
-        );
-      })
+      map((hymns) => hymns.filter((hymn) => favourite.hymnIds.includes(hymn.number)))
     );
   }
 
@@ -82,6 +80,11 @@ export class FavouriteService {
     const storedFavourites = await Preferences.get({ key: this.favouritesKey });
     if (storedFavourites && storedFavourites.value) {
       this.favourites = JSON.parse(storedFavourites.value);
+      // Convert any numeric hymnIds to strings for compatibility
+      this.favourites = this.favourites.map(fav => ({
+        ...fav,
+        hymnIds: fav.hymnIds.map(id => id.toString())
+      }));
     }
     this.favouritesLoaded = true;
     return this.favourites;
