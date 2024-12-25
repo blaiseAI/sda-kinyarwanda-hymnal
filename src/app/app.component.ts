@@ -25,7 +25,7 @@ export class AppComponent {
   
   getCurrentAppVersion = async () => {
     const result = await AppUpdate.getAppUpdateInfo();
-    console.log('Current app version:', result.currentVersion);
+    console.log('Current app version:', result.currentVersionName);
   };
   async simulateCheckForUpdate() {
     return {

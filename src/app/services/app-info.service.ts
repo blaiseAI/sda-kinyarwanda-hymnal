@@ -8,7 +8,7 @@ export class AppInfoService {
     const description = 'Indirimbo Zo Guhimbaza Imana';
     return description;
   }
-  private readonly version = '1.6';
+  private readonly version = '1.7';
 
   constructor() {}
 

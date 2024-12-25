@@ -1,24 +1,24 @@
 PODS:
-  - Capacitor (5.0.5):
+  - Capacitor (6.2.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.3):
+  - CapacitorApp (6.0.2):
     - Capacitor
-  - CapacitorCordova (5.0.5)
-  - CapacitorHaptics (5.0.4):
+  - CapacitorCordova (6.2.0)
+  - CapacitorHaptics (6.0.2):
     - Capacitor
-  - CapacitorKeyboard (5.0.4):
+  - CapacitorKeyboard (6.0.3):
     - Capacitor
-  - CapacitorPreferences (5.0.4):
+  - CapacitorPreferences (6.0.3):
     - Capacitor
-  - CapacitorShare (5.0.4):
+  - CapacitorShare (6.0.3):
     - Capacitor
-  - CapacitorSplashScreen (5.0.4):
+  - CapacitorSplashScreen (6.0.3):
     - Capacitor
-  - CapacitorStatusBar (5.0.4):
+  - CapacitorStatusBar (6.0.2):
     - Capacitor
-  - CapacitorTextZoom (5.0.4):
+  - CapacitorTextZoom (6.0.3):
     - Capacitor
-  - CapawesomeCapacitorAppUpdate (5.0.0):
+  - CapawesomeCapacitorAppUpdate (6.1.0):
     - Capacitor
 
 DEPENDENCIES:
@@ -59,17 +59,17 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capawesome/capacitor-app-update"
 
 SPEC CHECKSUMS:
-  Capacitor: b1248915663add1bd6567e2b67c1c1fa3abcf5e8
-  CapacitorApp: 7a5dec8b33573707164b293475d5c89ba684364a
-  CapacitorCordova: f8c06b897c74ee8f7701fe10e6443b40822bc83a
-  CapacitorHaptics: e36653b37326d71bb35ae42b944124037dbc3d97
-  CapacitorKeyboard: d1b25fde6f19744ad09c890862aefc6e2a7ded3d
-  CapacitorPreferences: 82a9ecf5355283a3b3cf7ac217d8c5534c4dee8a
-  CapacitorShare: 427bba238a1e3f116b2b349019aec6ea7f42cebd
-  CapacitorSplashScreen: 93a389d4f7673c08214ae25bb6f21d867d5305c5
-  CapacitorStatusBar: 190e0321b8734f4244d0c81baa183a00d5806ddf
-  CapacitorTextZoom: b1fb624a67d3a487a4b5783d18aaa7b2898bab77
-  CapawesomeCapacitorAppUpdate: b49ba541bc33085c758af19207ce2e0ac5c376d0
+  Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
+  CapacitorApp: 2a8c3a0b0814322e5e6e15fe595f02c3808f0f8b
+  CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
+  CapacitorHaptics: b53409aaca1203f79c6d0eb3ed5de40556339518
+  CapacitorKeyboard: 460c6f9ec5e52c84f2742d5ce2e67bbc7ab0ebb0
+  CapacitorPreferences: 9f9935bce493977183511362131a93f7b260191a
+  CapacitorShare: 7af6ca761ce62030e8e9fbd2eb82416f5ceced38
+  CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
+  CapacitorStatusBar: 3b9ac7d0684770522c532d1158a1434512ab1477
+  CapacitorTextZoom: be3bee30e5bf4bc623539877e6241dff861d631e
+  CapawesomeCapacitorAppUpdate: a0e57d43ee5ed4b19a52024241c3b177cbb1c463
 
 PODFILE CHECKSUM: 2a56f2d0152b5eff2d66b200c34c57a364c43896
 
