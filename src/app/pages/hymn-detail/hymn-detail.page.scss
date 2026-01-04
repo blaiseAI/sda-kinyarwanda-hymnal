@@ -295,6 +295,11 @@
 :host ::ng-deep ion-content {
   --padding-bottom: 60px; // Match footer height
 }
+.font-controls {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
 
 ion-header {
   ion-toolbar {

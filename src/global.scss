@@ -9,8 +9,65 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/assets/fonts/static/Fraunces_9pt_Soft-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
 * {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--ion-font-family);
+  font-variation-settings: 'opsz' var(--body-opsz);
 }
 .flex-center {
   display: flex;

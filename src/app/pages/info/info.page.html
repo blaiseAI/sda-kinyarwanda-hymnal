@@ -22,6 +22,66 @@
     </ion-list>
   </div>
 
+  <!-- Reminders Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">REMINDERS</h2>
+    <ion-list class="settings-list">
+      <!-- Hymnal Reminder -->
+      <ion-item lines="none" class="settings-item">
+        <ion-icon slot="start" name="musical-notes-outline"></ion-icon>
+        <ion-label>Daily Hymnal Reminder</ion-label>
+        <ion-toggle
+          slot="end"
+          mode="ios"
+          [checked]="isHymnalReminderEnabled"
+          (ionChange)="toggleHymnalReminder($event)"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="isHymnalReminderEnabled" lines="none" class="settings-item">
+        <ion-icon slot="start" name="time-outline"></ion-icon>
+        <ion-label>Hymnal Reminder Time</ion-label>
+        <ion-datetime-button datetime="hymnal-time" slot="end"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="hymnal-time"
+              presentation="time"
+              [value]="hymnalReminderTime"
+              (ionChange)="updateHymnalReminderTime($event)"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <!-- Daily Verse -->
+      <ion-item lines="none" class="settings-item">
+        <ion-icon slot="start" name="book-outline"></ion-icon>
+        <ion-label>Daily Bible Verse</ion-label>
+        <ion-toggle
+          slot="end"
+          mode="ios"
+          [checked]="isDailyVerseEnabled"
+          (ionChange)="toggleDailyVerse($event)"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="isDailyVerseEnabled" lines="none" class="settings-item">
+        <ion-icon slot="start" name="time-outline"></ion-icon>
+        <ion-label>Verse Time</ion-label>
+        <ion-datetime-button datetime="verse-time" slot="end"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="verse-time"
+              presentation="time"
+              [value]="dailyVerseTime"
+              (ionChange)="updateDailyVerseTime($event)"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+    </ion-list>
+  </div>
+
   <!-- Engagement Section -->
   <div class="settings-section">
     <h2 class="settings-section-header">ENGAGEMENT</h2>
@@ -39,6 +99,28 @@
         <ion-label>
           <h3>Share App</h3>
           <p>Share with friends and family</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- Support Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">SUPPORT</h2>
+    <ion-list class="settings-list">
+      <ion-item button lines="none" class="settings-item" (click)="supportViaPayPal()">
+        <ion-icon slot="start" name="logo-paypal"></ion-icon>
+        <ion-label>
+          <h3>PayPal</h3>
+          <p>Support via PayPal</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item button lines="none" class="settings-item" (click)="supportViaPatreon()">
+        <ion-icon slot="start" src="assets/icons/patreon.svg"></ion-icon>
+        <ion-label>
+          <h3>Patreon</h3>
+          <p>Become a patron</p>
         </ion-label>
       </ion-item>
     </ion-list>

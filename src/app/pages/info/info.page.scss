@@ -1,20 +1,26 @@
 .settings-content {
     --background: var(--ion-background-color);
+    --padding-top: 0;
+    --padding-bottom: 0;
     
     .settings-section {
       margin: 24px 0;
+      padding: 0 16px;
       
       .settings-section-header {
-        font-size: 13px;
-        font-weight: 400;
         color: var(--ion-color-medium);
-        margin: 0 20px 8px;
-        letter-spacing: 0.5px;
+        font-size: 0.8em;
+        font-weight: var(--heading-font-weight);
+        letter-spacing: 0.1em;
+        margin: 0 0 8px 16px;
+        font-variation-settings: 'opsz' var(--body-opsz);
       }
     }
   
     .settings-list {
-      background: transparent;
+      background: var(--ion-card-background);
+      border-radius: 12px;
+      overflow: hidden;
       margin: 0;
       padding: 0 8px;
   
@@ -22,68 +28,90 @@
         --background: var(--ion-background-color-step-50);
         --border-radius: 10px;
         margin: 4px 0;
+        --padding-start: 16px;
+        --padding-end: 16px;
+        --inner-padding-end: 0;
   
         ion-icon {
           color: var(--ion-color-medium);
           font-size: 20px;
           margin: 8px;
+
+          &[src*="patreon"] {
+            width: 20px;
+            height: 20px;
+          }
+
+          &[name="logo-paypal"] {
+            color: #003087;
+          }
         }
   
         ion-label {
           h3 {
-            font-size: 17px;
-            margin: 0;
-            font-weight: 400;
+            font-weight: var(--subheading-font-weight);
+            font-variation-settings: 'opsz' var(--body-opsz);
+            margin-bottom: 4px;
           }
   
           p {
-            font-size: 13px;
-            color: var(--ion-color-medium);
-            margin: 4px 0 0;
+            font-weight: var(--font-weight-light);
+            font-variation-settings: 'opsz' var(--body-opsz);
+            opacity: 0.8;
           }
         }
       }
     }
   
     .about-container {
-      padding: 24px 16px;
       text-align: center;
+      padding: 32px 16px;
   
       .app-icon {
         width: 80px;
         height: 80px;
-        border-radius: 15px;
         margin-bottom: 16px;
+        border-radius: 20px;
         object-fit: cover;
       }
   
       .app-name {
-        font-size: 20px;
-        font-weight: 600;
-        margin: 0 0 4px;
+        font-size: 1.5em;
+        font-weight: var(--heading-font-weight);
+        margin: 0 0 8px;
+        font-variation-settings: 'opsz' var(--heading-opsz);
+        letter-spacing: -0.02em;
         color: var(--ion-text-color);
       }
   
       .version {
-        font-size: 13px;
+        font-size: 0.9em;
         color: var(--ion-color-medium);
         margin: 0 0 16px;
+        font-weight: var(--font-weight-light);
+        font-variation-settings: 'opsz' var(--body-opsz);
       }
   
       .developer {
-        font-size: 15px;
-        margin: 0 0 8px;
-        color: var(--ion-text-color);
+        font-size: 0.9em;
+        color: var(--ion-color-medium);
+        margin: 0;
+        font-weight: var(--font-weight-light);
+        font-variation-settings: 'opsz' var(--body-opsz);
   
         span {
-          font-weight: 500;
+          font-weight: var(--font-weight-medium);
         }
       }
   
       .kinyarwanda-title {
-        font-size: 13px;
+        font-size: 1.1em;
         color: var(--ion-color-medium);
-        margin: 0;
+        margin: 16px 0 0;
+        font-style: italic;
+        font-weight: var(--font-weight-light);
+        font-variation-settings: 'opsz' var(--body-opsz);
+        opacity: 0.8;
       }
     }
   

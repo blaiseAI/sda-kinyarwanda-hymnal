@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Share } from '@capacitor/share';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Storage } from '@ionic/storage-angular';
+
 
 @Component({
   selector: 'app-hymn-detail',
@@ -37,6 +39,8 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   private parallaxImage: HTMLElement | null = null;
   private hymnSubscription?: Subscription;
   private lastScrollPosition: number = 0;
+  fontSize = 16; // Default font size in pixels
+
 
   get isAudioPaused(): boolean {
     return !this.audioPlayer || this.audioPlayer.paused;
@@ -49,8 +53,27 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private modalController: ModalController,
     private loadingController: LoadingController,
     private platform: Platform,
+    private storage: Storage,
     public readonly ionRouterOutlet: IonRouterOutlet
-  ) {}
+  ) {
+    this.initStorage();
+  }
+
+  private async initStorage() {
+    await this.storage.create();
+    await this.loadStoredSettings();
+  }
+
+  private async loadStoredSettings() {
+    const savedFontSize = await this.storage.get('fontSize');
+    if (savedFontSize) {
+      this.fontSize = savedFontSize;
+      this.updateFontSize();
+    }
+    
+    const showEnglishTitles = await this.storage.get('showEnglishTitles');
+    this.showEnglishTitles = showEnglishTitles === 'true';
+  }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -104,15 +127,14 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
       spinner: 'crescent'
     });
     await loading.present();
-
+  
     try {
       const hymnNumber = this.route.snapshot.paramMap.get('hymnNumber');
       if (!hymnNumber) {
         throw new Error('No hymn number provided');
       }
-      
+  
       await this.loadHymn(hymnNumber);
-      this.showEnglishTitles = localStorage.getItem('showEnglishTitles') === 'true';
     } catch (err) {
       console.error('Error loading hymn:', err);
       this.error = 'Failed to load hymn';
@@ -165,12 +187,27 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Clean up audio
     if (this.audioPlayer) {
       this.isLooping = false;
       this.audioPlayer.pause();
       this.audioPlayer.src = '';
     }
+
+    // Clean up subscriptions
     this.hymnSubscription?.unsubscribe();
+
+    // Save final settings to storage
+    this.saveSettings();
+  }
+
+  private async saveSettings() {
+    try {
+      await this.storage.set('fontSize', this.fontSize);
+      await this.storage.set('showEnglishTitles', this.showEnglishTitles.toString());
+    } catch (error) {
+      console.error('Error saving settings:', error);
+    }
   }
 
   getBackgroundImageUrl(hymnNumber: string): string {
@@ -304,6 +341,44 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     if (this.showNextButton && this.hymn) {
       const nextNumber = (parseInt(this.hymn.number, 10) + 1).toString().padStart(1, '0');
       this.navigateToHymn(nextNumber);
+    }
+  }
+
+  async increaseFontSize() {
+    this.fontSize = Math.min(24, this.fontSize + 2); // Limit max font size
+    await this.updateFontSize();
+  }
+
+  async decreaseFontSize() {
+    this.fontSize = Math.max(12, this.fontSize - 2); // Limit min font size
+    await this.updateFontSize();
+  }
+
+  async resetFontSize() {
+    this.fontSize = 16; // Default font size
+    await this.updateFontSize();
+  }
+
+  async updateFontSize() {
+    try {
+      // Save the font size to Ionic Storage
+      await this.storage.set('fontSize', this.fontSize);
+      
+      // Update font size for verses
+      const verses = document.querySelectorAll('.verse-text');
+      verses.forEach((verse: Element) => {
+        const htmlVerse = verse as HTMLElement;
+        htmlVerse.style.fontSize = `${this.fontSize}px`;
+      });
+    
+      // Update font size for chorus
+      const chorusTexts = document.querySelectorAll('.chorus-text');
+      chorusTexts.forEach((chorus: Element) => {
+        const htmlChorus = chorus as HTMLElement;
+        htmlChorus.style.fontSize = `${this.fontSize}px`;
+      });
+    } catch (error) {
+      console.error('Error updating font size:', error);
     }
   }
 

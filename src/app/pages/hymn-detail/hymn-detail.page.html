@@ -31,6 +31,17 @@
     </div>
 
     <div class="content-container">
+      <div class="font-controls">
+        <ion-button fill="clear" (click)="decreaseFontSize()">
+          <ion-icon name="remove-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="increaseFontSize()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="resetFontSize()">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </ion-button>
+      </div>
       <ng-container *ngIf="audioUrl && !audioError">
         <div class="audio-player-card">
           <div class="player-controls">

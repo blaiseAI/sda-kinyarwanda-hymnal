@@ -118,6 +118,10 @@ const routes: Routes = [
     path: 'terms-and-conditions',
     loadChildren: () => import('./pages/terms-and-conditions/terms-and-conditions.module').then( m => m.TermsAndConditionsPageModule)
   },
+  {
+    path: 'daily-verse',
+    loadChildren: () => import('./pages/daily-verse/daily-verse.module').then( m => m.DailyVersePageModule)
+  },
 ];
 
 @NgModule({

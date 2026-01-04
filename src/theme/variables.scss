@@ -58,6 +58,25 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  --ion-font-family: 'Fraunces', serif;
+  
+  // Specific font weights
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  // Font styles for different elements
+  --heading-font-weight: var(--font-weight-bold);
+  --subheading-font-weight: var(--font-weight-medium);
+  --body-font-weight: var(--font-weight-regular);
+
+  // Optical sizes for different contexts
+  --display-opsz: 144;
+  --heading-opsz: 72;
+  --body-opsz: 14;
 }
 
 // @media (prefers-color-scheme: dark) {
