@@ -2,7 +2,7 @@ ion-list {
   margin: 0;
   padding: 8px;
   border-radius: 12px;
-  background: white;
+  background: var(--ion-background-color, white);
 }
 
 ion-item {
@@ -17,10 +17,15 @@ ion-item {
     margin-bottom: 8px;
   }
 
+  ion-text {
+    color: var(--ion-text-color);
+  }
+
   ion-label {
     margin: 0;
     font-size: 16px;
     font-weight: 500;
+    color: var(--ion-text-color);
   }
 
   ion-icon {
