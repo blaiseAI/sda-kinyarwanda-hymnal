@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(
     private platform: Platform,
     private alertController: AlertController,
-    private storage: Storage
+    private themeService: ThemeService  // Theme service will auto-initialize
   ) {
     this.initializeApp();
   }
@@ -24,45 +24,12 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(async () => {
-      // Initialize storage and theme first
-      await this.initializeTheme();
-      
+      // Theme is now initialized automatically by ThemeService
       // Delay initialization of other features to ensure app is fully loaded
       setTimeout(() => {
         this.initializeFeatures();
       }, 1000);
     });
-  }
-
-  private async initializeTheme() {
-    try {
-      // Initialize storage
-      await this.storage.create();
-      
-      // Check for saved theme preference
-      const savedTheme = await this.storage.get('darkMode');
-      
-      // Check system theme preference
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-      
-      // Use saved preference if available, otherwise use system preference
-      const isDarkMode = savedTheme !== null ? savedTheme : systemDark.matches;
-      
-      // Apply theme
-      document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-      
-      // Listen for system theme changes
-      systemDark.addEventListener('change', (e) => {
-        // Only update if user hasn't manually set a preference
-        this.storage.get('darkMode').then(savedPref => {
-          if (savedPref === null) {
-            document.body.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-          }
-        });
-      });
-    } catch (error) {
-      console.error('Error initializing theme:', error);
-    }
   }
 
   private async initializeFeatures() {

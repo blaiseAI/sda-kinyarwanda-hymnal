@@ -85,13 +85,67 @@ ion-spinner {
 }
 
 ion-header {
+  &::after {
+    background: none;
+  }
+
   ion-toolbar {
-    --background: transparent;
+    --background: var(--ion-background-color);
     --border-width: 0;
+    --padding-top: env(safe-area-inset-top);
+    --min-height: calc(56px + env(safe-area-inset-top));
 
     ion-title {
       font-size: 24px;
       font-weight: 700;
+    }
+  }
+}
+
+// Stats Card
+.stats-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: var(--page-margin) 0;
+
+  .stat-item {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--ion-color-primary-rgb), 0.1) 0%,
+      rgba(var(--ion-color-primary-rgb), 0.05) 100%
+    );
+    border: 1px solid rgba(var(--ion-color-primary-rgb), 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    ion-icon {
+      font-size: 32px;
+      color: var(--ion-color-primary);
+    }
+
+    .stat-content {
+      flex: 1;
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--ion-color-medium);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+      }
     }
   }
 }
@@ -102,7 +156,7 @@ ion-header {
   .custom-searchbar {
     --background: var(--ion-color-light);
     --border-radius: 12px;
-    --box-shadow: none;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     --placeholder-color: var(--ion-color-medium);
     --icon-color: var(--ion-color-medium);
     padding: 0;
@@ -123,16 +177,52 @@ ion-header {
       --padding-end: 12px;
       --inner-padding-end: 12px;
       margin-bottom: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
-      .hymn-number {
-        background: var(--ion-color-primary);
-        color: white;
-        border-radius: 8px;
-        padding: 8px 12px;
-        font-weight: 600;
+      &:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .hymn-number-badge {
+        position: relative;
         margin-right: 12px;
-        min-width: 48px;
-        text-align: center;
+        
+        .badge-number {
+          background: linear-gradient(
+            135deg,
+            var(--ion-color-primary) 0%,
+            var(--ion-color-primary-shade) 100%
+          );
+          color: white;
+          border-radius: 10px;
+          padding: 10px 14px;
+          font-weight: 700;
+          min-width: 52px;
+          text-align: center;
+          font-size: 16px;
+          box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+        }
+
+        .badge-icon {
+          position: absolute;
+          bottom: -4px;
+          right: -4px;
+          background: white;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+          ion-icon {
+            font-size: 12px;
+            color: var(--ion-color-primary);
+          }
+        }
       }
 
       ion-label {
@@ -141,12 +231,38 @@ ion-header {
           font-weight: 600;
           color: var(--ion-color-dark);
           margin-bottom: 4px;
+          line-height: 1.3;
         }
 
         .english-title {
-          font-size: 14px;
+          font-size: 13px;
           color: var(--ion-color-medium);
-          margin: 0;
+          margin: 0 0 6px 0;
+          font-style: italic;
+        }
+
+        .hymn-meta {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 6px;
+
+          .verse-count {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--ion-color-medium);
+            background: rgba(var(--ion-color-primary-rgb), 0.1);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-weight: 500;
+
+            ion-icon {
+              font-size: 14px;
+              color: var(--ion-color-primary);
+            }
+          }
         }
       }
     }
@@ -193,4 +309,168 @@ ion-header {
 app-recently-viewed-list {
   display: block;
   margin-bottom: var(--page-margin);
+}
+
+// FAB Button
+ion-fab {
+  margin-bottom: 60px; // Account for tab bar
+
+  ion-fab-button {
+    --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.3);
+    
+    &::part(native) {
+      transition: transform 0.2s ease;
+    }
+
+    &:active {
+      --box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.4);
+      
+      &::part(native) {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+// Dark mode enhancements
+body[data-theme="dark"] {
+  .stats-card {
+    .stat-item {
+      background: linear-gradient(
+        135deg,
+        rgba(var(--ion-color-primary-rgb), 0.25) 0%,
+        rgba(var(--ion-color-primary-rgb), 0.15) 100%
+      );
+      border: 2px solid rgba(var(--ion-color-primary-rgb), 0.4);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .hymn-item {
+    --background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+
+    .hymn-number-badge {
+      .badge-icon {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+// Jump to Hymn Alert Styling
+.jump-to-hymn-alert {
+  --backdrop-opacity: 0.6;
+  
+  .alert-wrapper {
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 320px;
+    
+    .alert-head {
+      padding: 24px 20px 16px;
+      
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--ion-text-color);
+        margin: 0 0 8px 0;
+      }
+    }
+    
+    .alert-message {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--ion-color-medium);
+      padding: 0 20px 16px;
+      text-align: center;
+    }
+    
+    .alert-input-group {
+      padding: 0 20px 20px;
+      
+      .alert-input-wrapper {
+        margin: 0;
+        
+        input {
+          background: var(--ion-color-light);
+          border: 2px solid rgba(var(--ion-color-primary-rgb), 0.2);
+          border-radius: 12px;
+          padding: 16px 20px;
+          font-size: 24px;
+          font-weight: 600;
+          text-align: center;
+          color: var(--ion-text-color);
+          transition: all 0.3s ease;
+          
+          &::placeholder {
+            color: var(--ion-color-medium);
+            opacity: 0.6;
+            font-size: 16px;
+            font-weight: 500;
+          }
+          
+          &:focus {
+            outline: none;
+            border-color: var(--ion-color-primary);
+            background: var(--ion-background-color);
+            box-shadow: 0 0 0 4px rgba(var(--ion-color-primary-rgb), 0.1);
+          }
+        }
+      }
+    }
+    
+    .alert-button-group {
+      padding: 0;
+      border-top: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+      
+      .alert-button {
+        height: 56px;
+        font-size: 17px;
+        font-weight: 600;
+        margin: 0;
+        
+        &.alert-button-cancel {
+          color: var(--ion-color-medium);
+        }
+        
+        &.alert-button-confirm {
+          color: var(--ion-color-primary);
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode for Jump to Hymn Alert
+body[data-theme="dark"] {
+  .jump-to-hymn-alert {
+    .alert-wrapper {
+      background: rgba(40, 40, 40, 0.98);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      
+      .alert-input-group {
+        .alert-input-wrapper {
+          input {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(var(--ion-color-primary-rgb), 0.3);
+            
+            &:focus {
+              background: rgba(255, 255, 255, 0.12);
+              border-color: var(--ion-color-primary);
+              box-shadow: 0 0 0 4px rgba(var(--ion-color-primary-rgb), 0.15);
+            }
+          }
+        }
+      }
+      
+      .alert-button-group {
+        border-top-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
 }

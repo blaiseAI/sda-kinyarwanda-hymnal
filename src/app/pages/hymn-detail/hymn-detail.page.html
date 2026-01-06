@@ -1,16 +1,21 @@
 <ion-header>
   <ion-toolbar color="light">
     <ng-container *ngIf="hymn">
-      <ion-title>{{ hymn.number }} - {{ hymn.title.kinyarwanda }}</ion-title>
+      <ion-title>Indirimbo {{ hymn.number }}</ion-title>
     </ng-container>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/hymns"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="solid" shape="round" color="light" (click)="openAddToFavoriteModal()">
-        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+      <ion-button fill="solid" shape="round" color="medium" (click)="toggleAudioPlayer()" 
+                  *ngIf="audioUrl && !audioError" [class.audio-active]="showAudioPlayer">
+        <ion-icon slot="icon-only" name="musical-note"></ion-icon>
       </ion-button>
-      <ion-button fill="solid" shape="round" color="light" (click)="presentPopover($event)">
+      <ion-button fill="solid" shape="round" color="medium" (click)="toggleFavorite()" 
+                  [class.favorited]="isHymnFavorited">
+        <ion-icon slot="icon-only" [name]="isHymnFavorited ? 'heart' : 'heart-outline'"></ion-icon>
+      </ion-button>
+      <ion-button fill="solid" shape="round" color="medium" (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -30,7 +35,7 @@
       </div>
     </div>
 
-    <div class="content-container">
+    <div class="content-container" [class.fade-in]="showContent">
       <div class="font-controls">
         <ion-button fill="clear" (click)="decreaseFontSize()">
           <ion-icon name="remove-outline"></ion-icon>
@@ -42,8 +47,8 @@
           <ion-icon name="refresh-outline"></ion-icon>
         </ion-button>
       </div>
-      <ng-container *ngIf="audioUrl && !audioError">
-        <div class="audio-player-card">
+      <ng-container *ngIf="audioUrl && !audioError && showAudioPlayer">
+        <div class="audio-player-card" [@slideDown]>
           <div class="player-controls">
             <ion-button fill="clear" (click)="playAudio()">
               <ion-icon slot="icon-only" [name]="isAudioPaused ? 'play-circle' : 'pause-circle'" 
@@ -55,19 +60,23 @@
                   <div class="progress" [style.width]="audioProgress + '%'"></div>
                 </div>
               </div>
-              <div class="status-text">
-                {{ showEnglishTitles ? 'Listen to the hymn' : 'Umva indirimbo' }}
+              <div class="audio-metadata">
+                <div class="status-text">
+                  {{ showEnglishTitles ? 'Listen to the hymn' : 'Umva indirimbo' }}
+                </div>
+                <div class="audio-stats">
+                  <span class="time-display">{{ audioCurrentTime }} / {{ audioDuration }}</span>
+                  <span class="loop-counter" *ngIf="isLooping && maxLoops > 0">
+                    Loop {{ currentLoop + 1 }}/{{ maxLoops }}
+                  </span>
+                </div>
               </div>
             </div>
+            <ion-button fill="clear" (click)="restartAudio()" [disabled]="!audioPlayer">
+              <ion-icon slot="icon-only" name="reload-outline" class="control-icon"></ion-icon>
+            </ion-button>
           </div>
           <audio #audioPlayer [src]="audioUrl" (ended)="onAudioEnded()" (timeupdate)="onAudioTimeUpdate()"></audio>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="!audioUrl || audioError">
-        <div class="audio-unavailable">
-          <ion-icon name="alert-circle-outline"></ion-icon>
-          <span>{{ showEnglishTitles ? 'Audio not available yet' : 'Amajwi ntaraboneka' }}</span>
         </div>
       </ng-container>
 
@@ -79,8 +88,13 @@
           </div>
 
           <div class="chorus-card" *ngIf="hymn.verses.chorus && verse.verse === 1">
-            <div class="chorus-label">
-              {{ showEnglishTitles ? 'Chorus' : 'Gusubiramo' }}
+            <div class="chorus-header">
+              <div class="chorus-icon">
+                <ion-icon name="musical-notes"></ion-icon>
+              </div>
+              <div class="chorus-label">
+                {{ showEnglishTitles ? 'Chorus' : 'Gusubiramo' }}
+              </div>
             </div>
             <div class="chorus-text">
               <div [innerHTML]="hymn.verses.chorus.kinyarwanda | newline"></div>

@@ -26,12 +26,12 @@ export class AirtableService {
       records: [
         {
           fields: {
-            'Hymn Number': feedback.hymnNumber,
+            'Hymn Number': parseInt(feedback.hymnNumber || '0', 10),
             'Hymn Title': feedback.hymnTitle,
-            'Feedback Type': feedback.feedbackType,
+            'Feedback Type': (feedback.feedbackType || '').toLowerCase(),
             'Feedback Message': feedback.feedbackMessage,
             'Email Address': feedback.email,
-            'Date Submitted': new Date(),
+            'Date Submitted': new Date().toISOString(),
           },
         },
       ],

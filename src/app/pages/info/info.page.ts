@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { AppInfoService } from 'src/app/services/app-info.service';
 import { ModalController, IonRouterOutlet } from '@ionic/angular';
@@ -12,13 +12,16 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 import { Storage } from '@ionic/storage-angular';
 import { BibleVerseService } from 'src/app/services/bible-verse.service';
 import { Router } from '@angular/router';
+import { LanguageService } from 'src/app/services/language.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-info',
   templateUrl: './info.page.html',
   styleUrls: ['./info.page.scss'],
 })
-export class InfoPage implements OnInit {
+export class InfoPage implements OnInit, OnDestroy {
   appName: string;
   appDescription: string;
   appVersion: string;
@@ -29,6 +32,15 @@ export class InfoPage implements OnInit {
   isDailyVerseEnabled: boolean = true;
   hymnalReminderTime: string = '09:00';
   dailyVerseTime: string = '07:00';
+  showEnglishTitles = false;
+  showSupportInfo = false;
+  private languageSubscription?: Subscription;
+  private themeSubscription?: Subscription;
+
+  toggleSupportInfo() {
+    this.showSupportInfo = !this.showSupportInfo;
+    this.playHapticFeedback();
+  }
 
   constructor(
     private appInfoService: AppInfoService,
@@ -37,14 +49,15 @@ export class InfoPage implements OnInit {
     private platform: Platform,
     private storage: Storage,
     private bibleVerseService: BibleVerseService,
-    private router: Router
+    private router: Router,
+    private languageService: LanguageService,
+    private themeService: ThemeService
   ) {
     this.appName = this.appInfoService.getAppName();
     this.appDescription = this.appInfoService.getAppDescription();
     this.appVersion = this.appInfoService.getAppVersion();
     this.isMobile = this.appInfoService.isMobile();
     this.isIOS = Capacitor.getPlatform() === 'ios';
-    this.isDarkMode = document.body.getAttribute('data-theme') === 'dark';
     this.initStorage();
   }
 
@@ -58,12 +71,6 @@ export class InfoPage implements OnInit {
     this.isDailyVerseEnabled = (await this.storage.get('isDailyVerseEnabled')) ?? true;
     this.hymnalReminderTime = await this.storage.get('hymnalReminderTime') || '09:00';
     this.dailyVerseTime = await this.storage.get('dailyVerseTime') || '07:00';
-    
-    // Load dark mode preference
-    const savedDarkMode = await this.storage.get('darkMode');
-    if (savedDarkMode !== null) {
-      this.isDarkMode = savedDarkMode;
-    }
 
     const isFirstLaunch = await this.storage.get('isFirstLaunch') !== false;
     if (isFirstLaunch) {
@@ -81,10 +88,19 @@ export class InfoPage implements OnInit {
   }
 
   async ngOnInit() {
-    // Theme is now initialized in app.component.ts
-    // Just update the toggle state to match current theme
-    const currentTheme = document.body.getAttribute('data-theme');
-    this.isDarkMode = currentTheme === 'dark';
+    // Subscribe to theme changes
+    this.themeSubscription = this.themeService.isDarkMode$.subscribe(
+      (isDark) => {
+        this.isDarkMode = isDark;
+      }
+    );
+
+    // Subscribe to language preference changes
+    this.languageSubscription = this.languageService.showEnglishTitles$.subscribe(
+      (showEnglish) => {
+        this.showEnglishTitles = showEnglish;
+      }
+    );
 
     // Request notification permissions
     const permResult = await LocalNotifications.requestPermissions();
@@ -98,6 +114,21 @@ export class InfoPage implements OnInit {
         this.router.navigate(['/daily-verse']);
       }
     });
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
+    }
+  }
+
+  async toggleLanguage() {
+    await this.languageService.toggleLanguage();
+    await this.playHapticFeedback();
   }
 
   async toggleHymnalReminder(event: any) {
@@ -223,14 +254,11 @@ export class InfoPage implements OnInit {
   }
 
   async toggleDarkMode(event: any) {
-    this.isDarkMode = event.detail.checked;
+    const isDark = event.detail.checked;
     await this.playHapticFeedback();
     
-    // Save preference to storage
-    await this.storage.set('darkMode', this.isDarkMode);
-    
-    // Apply theme
-    document.body.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
+    // Update theme through the service (will sync to all tabs)
+    await this.themeService.setTheme(isDark);
   }
 
   async openPrivacyPolicy() {

@@ -1,51 +1,100 @@
-<ion-header [translucent]="true">
+<ion-header translucent="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Favorites</ion-title>
+    <ion-title class="ion-text-center">
+      <strong>{{ showEnglishTitles ? 'Favorites' : 'Izikunda' }}</strong>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleLanguage()">
+        <ion-icon slot="icon-only" [name]="showEnglishTitles ? 'language-outline' : 'text-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Favorites</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="toggleEditMode()">
-          {{ editMode ? 'Done' : 'Edit' }}
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-    <ion-toolbar>
-      <ion-searchbar (ionChange)="handleSearchChange($event)" placeholder="Search"></ion-searchbar>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding-horizontal">
+  <!-- Stats Card -->
+  <div class="stats-card" *ngIf="filteredFavorites.length > 0">
+    <div class="stat-item">
+      <ion-icon name="heart"></ion-icon>
+      <div class="stat-content">
+        <div class="stat-value">{{ totalFavorites }}</div>
+        <div class="stat-label">{{ showEnglishTitles ? 'Lists' : 'Uturonde' }}</div>
+      </div>
+    </div>
+    <div class="stat-item">
+      <ion-icon name="musical-notes"></ion-icon>
+      <div class="stat-content">
+        <div class="stat-value">{{ getTotalHymns() }}</div>
+        <div class="stat-label">{{ showEnglishTitles ? 'Total Hymns' : 'Indirimbo Zose' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-container" *ngIf="filteredFavorites.length > 0">
+    <ion-searchbar
+      class="custom-searchbar"
+      (ionChange)="handleSearchChange($event)"
+      [placeholder]="showEnglishTitles ? 'Search favorites' : 'Shakisha urutonde'"
+      [debounce]="300"
+      animated
+    ></ion-searchbar>
+  </div>
   <ng-container *ngIf="filteredFavorites.length; else emptyList">
-    <ion-list #myList [inset]="true">
-      <ion-item-sliding *ngFor="let fav of filteredFavorites">
-        <ion-item color="light">
-          <ion-label [routerLink]="['/tabs/favorites', fav.id]">
-            <ion-text>
-              <h2><strong>{{ fav.name }}</strong></h2>
-            </ion-text>
-            <p class="hymn-count">{{ fav.hymnIds.length }} hymn(s)</p>
-          </ion-label>
-          <ion-badge [routerLink]="['/tabs/favorites', fav.id]" slot="end">{{ fav.id | date }}</ion-badge>
-          <ion-button *ngIf="editMode" fill="clear" slot="end" color="danger" (click)="deleteFavorite(fav)">
-            <ion-icon name="remove-circle"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option color="danger" expandable (click)="deleteFavorite(fav)">
-            <ion-icon slot="icon-only" name="trash"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+    <div class="favorites-container">
+      <ion-list #myList class="favorites-list">
+        <ion-item-sliding *ngFor="let fav of filteredFavorites">
+          <ion-item
+            [routerLink]="['/tabs/favorites', fav.id]"
+            detail="true"
+            button
+            lines="none"
+            class="favorite-item"
+          >
+            <div class="favorite-icon">
+              <ion-icon name="heart"></ion-icon>
+            </div>
+            <ion-label>
+              <h2>{{ fav.name }}</h2>
+              <div class="favorite-meta">
+                <span class="hymn-count">
+                  <ion-icon name="musical-note-outline"></ion-icon>
+                  {{ fav.hymnIds.length }} {{ showEnglishTitles ? 'hymns' : 'indirimbo' }}
+                </span>
+                <span class="date-badge">
+                  {{ fav.id | date:'mediumDate' }}
+                </span>
+              </div>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" expandable (click)="deleteFavorite(fav)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </div>
   </ng-container>
+
   <ng-template #emptyList>
-    <ion-item>
-      <ion-text color="medium" class="ion-text-center">
-        No favourites list available
-      </ion-text>
-    </ion-item>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <ion-icon name="heart-outline"></ion-icon>
+      </div>
+      <h2>{{ showEnglishTitles ? 'No Favorites Yet' : 'Nta Zikunda' }}</h2>
+      <p>{{ showEnglishTitles ? 'Create your first favorite list to organize your hymns' : 'Rema urutonde rwawe rwambere rw\'indirimbo' }}</p>
+      <ion-button (click)="addNewFavorite()" color="primary" size="large">
+        <ion-icon name="add" slot="start"></ion-icon>
+        {{ showEnglishTitles ? 'Create List' : 'Rema Urutonde' }}
+      </ion-button>
+    </div>
   </ng-template>
+
+  <!-- Add New FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="filteredFavorites.length > 0">
+    <ion-fab-button (click)="addNewFavorite()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

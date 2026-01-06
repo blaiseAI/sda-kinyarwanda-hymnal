@@ -1,80 +1,61 @@
-<ion-header [translucent]="true">
+<ion-header translucent="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Find by Number</ion-title>
+    <ion-title class="ion-text-center">
+      <strong>{{ showEnglishTitles ? 'Find by Number' : 'Shakisha ku Nomero' }}</strong>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleLanguage()">
+        <ion-icon slot="icon-only" [name]="showEnglishTitles ? 'language-outline' : 'text-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="search-container">
-    <div class="number-input-card">
-      <div class="input-header">
-        <h2>Enter Hymn Number</h2>
-        <p class="subtitle">Type a number between 1 and 500</p>
-      </div>
-
-      <div class="number-input-wrapper">
-        <ion-input
-          [(ngModel)]="hymnNumber"
-          (ngModelChange)="onHymnNumberChange()"
-          type="number"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          placeholder="000"
-          class="number-input"
-          [clearInput]="true">
-        </ion-input>
-      </div>
-
-      <div *ngIf="hymnTitle" class="hymn-preview fade-in">
-        <div class="preview-label">Preview:</div>
-        <div class="hymn-title">
-          <span *ngFor="let word of words; let i = index" class="animated-word" [style.animation-delay]="i * 0.1 + 's'">
-            {{ word }}
-          </span>
-        </div>
-      </div>
-
-      <ion-button 
-        expand="block" 
-        class="open-button" 
-        (click)="openHymn()" 
-        [disabled]="!hymnNumber || hymnNumber <= 0 || hymnNumber > 500"
-        [class.pulse-animation]="hymnTitle">
-        <span>Open Hymn</span>
-        <ion-icon name="musical-notes-outline" slot="end"></ion-icon>
-      </ion-button>
-    </div>
-
-    <!-- Quick Number Pad -->
-    <div class="number-pad">
-      <div class="number-pad-grid">
-        <ion-button 
-          *ngFor="let num of [1,2,3,4,5,6,7,8,9]" 
-          fill="clear" 
-          class="number-pad-button"
-          (click)="appendNumber(num)">
-          {{ num }}
-        </ion-button>
-        <ion-button 
-          fill="clear" 
-          class="number-pad-button"
-          (click)="clearNumber()">
-          <ion-icon name="backspace-outline"></ion-icon>
-        </ion-button>
-        <ion-button 
-          fill="clear" 
-          class="number-pad-button"
-          (click)="appendNumber(0)">
-          0
-        </ion-button>
-        <ion-button 
-          fill="clear" 
-          class="number-pad-button go-button"
-          [disabled]="!hymnNumber || hymnNumber <= 0 || hymnNumber > 500"
-          (click)="openHymn()">
-          <ion-icon name="arrow-forward-outline"></ion-icon>
-        </ion-button>
+  <div class="simple-search-container">
+    <!-- Input Section -->
+    <div class="input-section">
+      <ion-label class="input-label">
+        {{ showEnglishTitles ? 'Enter hymn number (1-500)' : 'Andika nomero y\'indirimbo (1-500)' }}
+      </ion-label>
+      <ion-input
+        [(ngModel)]="hymnNumber"
+        (ionInput)="onHymnNumberChange($event)"
+        type="number"
+        inputmode="numeric"
+        placeholder="123"
+        class="simple-number-input"
+        min="1"
+        max="500"
+        maxlength="3"
+        (keyup.enter)="openHymn()">
+      </ion-input>
+      <div class="validation-message" *ngIf="hymnNumber !== null && !isValidNumber()">
+        <ion-icon name="alert-circle"></ion-icon>
+        <span>{{ showEnglishTitles ? 'Please enter a number between 1 and 500' : 'Andika nomero hagati ya 1 na 500' }}</span>
       </div>
     </div>
+
+    <!-- Preview Section -->
+    <div *ngIf="hymnTitle && isValidNumber()" class="simple-preview">
+      <div class="preview-header">
+        <ion-icon name="musical-note" color="primary"></ion-icon>
+        <span class="preview-label">{{ showEnglishTitles ? 'Hymn' : 'Indirimbo' }} #{{ hymnNumber }}</span>
+      </div>
+      <h2 class="hymn-title">{{ hymnTitle }}</h2>
+      <p *ngIf="hymnTitleEnglish" class="hymn-subtitle">{{ hymnTitleEnglish }}</p>
+    </div>
+
+    <!-- Open Button -->
+    <ion-button 
+      expand="block" 
+      class="simple-open-button" 
+      (click)="openHymn()" 
+      [disabled]="!isValidNumber()"
+      color="primary"
+      size="large">
+      <ion-icon name="arrow-forward-circle" slot="start"></ion-icon>
+      <span>{{ showEnglishTitles ? 'Open' : 'Fungura' }}</span>
+    </ion-button>
   </div>
 </ion-content>

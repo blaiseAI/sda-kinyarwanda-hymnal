@@ -1,21 +1,36 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IonContent, PopoverController, Platform, ModalController, LoadingController, IonRouterOutlet } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IonContent, PopoverController, Platform, ModalController, LoadingController, IonRouterOutlet, GestureController, AlertController, ToastController } from '@ionic/angular';
 import { HymnService } from '../../services/hymn.service';
 import { Hymn } from '../../models/hymn';
 import { HymnOptionsSheetComponent } from '../../components/hymn-options-sheet/hymn-options-sheet.component';
 import { FavouriteModalPage } from '../favourite-modal/favourite-modal.page';
+import { FavouriteService } from '../../services/favourite.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Share } from '@capacitor/share';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Storage } from '@ionic/storage-angular';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { LanguageService } from '../../services/language.service';
 
 
 @Component({
   selector: 'app-hymn-detail',
   templateUrl: './hymn-detail.page.html',
   styleUrls: ['./hymn-detail.page.scss'],
+  animations: [
+    trigger('slideDown', [
+      transition(':enter', [
+        style({ height: 0, opacity: 0, overflow: 'hidden' }),
+        animate('300ms ease-out', style({ height: '*', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ height: '*', opacity: 1, overflow: 'hidden' }),
+        animate('200ms ease-in', style({ height: 0, opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(IonContent) content!: IonContent;
@@ -29,6 +44,10 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   currentLoop = 0;
   maxLoops = 0;
   isLooping = false;
+  audioDuration = '0:00';
+  audioCurrentTime = '0:00';
+  showContent = false; // For fade-in animation
+  showAudioPlayer = false; // Toggle audio player visibility
   showPreviousButton = true;
   showNextButton = true;
   showEnglishTitles = false;
@@ -38,8 +57,11 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   private headerHeight: number = 0;
   private parallaxImage: HTMLElement | null = null;
   private hymnSubscription?: Subscription;
+  private languageSubscription?: Subscription;
   private lastScrollPosition: number = 0;
   fontSize = 16; // Default font size in pixels
+  isHymnFavorited = false; // Track if current hymn is in any favorites
+  private gesture?: any;
 
 
   get isAudioPaused(): boolean {
@@ -48,13 +70,19 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private hymnService: HymnService,
     private popoverController: PopoverController,
     private modalController: ModalController,
     private loadingController: LoadingController,
     private platform: Platform,
     private storage: Storage,
-    public readonly ionRouterOutlet: IonRouterOutlet
+    private favouriteService: FavouriteService,
+    private gestureCtrl: GestureController,
+    private alertController: AlertController,
+    private toastController: ToastController,
+    public readonly ionRouterOutlet: IonRouterOutlet,
+    private languageService: LanguageService
   ) {
     this.initStorage();
   }
@@ -71,8 +99,12 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
       this.updateFontSize();
     }
     
-    const showEnglishTitles = await this.storage.get('showEnglishTitles');
-    this.showEnglishTitles = showEnglishTitles === 'true';
+    // Subscribe to language preference changes
+    this.languageSubscription = this.languageService.showEnglishTitles$.subscribe(
+      (showEnglish) => {
+        this.showEnglishTitles = showEnglish;
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -85,7 +117,36 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
         this.content.scrollEvents = true;
         this.content.ionScroll.subscribe(event => this.handleScroll(event));
       }
+      
+      // Set up swipe gestures
+      this.setupSwipeGestures();
     }, 500);
+  }
+
+  private async setupSwipeGestures() {
+    const contentElement = await this.content.getScrollElement();
+    
+    this.gesture = this.gestureCtrl.create({
+      el: contentElement,
+      gestureName: 'swipe',
+      direction: 'x',
+      threshold: 20,
+      onEnd: (detail) => {
+        const deltaX = detail.deltaX;
+        const velocityX = detail.velocityX;
+        
+        // Swipe right (previous hymn)
+        if (deltaX > 50 || velocityX > 0.3) {
+          this.navigateToPreviousHymn();
+        }
+        // Swipe left (next hymn)
+        else if (deltaX < -50 || velocityX < -0.3) {
+          this.navigateToNextHymn();
+        }
+      }
+    });
+    
+    this.gesture.enable();
   }
 
   private handleScroll(event: any) {
@@ -146,6 +207,7 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   private async loadHymn(hymnNumber: string): Promise<void> {
     this.hymnSubscription?.unsubscribe();
+    this.showContent = false; // Fade out current content
     
     return new Promise((resolve, reject) => {
       this.hymnSubscription = this.hymnService.getHymn(hymnNumber)
@@ -159,6 +221,13 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
               }
               this.setupAudio(hymnNumber);
               this.updateNavigationButtons(hymnNumber);
+              this.checkIfHymnIsFavorited(hymnNumber);
+              
+              // Trigger fade-in animation after a brief delay
+              setTimeout(() => {
+                this.showContent = true;
+              }, 100);
+              
               resolve();
             } else {
               reject(new Error('Hymn not found'));
@@ -170,6 +239,16 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
           }
         });
     });
+  }
+
+  private async checkIfHymnIsFavorited(hymnNumber: string): Promise<void> {
+    this.favouriteService.getFavourites()
+      .pipe(take(1))
+      .subscribe(favourites => {
+        this.isHymnFavorited = favourites.some(fav => 
+          fav.hymnIds.includes(hymnNumber)
+        );
+      });
   }
 
   setupAudio(hymnNumber: string | null) {
@@ -196,6 +275,12 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
     // Clean up subscriptions
     this.hymnSubscription?.unsubscribe();
+    this.languageSubscription?.unsubscribe();
+
+    // Clean up gesture
+    if (this.gesture) {
+      this.gesture.destroy();
+    }
 
     // Save final settings to storage
     this.saveSettings();
@@ -274,7 +359,40 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     const audio = this.audioPlayer;
     if (audio) {
       this.audioProgress = (audio.currentTime / audio.duration) * 100;
+      this.audioCurrentTime = this.formatTime(audio.currentTime);
+      if (!isNaN(audio.duration)) {
+        this.audioDuration = this.formatTime(audio.duration);
+      }
     }
+  }
+
+  formatTime(seconds: number): string {
+    if (isNaN(seconds) || seconds === 0) {
+      return '0:00';
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  restartAudio() {
+    if (this.audioPlayer) {
+      this.audioPlayer.currentTime = 0;
+      this.currentLoop = 0;
+      if (this.audioPlayer.paused) {
+        this.isLooping = true;
+        this.audioPlayer.play().catch(error => {
+          console.error('Audio playback error:', error);
+          this.audioError = true;
+        });
+      }
+    }
+    this.playHapticFeedback();
+  }
+
+  toggleAudioPlayer() {
+    this.showAudioPlayer = !this.showAudioPlayer;
+    this.playHapticFeedback();
   }
 
   async shareHymn() {
@@ -311,10 +429,23 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     return await popover.present();
   }
 
-  async openAddToFavoriteModal() {
+  async toggleFavorite() {
     if (!this.hymn) return;
     
     await this.playHapticFeedback();
+    
+    if (this.isHymnFavorited) {
+      // Hymn is already favorited, so remove it
+      await this.removeFromFavorites();
+    } else {
+      // Hymn is not favorited, so open modal to add it
+      await this.openAddToFavoriteModal();
+    }
+  }
+
+  private async openAddToFavoriteModal() {
+    if (!this.hymn) return;
+    
     const modal = await this.modalController.create({
       component: FavouriteModalPage,
       componentProps: {
@@ -327,7 +458,154 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
       showBackdrop: true,
       cssClass: 'auto-height'
     });
-    return await modal.present();
+    
+    await modal.present();
+    
+    // Update favorite status after modal is dismissed
+    const { data } = await modal.onWillDismiss();
+    if (data?.success || data) {
+      this.checkIfHymnIsFavorited(this.hymn.number);
+    }
+  }
+
+  private async removeFromFavorites() {
+    if (!this.hymn) return;
+
+    // First, get all favorite lists that contain this hymn
+    this.favouriteService.getFavourites()
+      .pipe(take(1))
+      .subscribe(async (favourites) => {
+        const listsWithThisHymn = favourites.filter(fav => 
+          fav.hymnIds.includes(this.hymn!.number)
+        );
+
+        if (listsWithThisHymn.length === 0) {
+          return; // Shouldn't happen, but just in case
+        }
+
+        if (listsWithThisHymn.length === 1) {
+          // Only in one list, show simple confirmation
+          await this.showSingleListRemovalConfirmation(listsWithThisHymn[0]);
+        } else {
+          // In multiple lists, let user choose which ones to remove from
+          await this.showMultipleListsRemovalDialog(listsWithThisHymn);
+        }
+      });
+  }
+
+  private async showSingleListRemovalConfirmation(favouriteList: any) {
+    const alert = await this.alertController.create({
+      header: 'Remove from Favorites?',
+      message: `Remove "${this.hymn!.title.kinyarwanda}" from "${favouriteList.name}"?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Remove',
+          role: 'destructive',
+          handler: async () => {
+            await this.favouriteService.removeHymnFromFavourite(favouriteList.id, this.hymn!.number);
+            this.isHymnFavorited = false;
+            
+            const toast = await this.toastController.create({
+              message: `Removed from "${favouriteList.name}"`,
+              duration: 2000,
+              position: 'bottom',
+              color: 'dark'
+            });
+            await toast.present();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private async showMultipleListsRemovalDialog(listsWithThisHymn: any[]) {
+    const inputs = listsWithThisHymn.map(fav => ({
+      type: 'checkbox' as const,
+      label: `${fav.name} (${fav.hymnIds.length} hymns)`,
+      value: fav.id,
+      checked: false
+    }));
+
+    const alert = await this.alertController.create({
+      header: 'Remove from Favorites',
+      message: `"${this.hymn!.title.kinyarwanda}" is in ${listsWithThisHymn.length} lists. Select which ones to remove it from:`,
+      inputs: inputs,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Remove from All',
+          role: 'destructive',
+          handler: async () => {
+            // Remove from all lists
+            for (const fav of listsWithThisHymn) {
+              await this.favouriteService.removeHymnFromFavourite(fav.id, this.hymn!.number);
+            }
+            
+            this.isHymnFavorited = false;
+            
+            const toast = await this.toastController.create({
+              message: `Removed from all ${listsWithThisHymn.length} lists`,
+              duration: 2000,
+              position: 'bottom',
+              color: 'dark'
+            });
+            await toast.present();
+          }
+        },
+        {
+          text: 'Remove Selected',
+          handler: async (selectedIds: string[]) => {
+            if (!selectedIds || selectedIds.length === 0) {
+              const toast = await this.toastController.create({
+                message: 'Please select at least one list',
+                duration: 2000,
+                position: 'bottom',
+                color: 'warning'
+              });
+              await toast.present();
+              return false; // Keep dialog open
+            }
+
+            // Remove from selected lists
+            for (const favId of selectedIds) {
+              await this.favouriteService.removeHymnFromFavourite(favId, this.hymn!.number);
+            }
+
+            // Check if still in any other lists
+            const remainingLists = listsWithThisHymn.filter(fav => !selectedIds.includes(fav.id));
+            this.isHymnFavorited = remainingLists.length > 0;
+
+            const listNames = listsWithThisHymn
+              .filter(fav => selectedIds.includes(fav.id))
+              .map(fav => fav.name)
+              .join(', ');
+
+            const toast = await this.toastController.create({
+              message: `Removed from: ${listNames}`,
+              duration: 2500,
+              position: 'bottom',
+              color: 'dark'
+            });
+            await toast.present();
+            
+            return true;
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   navigateToPreviousHymn() {
@@ -404,7 +682,22 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
       this.audioProgress = 0;
       this.audioError = false;
       
-      const url = `/tabs/hymns/${hymnNumber}`;
+      // Preserve the current URL context (favorites or regular hymns)
+      const currentUrl = this.router.url;
+      let url: string;
+      
+      if (currentUrl.includes('/favorites/')) {
+        // Extract favorite ID from current URL and maintain favorites context
+        const favoriteIdMatch = currentUrl.match(/\/favorites\/([^/]+)\//);
+        if (favoriteIdMatch) {
+          url = `/tabs/favorites/${favoriteIdMatch[1]}/hymns/${hymnNumber}`;
+        } else {
+          url = `/tabs/hymns/${hymnNumber}`;
+        }
+      } else {
+        url = `/tabs/hymns/${hymnNumber}`;
+      }
+      
       window.history.replaceState({}, '', url);
     } catch (error) {
       console.error('Error navigating to hymn:', error);

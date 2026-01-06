@@ -55,9 +55,9 @@ const routes: Routes = [
           {
             path: ':favouriteId/hymns/:hymnNumber',
             loadChildren: () =>
-              import(
-                './pages/favourite-hymn-detail/favourite-hymn-detail.module'
-              ).then((m) => m.FavouriteHymnDetailPageModule),
+              import('./pages/hymn-detail/hymn-detail.module').then(
+                (m) => m.HymnDetailPageModule
+              ),
           },
         ],
       },
