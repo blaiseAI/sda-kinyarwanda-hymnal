@@ -1,0 +1,58 @@
+.verse-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.verse-content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--ion-card-background);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reference {
+  display: block;
+  font-size: 1.2em;
+  font-weight: var(--heading-font-weight);
+  margin-bottom: 16px;
+  font-variation-settings: 'opsz' var(--heading-opsz);
+  letter-spacing: -0.02em;
+}
+
+.verse-text {
+  display: block;
+  font-size: 1.4em;
+  line-height: 1.6;
+  margin: 20px 0;
+  font-weight: var(--body-font-weight);
+  color: var(--ion-text-color);
+  font-variation-settings: 'opsz' var(--body-opsz);
+  letter-spacing: -0.01em;
+}
+
+.translation {
+  display: block;
+  font-size: 0.9em;
+  margin-top: 16px;
+  font-style: italic;
+  font-weight: var(--font-weight-light);
+  font-variation-settings: 'opsz' var(--body-opsz);
+  opacity: 0.8;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 20px;
+  text-align: center;
+}

@@ -1,74 +1,264 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" translucent="true">
   <ion-toolbar>
-    <ion-title>Settings</ion-title>
+    <ion-title class="ion-text-center">
+      <strong>{{ showEnglishTitles ? 'Settings' : 'Amahitamo' }}</strong>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleLanguage()">
+        <ion-icon slot="icon-only" [name]="showEnglishTitles ? 'language-outline' : 'text-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="settings-content">
   <!-- Appearance Section -->
   <div class="settings-section">
-    <h2 class="settings-section-header">APPEARANCE</h2>
-    <ion-list class="settings-list">
-      <ion-item lines="none" class="settings-item">
-        <ion-icon slot="start" name="moon-outline"></ion-icon>
-        <ion-label>Dark Mode</ion-label>
-        <ion-toggle
-          slot="end"
-          mode="ios"
-          [checked]="isDarkMode"
-          (ionChange)="toggleDarkMode($event)"
-        ></ion-toggle>
-      </ion-item>
-    </ion-list>
+    <h2 class="settings-section-header">{{ showEnglishTitles ? 'APPEARANCE' : 'ISURA' }}</h2>
+    <div class="settings-card">
+      <ion-list class="settings-list">
+        <ion-item lines="none" class="settings-item">
+          <div class="item-icon">
+            <ion-icon name="moon"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Dark Mode' : 'Umwanya wijimye' }}</h3>
+            <p>{{ showEnglishTitles ? 'Use dark theme for better reading at night' : 'Koresha insanganyamatsiko yijimye nijoro' }}</p>
+          </ion-label>
+          <ion-toggle
+            slot="end"
+            mode="ios"
+            [checked]="isDarkMode"
+            (ionChange)="toggleDarkMode($event)"
+          ></ion-toggle>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+
+  <!-- Reminders Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">{{ showEnglishTitles ? 'REMINDERS' : 'IBIHEREKEZA' }}</h2>
+    <div class="settings-card">
+      <ion-list class="settings-list">
+        <!-- Hymnal Reminder -->
+        <ion-item lines="none" class="settings-item">
+          <div class="item-icon">
+            <ion-icon name="musical-notes"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Daily Hymnal Reminder' : 'Ibiherekeza by\'indirimbo' }}</h3>
+            <p>{{ showEnglishTitles ? 'Get reminded to praise daily' : 'Unyibukwe guhimbaza buri munsi' }}</p>
+          </ion-label>
+          <ion-toggle
+            slot="end"
+            mode="ios"
+            [checked]="isHymnalReminderEnabled"
+            (ionChange)="toggleHymnalReminder($event)"
+          ></ion-toggle>
+        </ion-item>
+        <ion-item *ngIf="isHymnalReminderEnabled" lines="none" class="settings-item time-item">
+          <div class="item-icon">
+            <ion-icon name="time"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Reminder Time' : 'Igihe' }}</h3>
+          </ion-label>
+          <ion-datetime-button datetime="hymnal-time" slot="end"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="hymnal-time"
+                presentation="time"
+                [value]="hymnalReminderTime"
+                (ionChange)="updateHymnalReminderTime($event)"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+
+        <!-- Daily Verse -->
+        <ion-item lines="none" class="settings-item divider-top">
+          <div class="item-icon">
+            <ion-icon name="book"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Daily Bible Verse' : 'Amagambo y\'umunsi' }}</h3>
+            <p>{{ showEnglishTitles ? 'Receive daily scripture' : 'Akwibuka ijambo buri munsi' }}</p>
+          </ion-label>
+          <ion-toggle
+            slot="end"
+            mode="ios"
+            [checked]="isDailyVerseEnabled"
+            (ionChange)="toggleDailyVerse($event)"
+          ></ion-toggle>
+        </ion-item>
+        <ion-item *ngIf="isDailyVerseEnabled" lines="none" class="settings-item time-item">
+          <div class="item-icon">
+            <ion-icon name="time"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Verse Time' : 'Igihe' }}</h3>
+          </ion-label>
+          <ion-datetime-button datetime="verse-time" slot="end"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="verse-time"
+                presentation="time"
+                [value]="dailyVerseTime"
+                (ionChange)="updateDailyVerseTime($event)"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 
   <!-- Engagement Section -->
   <div class="settings-section">
-    <h2 class="settings-section-header">ENGAGEMENT</h2>
-    <ion-list class="settings-list">
-      <ion-item button detail lines="none" class="settings-item" (click)="sendFeedback()">
-        <ion-icon slot="start" name="chatbubble-outline"></ion-icon>
-        <ion-label>
-          <h3>Feedback</h3>
-          <p>Share your thoughts with us</p>
-        </ion-label>
-      </ion-item>
+    <h2 class="settings-section-header">{{ showEnglishTitles ? 'ENGAGEMENT' : 'UBUFATANYE' }}</h2>
+    <div class="settings-card">
+      <ion-list class="settings-list">
+        <ion-item button detail lines="none" class="settings-item" (click)="sendFeedback()">
+          <div class="item-icon">
+            <ion-icon name="chatbubble-ellipses"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Feedback' : 'Ibitekerezo' }}</h3>
+            <p>{{ showEnglishTitles ? 'Share your thoughts with us' : 'Dutange ibitekerezo byawe' }}</p>
+          </ion-label>
+        </ion-item>
 
-      <ion-item *ngIf="isMobile" button detail lines="none" class="settings-item" (click)="shareApp()">
-        <ion-icon slot="start" name="share-social-outline"></ion-icon>
-        <ion-label>
-          <h3>Share App</h3>
-          <p>Share with friends and family</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+        <ion-item *ngIf="isMobile" button detail lines="none" class="settings-item" (click)="shareApp()">
+          <div class="item-icon">
+            <ion-icon name="share-social"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Share App' : 'Sangiza Porogaramu' }}</h3>
+            <p>{{ showEnglishTitles ? 'Share with friends and family' : 'Sangiza inshuti n\'umuryango' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+
+  <!-- Support Section -->
+  <div class="settings-section">
+    <h2 class="settings-section-header">{{ showEnglishTitles ? 'SUPPORT' : 'INKUNGA' }}</h2>
+    
+    <!-- Support Info Toggle Button -->
+    <div class="support-info-toggle" (click)="toggleSupportInfo()">
+      <div class="toggle-content">
+        <ion-icon name="information-circle"></ion-icon>
+        <span>{{ showEnglishTitles ? 'Why support?' : 'Kuki duha inkunga?' }}</span>
+      </div>
+      <ion-icon [name]="showSupportInfo ? 'chevron-up' : 'chevron-down'" class="toggle-icon"></ion-icon>
+    </div>
+
+    <!-- Support Info Card (Collapsible) -->
+    <div class="support-info-card" [class.expanded]="showSupportInfo">
+      <div class="support-info-content">
+        <div class="info-icon">
+          <ion-icon name="heart-circle"></ion-icon>
+        </div>
+        <h3>{{ showEnglishTitles ? 'Support Development' : 'Dufashe Guteza Imbere' }}</h3>
+        <p>
+          {{ showEnglishTitles 
+            ? 'This app is completely free to use with no ads. Your support helps maintain and improve the app for everyone.' 
+            : 'Iyi porogaramu ni ubuntu kandi nta matangazo. Inkunga yawe idufasha kuyikora neza no kuyongera ibikorwa.' 
+          }}
+        </p>
+        <div class="support-benefits">
+          <div class="benefit-item">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <span>{{ showEnglishTitles ? 'Free forever' : 'Ubuntu buhoraho' }}</span>
+          </div>
+          <div class="benefit-item">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <span>{{ showEnglishTitles ? 'No advertisements' : 'Nta matangazo' }}</span>
+          </div>
+          <div class="benefit-item">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <span>{{ showEnglishTitles ? 'Regular updates' : 'Ivugurura rihoraho' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <ion-list class="settings-list">
+        <ion-item button detail lines="none" class="settings-item" (click)="supportViaPayPal()">
+          <div class="item-icon paypal">
+            <ion-icon name="logo-paypal"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>PayPal</h3>
+            <p>{{ showEnglishTitles ? 'Support via PayPal' : 'Duhe inkunga binyuze kuri PayPal' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item button detail lines="none" class="settings-item" (click)="supportViaPatreon()">
+          <div class="item-icon patreon">
+            <ion-icon src="assets/icons/patreon.svg"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>Patreon</h3>
+            <p>{{ showEnglishTitles ? 'Become a patron' : 'Twubake hamwe' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 
   <!-- Legal Section -->
   <div class="settings-section">
-    <h2 class="settings-section-header">LEGAL</h2>
-    <ion-list class="settings-list">
-      <ion-item button detail lines="none" class="settings-item" (click)="openPrivacyPolicy()">
-        <ion-icon slot="start" name="shield-outline"></ion-icon>
-        <ion-label>Privacy Policy</ion-label>
-      </ion-item>
+    <h2 class="settings-section-header">{{ showEnglishTitles ? 'LEGAL' : 'AMATEGEKO' }}</h2>
+    <div class="settings-card">
+      <ion-list class="settings-list">
+        <ion-item button detail lines="none" class="settings-item" (click)="openPrivacyPolicy()">
+          <div class="item-icon">
+            <ion-icon name="shield-checkmark"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Privacy Policy' : 'Amategeko y\'ibanga' }}</h3>
+          </ion-label>
+        </ion-item>
 
-      <ion-item button detail lines="none" class="settings-item" (click)="openTermsAndConditions()">
-        <ion-icon slot="start" name="document-text-outline"></ion-icon>
-        <ion-label>Terms of Service</ion-label>
-      </ion-item>
-    </ion-list>
+        <ion-item button detail lines="none" class="settings-item" (click)="openTermsAndConditions()">
+          <div class="item-icon">
+            <ion-icon name="document-text"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'Terms of Service' : 'Amategeko y\'ikoreshwa' }}</h3>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 
   <!-- About Section -->
   <div class="settings-section">
-    <h2 class="settings-section-header">ABOUT</h2>
-    <div class="about-container">
-      <img src="assets/icon/favicon.png" alt="App Icon" class="app-icon">
+    <h2 class="settings-section-header">{{ showEnglishTitles ? 'ABOUT' : 'IBYEREKEYE' }}</h2>
+    <div class="about-card">
+      <div class="app-icon-container">
+        <img src="assets/icon/favicon.png" alt="App Icon" class="app-icon">
+      </div>
       <h2 class="app-name">SDA Kinyarwanda Hymnal</h2>
-      <p class="version">Version {{ appVersion }}</p>
-      <p class="developer">Created with ❤️ by <span>Blaise Sebagabo</span></p>
-      <p class="kinyarwanda-title">Indirimbo Zo Guhimbaza Imana 500</p>
+      <p class="app-subtitle">Indirimbo Zo Guhimbaza Imana</p>
+      <div class="version-badge">
+        <ion-icon name="code-working-outline"></ion-icon>
+        <span>{{ showEnglishTitles ? 'Version' : 'Verisiyo' }} {{ appVersion }}</span>
+      </div>
+      <div class="developer-info">
+        <ion-icon name="heart" color="danger"></ion-icon>
+        <p>{{ showEnglishTitles ? 'Created with love by' : 'Byakozwe n\'urukundo na' }} <span>Blaise Sebagabo</span></p>
+      </div>
+      <div class="hymn-count-badge">
+        <ion-icon name="musical-notes"></ion-icon>
+        <span>500 {{ showEnglishTitles ? 'Hymns' : 'Indirimbo' }}</span>
+      </div>
     </div>
   </div>
 </ion-content>

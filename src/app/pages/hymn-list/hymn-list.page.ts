@@ -1,17 +1,21 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Hymn } from '../../models/hymn';
 import { HymnService } from '../../services/hymn.service';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, of, Subscription } from 'rxjs';
 import { tap, throttleTime, mergeMap, scan, map } from 'rxjs/operators';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { Preferences } from '@capacitor/preferences';
+import { AlertController, IonContent } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-hymn-list',
   templateUrl: './hymn-list.page.html',
   styleUrls: ['./hymn-list.page.scss'],
 })
-export class HymnListPage implements OnInit {
+export class HymnListPage implements OnInit, OnDestroy {
+  @ViewChild(IonContent) content!: IonContent;
+  
   hymns$!: Observable<Hymn[]>;
   filteredHymns: Hymn[] = [];
   hymns: Hymn[] = [];
@@ -22,11 +26,15 @@ export class HymnListPage implements OnInit {
   currentSearchQuery: string = '';
   isSearching = false;
   showEnglishTitles = false;
-  private readonly LANGUAGE_PREF_KEY = 'show_english_titles';
+  totalHymns = 0;
+  private languageSubscription?: Subscription;
 
-  constructor(private hymnService: HymnService) {
-    this.loadLanguagePreference();
-  }
+  constructor(
+    private hymnService: HymnService,
+    private alertController: AlertController,
+    private router: Router,
+    private languageService: LanguageService
+  ) {}
 
   // Helper function to normalize text by removing special characters and spaces
   private normalizeText(text: string): string {
@@ -37,17 +45,8 @@ export class HymnListPage implements OnInit {
       .replace(/[^a-z0-9]/g, ''); // Remove all non-alphanumeric characters
   }
 
-  async loadLanguagePreference() {
-    const { value } = await Preferences.get({ key: this.LANGUAGE_PREF_KEY });
-    this.showEnglishTitles = value === 'true';
-  }
-
   async toggleLanguage() {
-    this.showEnglishTitles = !this.showEnglishTitles;
-    await Preferences.set({
-      key: this.LANGUAGE_PREF_KEY,
-      value: this.showEnglishTitles.toString(),
-    });
+    await this.languageService.toggleLanguage();
     await this.playHapticFeedback();
   }
 
@@ -93,16 +92,31 @@ export class HymnListPage implements OnInit {
   }
 
   ngOnInit() {
+    // Subscribe to language preference changes
+    this.languageSubscription = this.languageService.showEnglishTitles$.subscribe(
+      (showEnglish) => {
+        this.showEnglishTitles = showEnglish;
+      }
+    );
+
     this.hymns$ = this.hymnService.getHymns();
     this.hymns$.subscribe({
       next: (hymns) => {
         this.hymns = hymns;
+        this.totalHymns = hymns.length;
         this.filterHymns();
       },
       error: (error) => {
         console.error('Error loading hymns:', error);
       }
     });
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
   }
 
   trackByFn(_: any, item: Hymn) {
@@ -122,6 +136,50 @@ export class HymnListPage implements OnInit {
       return `${hymn.number} - ${hymn.title.english}`;
     }
     return `${hymn.number} - ${hymn.title.kinyarwanda}`;
+  }
+
+  async showJumpToHymnAlert() {
+    const alert = await this.alertController.create({
+      header: this.showEnglishTitles ? 'Jump to Hymn' : 'Simbukira ku ndirimbo',
+      message: this.showEnglishTitles ? 'Enter hymn number (1-500)' : 'Andika numero y\'indirimbo (1-500)',
+      cssClass: 'jump-to-hymn-alert',
+      inputs: [
+        {
+          name: 'hymnNumber',
+          type: 'number',
+          placeholder: this.showEnglishTitles ? 'Hymn number' : 'Numero y\'indirimbo',
+          min: 1,
+          max: 500,
+          attributes: {
+            inputmode: 'numeric'
+          }
+        }
+      ],
+      buttons: [
+        {
+          text: this.showEnglishTitles ? 'Cancel' : 'Kureka',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
+        },
+        {
+          text: this.showEnglishTitles ? 'Go' : 'Genda',
+          cssClass: 'alert-button-confirm',
+          handler: async (data) => {
+            const hymnNum = parseInt(data.hymnNumber);
+            if (hymnNum >= 1 && hymnNum <= 500) {
+              await this.playHapticFeedback();
+              this.router.navigate(['/tabs/hymns', hymnNum]);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  getVerseCount(hymn: Hymn): number {
+    return hymn.verses?.count || hymn.verses?.text?.length || 0;
   }
 }
 

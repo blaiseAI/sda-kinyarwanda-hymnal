@@ -21,8 +21,8 @@
     }
 
     ion-title {
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 16px;
+      font-weight: 600;
     }
 
     .action-buttons {
@@ -71,13 +71,20 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+    background: linear-gradient(
+      to bottom, 
+      rgba(0,0,0,0.2) 0%, 
+      rgba(0,0,0,0.4) 40%,
+      rgba(0,0,0,0.7) 70%,
+      rgba(0,0,0,0.85) 100%
+    );
     display: flex;
     align-items: flex-end;
     padding: 20px;
     
     .hymn-info {
       color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       
       .hymn-number {
         font-size: 24px;
@@ -87,6 +94,7 @@
         display: inline-block;
         padding: 4px 12px;
         border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
       
       h1 {
@@ -99,7 +107,7 @@
       .english-title {
         font-size: 16px;
         margin: 0;
-        opacity: 0.9;
+        opacity: 0.95;
       }
     }
   }
@@ -120,10 +128,12 @@
   border-radius: 12px;
   padding: 12px;
   margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   
   .player-controls {
     display: flex;
     align-items: center;
+    gap: 8px;
     
     ion-button {
       --padding-start: 0;
@@ -134,11 +144,20 @@
         font-size: 40px;
         color: var(--ion-color-primary);
       }
+      
+      .control-icon {
+        font-size: 24px;
+        color: var(--ion-color-medium);
+      }
+      
+      &[disabled] {
+        opacity: 0.4;
+      }
     }
     
     .player-info {
       flex: 1;
-      margin-left: 12px;
+      margin-left: 4px;
       
       .progress-container {
         margin-bottom: 8px;
@@ -157,9 +176,36 @@
         }
       }
       
-      .status-text {
-        font-size: 14px;
-        color: var(--ion-color-medium);
+      .audio-metadata {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        
+        .status-text {
+          font-size: 14px;
+          color: var(--ion-color-medium);
+        }
+        
+        .audio-stats {
+          display: flex;
+          gap: 12px;
+          font-size: 12px;
+          color: var(--ion-color-medium);
+          
+          .time-display {
+            font-weight: 500;
+          }
+          
+          .loop-counter {
+            color: var(--ion-color-primary);
+            font-weight: 600;
+            background: rgba(var(--ion-color-primary-rgb), 0.1);
+            padding: 2px 8px;
+            border-radius: 8px;
+          }
+        }
       }
     }
   }
@@ -206,14 +252,89 @@
   }
   
   .chorus-card {
-    background: rgba(var(--ion-color-primary-rgb), 0.1);
-    border-left: 4px solid var(--ion-color-primary);
+    background: linear-gradient(
+      135deg,
+      rgba(var(--ion-color-primary-rgb), 0.15) 0%,
+      rgba(var(--ion-color-primary-rgb), 0.08) 100%
+    );
+    border: 2px solid rgba(var(--ion-color-primary-rgb), 0.3);
+    box-shadow: 
+      0 4px 12px rgba(var(--ion-color-primary-rgb), 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
     
-    .chorus-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ion-color-primary);
-      margin-bottom: 8px;
+    // Decorative accent line
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        var(--ion-color-primary),
+        var(--ion-color-primary-shade)
+      );
+      box-shadow: 2px 0 8px rgba(var(--ion-color-primary-rgb), 0.3);
+    }
+    
+    // Subtle pattern overlay
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(
+        circle at center,
+        rgba(var(--ion-color-primary-rgb), 0.05) 0%,
+        transparent 70%
+      );
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    .chorus-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+      
+      .chorus-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: var(--ion-color-primary);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+        
+        ion-icon {
+          font-size: 18px;
+          color: white;
+        }
+      }
+      
+      .chorus-label {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+    
+    .chorus-text {
+      position: relative;
+      z-index: 1;
+      font-style: italic;
+      padding-left: 10px;
     }
   }
 
@@ -295,6 +416,11 @@
 :host ::ng-deep ion-content {
   --padding-bottom: 60px; // Match footer height
 }
+.font-controls {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
 
 ion-header {
   ion-toolbar {
@@ -313,6 +439,74 @@ ion-header {
         font-size: 20px;
         color: var(--ion-color-dark);
       }
+      
+      // Favorited heart button styling
+      &.favorited {
+        ion-icon {
+          color: var(--ion-color-primary);
+        }
+      }
+      
+      // Active audio player button styling
+      &.audio-active {
+        &::part(native) {
+          background: rgba(var(--ion-color-primary-rgb), 0.15);
+        }
+        
+        ion-icon {
+          color: var(--ion-color-primary);
+        }
+      }
     }
+  }
+}
+
+// Dark mode - favorited heart in white
+body[data-theme="dark"] {
+  ion-header ion-toolbar {
+    ion-button.favorited {
+      ion-icon {
+        color: white;
+      }
+    }
+    
+    ion-button.audio-active {
+      &::part(native) {
+        background: rgba(var(--ion-color-primary-rgb), 0.25);
+      }
+      
+      ion-icon {
+        color: var(--ion-color-primary-tint);
+      }
+    }
+  }
+  
+  // Enhanced chorus styling for dark mode
+  .chorus-card {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--ion-color-primary-rgb), 0.2) 0%,
+      rgba(var(--ion-color-primary-rgb), 0.12) 100%
+    );
+    border-color: rgba(var(--ion-color-primary-rgb), 0.4);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    
+    &::before {
+      box-shadow: 2px 0 12px rgba(var(--ion-color-primary-rgb), 0.5);
+    }
+  }
+}
+
+// Smooth fade-in animation
+.content-container {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  
+  &.fade-in {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

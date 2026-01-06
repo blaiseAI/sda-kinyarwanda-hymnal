@@ -1,5 +1,5 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar color="light">
+<ion-header class="ion-no-border" translucent="true">
+  <ion-toolbar>
     <ion-title class="ion-text-center">
       <strong>Indirimbo</strong>
     </ion-title>
@@ -12,6 +12,24 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding-horizontal">
+  <!-- Stats Card -->
+  <div class="stats-card" *ngIf="!isSearching">
+    <div class="stat-item">
+      <ion-icon name="musical-notes"></ion-icon>
+      <div class="stat-content">
+        <div class="stat-value">{{ totalHymns }}</div>
+        <div class="stat-label">{{ showEnglishTitles ? 'Total Hymns' : 'Indirimbo Zose' }}</div>
+      </div>
+    </div>
+    <div class="stat-item">
+      <ion-icon name="library"></ion-icon>
+      <div class="stat-content">
+        <div class="stat-value">{{ filteredHymns.length }}</div>
+        <div class="stat-label">{{ showEnglishTitles ? 'Showing' : 'Bigaragara' }}</div>
+      </div>
+    </div>
+  </div>
+
   <div class="search-container">
     <ion-searchbar
       class="custom-searchbar"
@@ -35,10 +53,21 @@
           lines="none"
           class="hymn-item"
         >
-          <div class="hymn-number">{{ hymn.number }}</div>
+          <div class="hymn-number-badge">
+            <div class="badge-number">{{ hymn.number }}</div>
+            <div class="badge-icon">
+              <ion-icon name="musical-note"></ion-icon>
+            </div>
+          </div>
           <ion-label>
             <h2>{{ hymn.title.kinyarwanda }}</h2>
             <p *ngIf="hymn.title.english" class="english-title">{{ hymn.title.english }}</p>
+            <div class="hymn-meta">
+              <span class="verse-count">
+                <ion-icon name="list-outline"></ion-icon>
+                {{ getVerseCount(hymn) }} {{ showEnglishTitles ? 'verses' : 'ibice' }}
+              </span>
+            </div>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -75,4 +104,11 @@
     >
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <!-- Quick Jump FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="showJumpToHymnAlert()" color="primary">
+      <ion-icon name="search"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

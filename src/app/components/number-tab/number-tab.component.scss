@@ -1,82 +1,217 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 20px;
+ion-header {
+  &::after {
+    background: none;
   }
-  
-  .hymn-input-item {
-    margin-bottom: 20px;
-    --padding-start: 8px;
-    --padding-end: 8px;
-    // --border-radius: 8px;
-  }
-  
-  .hymn-title {
-    text-align: center;
-  }
-  
-  .animated-word {
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: fadeInUp 0.5s forwards;
-    animation-delay: var(--delay);
-  }
-  
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+  ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    --padding-top: env(safe-area-inset-top);
+    --min-height: calc(56px + env(safe-area-inset-top));
+
+    ion-title {
+      font-size: 24px;
+      font-weight: 700;
     }
   }
-  
-  
-  .open-button {
-    --border-radius: 8px;
-    margin-top: 20px;
-    font-weight: bold;
-    --background: var(--ion-color-primary); /* Use your theme's primary color */
-    --background-activated: var(--ion-color-primary-shade); /* Slightly darker variant for activated state */
-    --background-focused: var(--ion-color-primary-tint); /* Slightly lighter variant for focused state */
-  }
+}
 
-  /* In your-component.component.scss */
-.new-features-badge {
-    padding: 8px;
-    background-color: var(--ion-color-primary-tint); /* Primary color or any color that signifies new or important features */
-    color: white;
-    border-radius: 4px;
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+.simple-search-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Input Section
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .input-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ion-color-medium);
     text-align: center;
-    width: max-content;
-    margin: auto; /* Center the badge horizontally */
-    margin-top: 16px; /* Space from top */
   }
 
+  .simple-number-input {
+    --background: var(--ion-color-light);
+    --color: var(--ion-text-color);
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 16px;
+    border: 2px solid rgba(var(--ion-color-primary-rgb), 0.2);
+    transition: all 0.3s ease;
 
-  /* Input Field Styles */
-  .ionic-input {
-    background: transparent; /* Ensure no background color */
-    border: none; /* Remove border */
-    box-shadow: none; /* Remove shadow */
-    padding: 13px 15px; /* Adjust padding to match ionic input */
-    font-size: 18px; /* Increased font size for bigger text */
-    width: calc(100% - 30px); /* Adjust width if padding is added */
-    margin: auto; /* Center the input in the container */
-    margin-bottom: 15px; /* Space below the input */
-    box-sizing: border-box; /* Include padding in width calculation */
-    outline: none; /* Remove the outline on focus */
-    text-align: center; /* Center the text */
+    &::part(native) {
+      text-align: center;
+    }
+
+    &:focus-within {
+      border-color: var(--ion-color-primary);
+      --background: var(--ion-background-color);
+      box-shadow: 0 0 0 4px rgba(var(--ion-color-primary-rgb), 0.1);
+    }
   }
-  
-  /* Adjust the input placeholder for better visibility */
-  .ionic-input::placeholder {
-    color: #bbb; /* Placeholder text color */
-    opacity: 1; /* Full opacity for placeholder */
-    font-size: 18px; /* Match font size of input text */
+
+  .validation-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(var(--ion-color-danger-rgb), 0.1);
+    border: 1px solid rgba(var(--ion-color-danger-rgb), 0.3);
+    border-radius: 12px;
+    color: var(--ion-color-danger);
+    font-size: 14px;
+    font-weight: 500;
+    animation: shake 0.4s ease;
+
+    ion-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    span {
+      text-align: center;
+    }
   }
+}
+
+// Preview Section
+.simple-preview {
+  background: var(--ion-color-light);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.1);
+  animation: fadeIn 0.3s ease;
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    ion-icon {
+      font-size: 20px;
+    }
+
+    .preview-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ion-color-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .hymn-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ion-text-color);
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+  }
+
+  .hymn-subtitle {
+    font-size: 15px;
+    color: var(--ion-color-medium);
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// Open Button
+.simple-open-button {
+  --border-radius: 14px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
   
-  
-  
-  
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: none;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+
+  &:not([disabled]):active {
+    transform: scale(0.98);
+  }
+
+  &[disabled] {
+    opacity: 0.4;
+  }
+
+  ion-icon {
+    font-size: 22px;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+// Dark Mode
+body[data-theme="dark"] {
+  .simple-search-container {
+    .input-section {
+      .simple-number-input {
+        --background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(var(--ion-color-primary-rgb), 0.3);
+
+        &:focus-within {
+          --background: rgba(255, 255, 255, 0.12);
+          border-color: var(--ion-color-primary);
+          box-shadow: 0 0 0 4px rgba(var(--ion-color-primary-rgb), 0.15);
+        }
+      }
+    }
+
+    .simple-preview {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .simple-open-button {
+    --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.4);
+  }
+}

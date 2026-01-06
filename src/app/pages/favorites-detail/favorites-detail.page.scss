@@ -1,93 +1,339 @@
-.header-image {
+:host {
+  --page-margin: 16px;
+}
+
+// Header styles
+.transparent-header {
+  ion-toolbar {
+    --background: rgba(255, 255, 255, 0.95);
+    --border-width: 0;
+    --padding-top: env(safe-area-inset-top);
+    --min-height: calc(56px + env(safe-area-inset-top));
+
+    ion-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    ion-back-button {
+      --color: var(--ion-color-dark);
+    }
+  }
+}
+
+// Header Container
+.header-container {
   position: relative;
-  height: 200px;
-  background-size: cover;
-  background-position: center;
-  
-  .overlay {
+  height: 280px;
+  overflow: hidden;
+
+  .header-image {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
-    padding: 20px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.8));
-    color: white;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.9);
+  }
 
-    .favorite-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 0 0 8px 0;
-    }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.4) 40%,
+      rgba(0, 0, 0, 0.7) 70%,
+      rgba(0, 0, 0, 0.85) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
 
-    .favorite-date {
-      font-size: 14px;
-      margin: 0;
-      opacity: 0.8;
-    }
+    .favorite-info {
+      width: 100%;
 
-    .hymn-count {
-      font-size: 16px;
-      margin: 8px 0 0 0;
-      opacity: 0.9;
+      .favorite-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        background: var(--ion-color-primary);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+
+        ion-icon {
+          font-size: 28px;
+          color: white;
+        }
+      }
+
+      .favorite-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        margin: 0 0 12px 0;
+        line-height: 1.2;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .favorite-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+
+        .favorite-date,
+        .hymn-count {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 14px;
+          color: white;
+          opacity: 0.95;
+          background: rgba(255, 255, 255, 0.15);
+          padding: 6px 12px;
+          border-radius: 20px;
+          backdrop-filter: blur(10px);
+
+          ion-icon {
+            font-size: 16px;
+          }
+        }
+      }
     }
   }
 }
 
+// Content Container
 .content-container {
   background: var(--ion-background-color);
-  border-radius: 20px 20px 0 0;
-  margin-top: -20px;
+  border-radius: 24px 24px 0 0;
+  margin-top: -24px;
   position: relative;
-  padding: 16px;
+  padding: var(--page-margin);
+  min-height: calc(100vh - 280px);
 
-  .hymn-list {
-    background: transparent;
-    margin-bottom: 16px;
+  .hymns-wrapper {
+    .hymn-list {
+      background: transparent;
+      padding: 0;
 
-    ion-item {
-      --background: var(--ion-color-light);
-      --border-radius: 8px;
-      margin-bottom: 8px;
+      .hymn-item {
+        --background: var(--ion-color-light);
+        --border-radius: 12px;
+        --padding-start: 12px;
+        --padding-end: 12px;
+        --inner-padding-end: 12px;
+        margin-bottom: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
-      h2 {
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
+        &:active {
+          transform: scale(0.98);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
 
-      p {
-        color: var(--ion-color-medium);
-        font-size: 14px;
-        margin: 0;
+        .hymn-number-badge {
+          position: relative;
+          margin-right: 12px;
+
+          .badge-number {
+            background: linear-gradient(
+              135deg,
+              var(--ion-color-primary) 0%,
+              var(--ion-color-primary-shade) 100%
+            );
+            color: white;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 700;
+            min-width: 52px;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+          }
+
+          .badge-icon {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+            ion-icon {
+              font-size: 12px;
+              color: var(--ion-color-primary);
+            }
+          }
+        }
+
+        ion-label {
+          h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ion-color-dark);
+            margin-bottom: 4px;
+            line-height: 1.3;
+          }
+
+          .english-title {
+            font-size: 13px;
+            color: var(--ion-color-medium);
+            margin: 0 0 6px 0;
+            font-style: italic;
+          }
+
+          .hymn-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+
+            .verse-count {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              font-size: 12px;
+              color: var(--ion-color-medium);
+              background: rgba(var(--ion-color-primary-rgb), 0.1);
+              padding: 3px 8px;
+              border-radius: 8px;
+              font-weight: 500;
+
+              ion-icon {
+                font-size: 14px;
+                color: var(--ion-color-primary);
+              }
+            }
+          }
+        }
       }
     }
   }
 }
 
+// Empty State
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
   text-align: center;
-  padding: 40px 20px;
+  padding: var(--page-margin);
 
-  ion-icon {
-    font-size: 64px;
-    margin-bottom: 16px;
+  .empty-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      rgba(var(--ion-color-primary-rgb), 0.1) 0%,
+      rgba(var(--ion-color-primary-rgb), 0.05) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+
+    ion-icon {
+      font-size: 64px;
+      color: var(--ion-color-primary);
+    }
   }
 
   h2 {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    color: var(--ion-color-dark);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ion-text-color);
+    margin: 0 0 12px 0;
   }
 
   p {
     font-size: 16px;
     color: var(--ion-color-medium);
     margin: 0;
+    max-width: 400px;
+    line-height: 1.5;
   }
 }
 
+// Loading Container
+.loading-container {
+  padding: var(--page-margin) 0;
+
+  ion-skeleton-text {
+    --background-rgb: var(--ion-color-light-rgb);
+  }
+}
+
+// Item Sliding
 ion-item-sliding {
-  border-radius: 8px;
-  margin-bottom: 8px;
-  overflow: hidden;
+  margin-bottom: 12px;
+
+  ion-item-options {
+    border-radius: 12px;
+  }
+}
+
+// Dark mode enhancements
+body[data-theme="dark"] {
+  .transparent-header {
+    ion-toolbar {
+      --background: rgba(0, 0, 0, 0.95);
+    }
+  }
+
+  .header-container {
+    .overlay {
+      .favorite-info {
+        .favorite-meta {
+          .favorite-date,
+          .hymn-count {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+    }
+  }
+
+  .hymn-item {
+    --background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+
+    .hymn-number-badge {
+      .badge-icon {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+
+  .empty-state {
+    .empty-icon {
+      background: linear-gradient(
+        135deg,
+        rgba(var(--ion-color-primary-rgb), 0.25) 0%,
+        rgba(var(--ion-color-primary-rgb), 0.15) 100%
+      );
+      border: 2px solid rgba(var(--ion-color-primary-rgb), 0.3);
+    }
+  }
 }

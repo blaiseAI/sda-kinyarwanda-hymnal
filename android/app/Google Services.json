@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761437553480",
+    "project_id": "newstart-15071",
+    "storage_bucket": "newstart-15071.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761437553480:android:7cabadf8946597ac74a97d",
+        "android_client_info": {
+          "package_name": "com.devseb.sdaKinyarwandaHymnal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ6zagEsc1YYoHew5p6M-w5xZuJfttkms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, combineLatest } from 'rxjs';
+import { Observable, of, combineLatest, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AlertController, IonList } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -8,17 +8,21 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { Hymn } from 'src/app/models/hymn';
 import { FavouriteService, Favourite } from 'src/app/services/favourite.service';
-import { HymnService } from 'src/app/services/hymn.service'; // Add this import
+import { HymnService } from 'src/app/services/hymn.service';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-favorites-detail',
   templateUrl: './favorites-detail.page.html',
   styleUrls: ['./favorites-detail.page.scss'],
 })
-export class FavoritesDetailPage implements OnInit {
+export class FavoritesDetailPage implements OnInit, OnDestroy {
   favourite: Favourite = { id: '', name: '', hymnIds: [] };
   hymns$: Observable<Hymn[]> | undefined;
   editMode = false;
+  showEnglishTitles = false;
+  backgroundImageUrl: SafeStyle = '';
+  private languageSubscription?: Subscription;
   @ViewChild('myList', { static: true }) myList: IonList = {} as IonList;
 
   constructor(
@@ -26,10 +30,20 @@ export class FavoritesDetailPage implements OnInit {
     private favouriteService: FavouriteService,
     private alertController: AlertController,
     private hymnService: HymnService,
-    private sanitizer: DomSanitizer
-  ) {}
+    private sanitizer: DomSanitizer,
+    private languageService: LanguageService
+  ) {
+    // Generate background image once during construction
+    this.backgroundImageUrl = this.generateRandomBackgroundImage();
+  }
 
   ngOnInit() {
+    // Subscribe to language preference changes
+    this.languageSubscription = this.languageService.showEnglishTitles$.subscribe(
+      (showEnglish) => {
+        this.showEnglishTitles = showEnglish;
+      }
+    );
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const favourite$ = this.favouriteService.getFavouriteById(id);
@@ -54,19 +68,33 @@ export class FavoritesDetailPage implements OnInit {
     this.getHymnIdsCount();
   }
 
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+  }
+
+  async toggleLanguage() {
+    await this.languageService.toggleLanguage();
+    await this.playHapticFeedback();
+  }
+
   async removeHymnFromFavorite(hymn: Hymn) {
     this.playHapticFeedback();
     const alert = await this.alertController.create({
-      header: 'Confirm Remove',
-      message: `Are you sure you want to remove ${hymn.number} - ${hymn.title.kinyarwanda} from ${this.favourite.name} favourite list?`,
+      header: this.showEnglishTitles ? 'Confirm Remove' : 'Emeza Gukuraho',
+      message: this.showEnglishTitles
+        ? `Are you sure you want to remove ${hymn.number} - ${hymn.title.kinyarwanda} from ${this.favourite.name}?`
+        : `Uzi neza ko ushaka gukuraho ${hymn.number} - ${hymn.title.kinyarwanda} muri ${this.favourite.name}?`,
       buttons: [
         {
-          text: 'Cancel',
+          text: this.showEnglishTitles ? 'Cancel' : 'Kureka',
           role: 'cancel',
           cssClass: 'secondary',
         },
         {
-          text: 'Remove',
+          text: this.showEnglishTitles ? 'Remove' : 'Kuraho',
           cssClass: 'danger',
           handler: async () => {
             await this.favouriteService.removeHymnFromFavourite(
@@ -81,6 +109,10 @@ export class FavoritesDetailPage implements OnInit {
       ],
     });
     await alert.present();
+  }
+
+  getVerseCount(hymn: Hymn): number {
+    return hymn.verses?.count || hymn.verses?.text?.length || 0;
   }
 
   toggleEditMode() {
@@ -100,6 +132,10 @@ export class FavoritesDetailPage implements OnInit {
   }
 
   getBackgroundImageUrl(): SafeStyle {
+    return this.backgroundImageUrl;
+  }
+
+  private generateRandomBackgroundImage(): SafeStyle {
     const images = [];
     for (let i = 1; i <= 21; i++) {
       const imageName = `image${i}.jpg`;

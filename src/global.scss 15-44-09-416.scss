@@ -1,0 +1,150 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+:root {
+  --font-primary: "Inter", sans-serif;
+  --font-hymnal: "Crimson Pro", serif;
+  
+  // Gradient colors
+  --gradient-start: #6a85b6;
+  --gradient-end: #5a2736;
+  
+  // Additional gradients
+  --gradient-purple: linear-gradient(180deg, #4B6CB7 0%, #182848 100%);
+  --gradient-warm: linear-gradient(180deg, #6a85b6 0%, #5a2736 100%);
+}
+
+body {
+  font-family: var(--font-primary);
+}
+
+// Background gradient
+.hymn-detail-content {
+  --background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  min-height: 100vh;
+  color: white;
+}
+
+// Hymn specific text
+.hymn-text, 
+.hymn-verse, 
+.hymn-title {
+  font-family: var(--font-hymnal);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hymn-number {
+  font-size: 2rem;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.hymn-title {
+  font-weight: 500;
+  font-size: 1.8rem;
+  margin: 1.5rem 0;
+  opacity: 0.95;
+}
+
+.hymn-verse {
+  font-size: 1.4rem;
+  margin: 2rem 0;
+  padding: 0 1.5rem;
+  opacity: 0.9;
+}
+
+.hymn-refrain {
+  font-style: italic;
+  margin: 1.5rem 0;
+  padding: 1rem 2rem;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0 8px 8px 0;
+}
+
+// Container styling
+.hymn-container {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  // Add a subtle overlay gradient
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+}
+
+// Verse label styling
+.verse-label {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+// Add animation for content
+.hymn-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gradient-start: #2c3e50;
+    --gradient-end: #1a1a1a;
+  }
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";

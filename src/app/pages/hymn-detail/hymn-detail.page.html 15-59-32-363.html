@@ -1,0 +1,81 @@
+<ion-content [fullscreen]="true" class="hymn-detail-content">
+  <!-- Debug Info -->
+  <div style="padding: 10px; background: #f0f0f0;" *ngIf="false">
+    <p>Loading: {{ isLoading }}</p>
+    <p>Error: {{ error }}</p>
+    <p>Hymn: {{ hymn | json }}</p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner></ion-spinner>
+    <p>Loading hymn...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Content State -->
+  <ng-container *ngIf="hymn && !isLoading && !error">
+    <!-- Custom Header -->
+    <div class="custom-header">
+      <div class="header-controls">
+        <ion-button fill="clear" class="nav-button" (click)="goBack()">
+          <ion-icon name="chevron-back"></ion-icon>
+        </ion-button>
+        <div class="hymn-number">{{ hymn.number }}</div>
+        <ion-button fill="clear" class="nav-button" (click)="presentOptions($event)">
+          <ion-icon name="ellipsis-horizontal"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="hymn-container">
+      <!-- Title Section -->
+      <h1 class="hymn-title">{{ hymn.title.kinyarwanda }}</h1>
+      <p class="hymn-subtitle" *ngIf="hymn.title.english">{{ hymn.title.english }}</p>
+      
+      <!-- Verses -->
+      <div class="verses-container">
+        <div class="verse-section" *ngFor="let verse of hymn.verses.text">
+          <div class="verse-label">VERSE {{ verse.verse }}</div>
+          <div class="verse-text" [innerHTML]="verse.text"></div>
+        </div>
+
+        <!-- Chorus -->
+        <div class="chorus-section" *ngIf="hymn.verses.chorus">
+          <ion-button fill="clear" class="chorus-button">
+            <ion-icon name="musical-notes"></ion-icon>
+            <span>REFRAIN</span>
+          </ion-button>
+          <div class="chorus-text">
+            <p>{{ hymn.verses.chorus.kinyarwanda }}</p>
+            <p *ngFor="let line of hymn.verses.chorus.subtext">{{ line }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>
+
+<!-- Navigation Footer -->
+<ion-footer class="ion-no-border" *ngIf="hymn && !isLoading && !error">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateToHymn('previous')" [disabled]="!showPreviousButton">
+        <ion-icon name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title class="ion-text-center">{{ hymn.number }}/{{ totalHymns }}</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="navigateToHymn('next')" [disabled]="!showNextButton">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -14,12 +14,14 @@ import { ParallaxDirective } from './directives/parallax.directive';
 // import { AppRate } from '@ionic-native/app-rate';
 
 import { SharedModule } from './shared/shared.module'; // Import SharedModule
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
     TabnavPageModule,
     ScrollingModule,
@@ -28,7 +30,9 @@ import { SharedModule } from './shared/shared.module'; // Import SharedModule
     HttpClientModule,
     SharedModule, // Add SharedModule to imports
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

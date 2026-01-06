@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/info"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Daily Verse</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="verse-container" *ngIf="verse && !error">
+    <div class="verse-content">
+      <ion-text color="medium" class="reference">
+        {{ verse.random_verse.book }} {{ verse.random_verse.chapter }}:{{ verse.random_verse.verse }}
+      </ion-text>
+      
+      <ion-text class="verse-text">
+        <p>{{ verse.random_verse.text }}</p>
+      </ion-text>
+
+      <ion-text color="medium" class="translation">
+        {{ verse.translation.name }}
+      </ion-text>
+    </div>
+  </div>
+
+  <div class="error-container" *ngIf="error">
+    <ion-text color="danger">
+      {{ error }}
+    </ion-text>
+    <ion-button (click)="loadDailyVerse()" fill="clear">
+      Try Again
+    </ion-button>
+  </div>
+</ion-content>

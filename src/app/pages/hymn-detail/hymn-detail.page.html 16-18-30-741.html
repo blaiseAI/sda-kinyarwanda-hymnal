@@ -1,0 +1,73 @@
+<ion-content [fullscreen]="true" class="hymn-detail-content">
+  <!-- Minimal Header -->
+  <div class="minimal-header">
+    <div class="header-actions">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Back
+      </ion-button>
+      <div class="header-title">{{ hymn?.number }} - {{ hymn?.title?.kinyarwanda }}</div>
+      <div class="action-buttons">
+        <ion-button fill="clear" (click)="openAddToFavoriteModal()">
+          <ion-icon name="heart-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="presentPopover($event)">
+          <ion-icon name="ellipsis-horizontal"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="hymn-container" *ngIf="hymn && !isLoading && !error">
+    <div class="hymn-number"># {{ hymn.number }}</div>
+    <h1 class="hymn-title">{{ hymn.title.kinyarwanda }}</h1>
+    
+    <div class="verses-container">
+      <div class="verse-section" *ngFor="let verse of hymn.verses.text">
+        <div class="verse-number">{{ verse.verse }}.</div>
+        <div class="verse-text">{{ verse.text }}</div>
+        
+        <!-- Show chorus after first verse -->
+        <ng-container *ngIf="verse.verse === 1 && hymn.verses.chorus">
+          <div class="chorus-section">
+            <div class="chorus-text">
+              <p>{{ hymn.verses.chorus.kinyarwanda }}</p>
+              <p *ngFor="let line of hymn.verses.chorus.subtext">{{ line }}</p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner></ion-spinner>
+    <p>Loading hymn...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error }}</p>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border footer-nav" *ngIf="!isLoading && !error && hymn">
+  <ion-toolbar color="light" class="navigation-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateToPreviousHymn()" [disabled]="!showPreviousButton">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      {{ hymn.number }}/{{ totalHymns }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="navigateToNextHymn()" [disabled]="!showNextButton">
+        <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

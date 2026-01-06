@@ -71,3 +71,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Playwright MCP
+.playwright-mcp/

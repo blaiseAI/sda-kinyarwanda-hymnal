@@ -10,6 +10,9 @@ const config: CapacitorConfig = {
       launchAutoHide: true,
       launchShowDuration: 3000,
     },
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"],
+    },
   },
   ios: {
     preferredContentMode: 'mobile',
