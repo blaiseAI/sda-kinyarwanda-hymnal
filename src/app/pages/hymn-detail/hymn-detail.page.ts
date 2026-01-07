@@ -169,13 +169,13 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
       this.hymnSubscription = this.hymnService.getHymn(hymnNumber)
         .pipe(take(1))
         .subscribe({
-          next: (hymn) => {
+          next: async (hymn) => {
             if (hymn) {
               this.hymn = hymn;
               if (!hymn.image) {
                 this.hymnService.addToRecentlyViewed(hymn);
               }
-              this.setupAudio(hymnNumber);
+              await this.setupAudio(hymnNumber);
               this.updateNavigationButtons(hymnNumber);
               this.checkIfHymnIsFavorited(hymnNumber);
               
@@ -207,16 +207,83 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  setupAudio(hymnNumber: string | null) {
+  async setupAudio(hymnNumber: string | null) {
+    // Reset audio state
+    this.audioUrl = '';
+    this.audioError = false;
+    
     if (hymnNumber && this.hymn) {
-      this.audioUrl = `${this.hymnService.baseUrl}${hymnNumber.padStart(3, '0')}.mp3`;
-      const audioElement = new Audio(this.audioUrl);
-      audioElement.addEventListener('error', () => {
-        this.audioError = true;
-      });
+      // Add cache-busting parameter to match the actual URL format
+      const potentialAudioUrl = `${this.hymnService.baseUrl}${hymnNumber.padStart(3, '0')}.mp3?_=1`;
       
+      // Check if audio file exists by trying to load it
+      // HEAD requests might be blocked by CORS, so we use a test audio element
+      return new Promise<void>((resolve) => {
+        const testAudio = new Audio();
+        let resolved = false;
+        
+        const cleanup = () => {
+          testAudio.removeEventListener('canplaythrough', onSuccess);
+          testAudio.removeEventListener('error', onError);
+          testAudio.src = '';
+          testAudio.load();
+        };
+        
+        const onSuccess = () => {
+          if (!resolved) {
+            resolved = true;
+            this.audioUrl = potentialAudioUrl;
+            this.audioError = false;
+            cleanup();
+            resolve();
+          }
+        };
+        
+        const onError = () => {
+          if (!resolved) {
+            resolved = true;
+            this.audioError = true;
+            this.audioUrl = '';
+            cleanup();
+            resolve();
+          }
+        };
+        
+        // Set timeout to avoid hanging if audio never loads
+        const timeout = setTimeout(() => {
+          if (!resolved) {
+            resolved = true;
+            this.audioError = true;
+            this.audioUrl = '';
+            cleanup();
+            resolve();
+          }
+        }, 3000); // 3 second timeout
+        
+        testAudio.addEventListener('canplaythrough', () => {
+          clearTimeout(timeout);
+          onSuccess();
+        });
+        
+        testAudio.addEventListener('error', () => {
+          clearTimeout(timeout);
+          onError();
+        });
+        
+        // Try to load the audio
+        testAudio.preload = 'metadata';
+        testAudio.src = potentialAudioUrl;
+        testAudio.load();
+      }).then(() => {
+        if (this.hymn) {
+          this.currentLoop = 0;
+          this.maxLoops = this.hymn.verses ? this.hymn.verses.count : 0;
+          this.isLooping = false;
+        }
+      });
+    } else {
       this.currentLoop = 0;
-      this.maxLoops = this.hymn.verses ? this.hymn.verses.count : 0;
+      this.maxLoops = 0;
       this.isLooping = false;
     }
   }
