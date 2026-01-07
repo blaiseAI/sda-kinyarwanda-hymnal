@@ -43,7 +43,7 @@ export class ThemeService {
         const savedPref = await this.storage.get(this.DARK_MODE_KEY);
         if (savedPref === null) {
           await this.setTheme(e.matches, false);
-        }
+  }
       });
     } catch (error) {
       console.error('Error initializing theme:', error);

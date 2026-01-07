@@ -2,6 +2,10 @@
   --page-margin: 16px;
 }
 
+ion-content {
+  --padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
 ion-header {
   &::after {
     background: none;

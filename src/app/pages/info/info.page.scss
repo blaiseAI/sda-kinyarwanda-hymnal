@@ -28,7 +28,7 @@ ion-header {
 .settings-content {
   --background: var(--ion-background-color);
   --padding-top: 8px;
-  --padding-bottom: 80px; // Account for tab bar
+  --padding-bottom: calc(100px + env(safe-area-inset-bottom)); // Account for tab bar + safe area
 
   .settings-section {
     margin: 16px 0;

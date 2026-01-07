@@ -1,0 +1,35 @@
+// Modern Tab Bar Styling
+ion-tab-bar {
+  --background: rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.95);
+  --border: 0;
+  border-top: 1px solid var(--ion-color-light-shade);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  padding-bottom: env(safe-area-inset-bottom);
+  height: calc(56px + env(safe-area-inset-bottom));
+  
+  ion-tab-button {
+    --color: var(--ion-color-medium);
+    --color-selected: var(--ion-color-primary);
+    --ripple-color: var(--ion-color-primary);
+    
+    ion-icon {
+      font-size: 24px;
+    }
+    
+    ion-label {
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+  }
+}
+
+// Dark mode adjustments
+[data-theme="dark"] {
+  ion-tab-bar {
+    --background: rgba(var(--ion-background-color-rgb, 0, 0, 0), 0.95);
+    border-top-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  }
+}
+

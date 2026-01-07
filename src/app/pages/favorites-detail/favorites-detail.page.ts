@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, combineLatest, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { AlertController, IonList } from '@ionic/angular';
+import { AlertController, IonList, NavController } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
@@ -27,11 +27,13 @@ export class FavoritesDetailPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private favouriteService: FavouriteService,
     private alertController: AlertController,
     private hymnService: HymnService,
     private sanitizer: DomSanitizer,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private navCtrl: NavController
   ) {
     // Generate background image once during construction
     this.backgroundImageUrl = this.generateRandomBackgroundImage();
@@ -42,7 +44,7 @@ export class FavoritesDetailPage implements OnInit, OnDestroy {
     this.languageSubscription = this.languageService.showEnglishTitles$.subscribe(
       (showEnglish) => {
         this.showEnglishTitles = showEnglish;
-      }
+  }
     );
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -73,6 +75,10 @@ export class FavoritesDetailPage implements OnInit, OnDestroy {
     if (this.languageSubscription) {
       this.languageSubscription.unsubscribe();
     }
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 
   async toggleLanguage() {

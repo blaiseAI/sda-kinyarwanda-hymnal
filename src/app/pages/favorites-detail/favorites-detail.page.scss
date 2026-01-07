@@ -1,30 +1,13 @@
 :host {
   --page-margin: 16px;
-}
-
-// Header styles
-.transparent-header {
-  ion-toolbar {
-    --background: rgba(255, 255, 255, 0.95);
-    --border-width: 0;
-    --padding-top: env(safe-area-inset-top);
-    --min-height: calc(56px + env(safe-area-inset-top));
-
-    ion-title {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    ion-back-button {
-      --color: var(--ion-color-dark);
-    }
-  }
+  --header-height: 40vh;
 }
 
 // Header Container
 .header-container {
   position: relative;
-  height: 280px;
+  height: var(--header-height);
+  min-height: 320px;
   overflow: hidden;
 
   .header-image {
@@ -35,7 +18,51 @@
     bottom: 0;
     background-size: cover;
     background-position: center;
-    filter: brightness(0.9);
+    background-repeat: no-repeat;
+  }
+
+  .transparent-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+
+    ion-toolbar {
+      --background: transparent;
+      --border-width: 0;
+      --padding-top: env(safe-area-inset-top);
+      --padding-bottom: 8px;
+      --min-height: calc(56px + env(safe-area-inset-top));
+
+      ion-button {
+        --color: white;
+        --background: rgba(0, 0, 0, 0.4);
+        --background-hover: rgba(0, 0, 0, 0.5);
+        --border-radius: 50%;
+        --padding-start: 0;
+        --padding-end: 0;
+        width: 40px;
+        height: 40px;
+        margin: 0 4px;
+
+        &::part(native) {
+          padding: 0;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+
+        ion-icon {
+          font-size: 24px;
+        }
+
+        &.edit-active {
+          --background: var(--ion-color-primary);
+          --color: white;
+        }
+      }
+    }
   }
 
   .overlay {
@@ -46,42 +73,39 @@
     bottom: 0;
     background: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0.4) 40%,
-      rgba(0, 0, 0, 0.7) 70%,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.3) 30%,
+      rgba(0, 0, 0, 0.6) 60%,
       rgba(0, 0, 0, 0.85) 100%
     );
     display: flex;
     align-items: flex-end;
     padding: 24px;
+    padding-bottom: 32px;
 
     .favorite-info {
       width: 100%;
+      color: white;
 
-      .favorite-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 48px;
-        height: 48px;
-        background: var(--ion-color-primary);
-        border-radius: 12px;
+      .favorite-label {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        opacity: 0.9;
         margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
-
-        ion-icon {
-          font-size: 28px;
-          color: white;
-        }
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
 
       .favorite-title {
         font-size: 28px;
         font-weight: 700;
         color: white;
-        margin: 0 0 12px 0;
-        line-height: 1.2;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        margin: 0;
+        margin-bottom: 12px;
+        line-height: 1.25;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        letter-spacing: -0.5px;
       }
 
       .favorite-meta {
@@ -97,11 +121,10 @@
           gap: 6px;
           font-size: 14px;
           color: white;
-          opacity: 0.95;
+          opacity: 0.85;
           background: rgba(255, 255, 255, 0.15);
           padding: 6px 12px;
           border-radius: 20px;
-          backdrop-filter: blur(10px);
 
           ion-icon {
             font-size: 16px;
@@ -119,7 +142,9 @@
   margin-top: -24px;
   position: relative;
   padding: var(--page-margin);
-  min-height: calc(100vh - 280px);
+  // Extra padding for bottom navigation + safe area
+  padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  min-height: calc(100vh - var(--header-height) + 24px);
 
   .hymns-wrapper {
     .hymn-list {

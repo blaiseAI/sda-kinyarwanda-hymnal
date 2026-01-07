@@ -1,50 +1,162 @@
-.verse-container {
+:host {
+  --page-margin: 16px;
+  --header-height: 40vh;
+}
+
+// Header Container
+.header-container {
+  position: relative;
+  height: var(--header-height);
+  min-height: 320px;
+  overflow: hidden;
+
+  .header-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .transparent-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+
+    ion-toolbar {
+      --background: transparent;
+      --border-width: 0;
+      --padding-top: env(safe-area-inset-top);
+      --padding-bottom: 8px;
+      --min-height: calc(56px + env(safe-area-inset-top));
+
+      ion-button {
+        --color: white;
+        --background: rgba(0, 0, 0, 0.4);
+        --background-hover: rgba(0, 0, 0, 0.5);
+        --border-radius: 50%;
+        --padding-start: 0;
+        --padding-end: 0;
+        width: 40px;
+        height: 40px;
+        margin: 0 4px;
+
+        &::part(native) {
+          padding: 0;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+
+        ion-icon {
+          font-size: 24px;
+        }
+      }
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.3) 30%,
+      rgba(0, 0, 0, 0.6) 60%,
+      rgba(0, 0, 0, 0.85) 100%
+    );
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
-  padding: 20px;
+    align-items: flex-end;
+    padding: 24px;
+    padding-bottom: 32px;
+
+    .verse-info {
+      width: 100%;
+      color: white;
+
+      .verse-label {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        opacity: 0.9;
+        margin-bottom: 12px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .verse-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        margin-bottom: 12px;
+        line-height: 1.25;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        letter-spacing: -0.5px;
+      }
+
+      .verse-reference {
+        font-size: 16px;
+        font-weight: 400;
+        margin: 0;
+        opacity: 0.85;
+        line-height: 1.4;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+// Content Container
+.content-container {
+  background: var(--ion-background-color);
+  border-radius: 24px 24px 0 0;
+  margin-top: -24px;
+  position: relative;
+  padding: var(--page-margin);
+  padding-top: 32px;
+  // Extra padding for bottom navigation + safe area
+  padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  min-height: calc(100vh - var(--header-height) + 24px);
 }
 
 .verse-content {
   max-width: 600px;
   width: 100%;
+  margin: 0 auto;
   text-align: center;
-  padding: 20px;
-  border-radius: 12px;
-  background: var(--ion-card-background);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.reference {
-  display: block;
-  font-size: 1.2em;
-  font-weight: var(--heading-font-weight);
-  margin-bottom: 16px;
-  font-variation-settings: 'opsz' var(--heading-opsz);
-  letter-spacing: -0.02em;
+  padding: 32px 16px;
 }
 
 .verse-text {
   display: block;
-  font-size: 1.4em;
-  line-height: 1.6;
-  margin: 20px 0;
-  font-weight: var(--body-font-weight);
+  font-size: 1.5em;
+  line-height: 1.7;
+  margin: 0 0 24px 0;
+  font-weight: 400;
   color: var(--ion-text-color);
-  font-variation-settings: 'opsz' var(--body-opsz);
   letter-spacing: -0.01em;
+
+  p {
+    margin: 0;
+    font-style: italic;
+  }
 }
 
 .translation {
   display: block;
-  font-size: 0.9em;
+  font-size: 1em;
   margin-top: 16px;
-  font-style: italic;
-  font-weight: var(--font-weight-light);
-  font-variation-settings: 'opsz' var(--body-opsz);
-  opacity: 0.8;
+  font-weight: 500;
+  opacity: 0.7;
 }
 
 .error-container {
@@ -52,7 +164,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100%;
-  padding: 20px;
+  min-height: 50vh;
+  padding: 32px;
   text-align: center;
+
+  .error-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 16px 0 24px 0;
+  }
 }

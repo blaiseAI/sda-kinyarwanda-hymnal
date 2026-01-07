@@ -1,39 +1,43 @@
-<ion-header class="transparent-header">
-  <ion-toolbar color="light">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/favorites"></ion-back-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center">
-      <strong>{{ favourite.name }}</strong>
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="toggleLanguage()">
-        <ion-icon slot="icon-only" [name]="showEnglishTitles ? 'language-outline' : 'text-outline'"></ion-icon>
-      </ion-button>
-      <ion-button fill="solid" shape="round" color="medium" (click)="toggleEditMode()">
-        <ion-icon slot="icon-only" [name]="editMode ? 'checkmark-outline' : 'create-outline'"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="ion-no-padding">
+  <!-- Header with Background Image -->
   <div class="header-container">
     <div class="header-image" [style.background-image]="getBackgroundImageUrl()"></div>
+    
+    <!-- Transparent Header Toolbar -->
+    <div class="transparent-header">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="goBack()">
+            <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="toggleLanguage()">
+            <ion-icon [name]="showEnglishTitles ? 'language-outline' : 'text-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button (click)="toggleEditMode()" [class.edit-active]="editMode">
+            <ion-icon [name]="editMode ? 'checkmark-outline' : 'create-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </div>
+
+    <!-- Dark Overlay -->
     <div class="overlay">
+      <!-- Favorite List Info Overlay -->
       <div class="favorite-info">
-        <div class="favorite-icon">
-          <ion-icon name="heart"></ion-icon>
+        <div class="favorite-label">
+          {{ showEnglishTitles ? 'FAVORITE LIST' : 'URUTONDE RW\'IBYITORWA' }}
         </div>
         <h1 class="favorite-title">{{ favourite.name }}</h1>
-        <div class="favorite-meta">
+        <div class="favorite-meta" *ngIf="(hymns$ | async) as hymns">
+          <span class="hymn-count">
+            <ion-icon name="musical-notes"></ion-icon>
+            {{ hymns.length }} {{ showEnglishTitles ? (hymns.length === 1 ? 'Hymn' : 'Hymns') : 'Indirimbo' }}
+          </span>
           <span class="favorite-date">
             <ion-icon name="calendar-outline"></ion-icon>
             {{ favourite.id | date:'mediumDate' }}
-          </span>
-          <span class="hymn-count" *ngIf="(hymns$ | async) as hymns">
-            <ion-icon name="musical-notes"></ion-icon>
-            {{ hymns.length }} {{ showEnglishTitles ? (hymns.length === 1 ? 'Hymn' : 'Hymns') : 'Indirimbo' }}
           </span>
         </div>
       </div>

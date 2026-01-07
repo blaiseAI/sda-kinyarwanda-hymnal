@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonContent, PopoverController, Platform, ModalController, LoadingController, IonRouterOutlet, GestureController, AlertController, ToastController } from '@ionic/angular';
+import { IonContent, PopoverController, Platform, ModalController, LoadingController, IonRouterOutlet, GestureController, AlertController, ToastController, NavController } from '@ionic/angular';
 import { HymnService } from '../../services/hymn.service';
 import { Hymn } from '../../models/hymn';
 import { HymnOptionsSheetComponent } from '../../components/hymn-options-sheet/hymn-options-sheet.component';
@@ -54,11 +54,8 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
   error: string | null = null;
   totalHymns = 500;
-  private headerHeight: number = 0;
-  private parallaxImage: HTMLElement | null = null;
   private hymnSubscription?: Subscription;
   private languageSubscription?: Subscription;
-  private lastScrollPosition: number = 0;
   fontSize = 16; // Default font size in pixels
   isHymnFavorited = false; // Track if current hymn is in any favorites
   private gesture?: any;
@@ -82,7 +79,8 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     private alertController: AlertController,
     private toastController: ToastController,
     public readonly ionRouterOutlet: IonRouterOutlet,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private navCtrl: NavController
   ) {
     this.initStorage();
   }
@@ -108,19 +106,9 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      const element = document.querySelector('.parallax-image');
-      if (element instanceof HTMLElement) {
-        this.parallaxImage = element;
-        this.headerHeight = element.clientHeight;
-        
-        this.content.scrollEvents = true;
-        this.content.ionScroll.subscribe(event => this.handleScroll(event));
-      }
-      
-      // Set up swipe gestures
+    // Simplified initialization without parallax effect
+    // Set up swipe gestures for navigation
       this.setupSwipeGestures();
-    }, 500);
   }
 
   private async setupSwipeGestures() {
@@ -149,38 +137,6 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     this.gesture.enable();
   }
 
-  private handleScroll(event: any) {
-    if (!this.parallaxImage) return;
-    
-    const scrollTop = event.detail.scrollTop;
-    this.lastScrollPosition = scrollTop;
-    
-    const newPosition = scrollTop * 0.5;
-    const opacity = 1 - (scrollTop / this.headerHeight);
-    
-    this.parallaxImage.style.transform = `translate3d(0, ${newPosition}px, 0)`;
-    this.parallaxImage.style.opacity = opacity.toString();
-  }
-
-  private saveScrollPosition() {
-    this.content.getScrollElement().then(element => {
-      this.lastScrollPosition = element.scrollTop;
-    });
-  }
-
-  private restoreScrollPosition() {
-    setTimeout(() => {
-      this.content.scrollToPoint(0, this.lastScrollPosition, 0);
-    }, 100);
-  }
-
-  ionViewDidEnter() {
-    this.restoreScrollPosition();
-  }
-
-  ionViewWillLeave() {
-    this.saveScrollPosition();
-  }
 
   async ngOnInit() {
     const loading = await this.loadingController.create({
@@ -606,6 +562,10 @@ export class HymnDetailPage implements OnInit, AfterViewInit, OnDestroy {
     });
 
     await alert.present();
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 
   navigateToPreviousHymn() {

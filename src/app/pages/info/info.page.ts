@@ -53,9 +53,9 @@ export class InfoPage implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private themeService: ThemeService
   ) {
-    this.appName = this.appInfoService.getAppName();
+    this.appName = this.appInfoService.getAppNameSync();
     this.appDescription = this.appInfoService.getAppDescription();
-    this.appVersion = this.appInfoService.getAppVersion();
+    this.appVersion = this.appInfoService.getAppVersionSync();
     this.isMobile = this.appInfoService.isMobile();
     this.isIOS = Capacitor.getPlatform() === 'ios';
     this.initStorage();
@@ -88,6 +88,10 @@ export class InfoPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    // Load actual version from native app (will update from fallback if native not available)
+    this.appVersion = await this.appInfoService.getAppVersion();
+    this.appName = await this.appInfoService.getAppName();
+
     // Subscribe to theme changes
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(
       (isDark) => {
@@ -129,6 +133,11 @@ export class InfoPage implements OnInit, OnDestroy {
   async toggleLanguage() {
     await this.languageService.toggleLanguage();
     await this.playHapticFeedback();
+  }
+
+  async openDailyVerse() {
+    await this.playHapticFeedback();
+    this.router.navigate(['/daily-verse']);
   }
 
   async toggleHymnalReminder(event: any) {

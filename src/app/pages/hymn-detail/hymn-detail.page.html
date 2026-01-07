@@ -1,35 +1,45 @@
-<ion-header>
-  <ion-toolbar color="light">
-    <ng-container *ngIf="hymn">
-      <ion-title>Indirimbo {{ hymn.number }}</ion-title>
-    </ng-container>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/hymns"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button fill="solid" shape="round" color="medium" (click)="toggleAudioPlayer()" 
-                  *ngIf="audioUrl && !audioError" [class.audio-active]="showAudioPlayer">
-        <ion-icon slot="icon-only" name="musical-note"></ion-icon>
-      </ion-button>
-      <ion-button fill="solid" shape="round" color="medium" (click)="toggleFavorite()" 
-                  [class.favorited]="isHymnFavorited">
-        <ion-icon slot="icon-only" [name]="isHymnFavorited ? 'heart' : 'heart-outline'"></ion-icon>
-      </ion-button>
-      <ion-button fill="solid" shape="round" color="medium" (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="ion-no-padding">
   <ng-container *ngIf="!isLoading && !error && hymn; else loadingTemplate">
+    <!-- Header with Background Image -->
     <div class="header-container">
       <div class="parallax-image" [style.background-image]="getBackgroundImageUrl(hymn.number)">
+        <!-- Transparent Header Toolbar -->
+        <div class="transparent-header">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="goBack()">
+                <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end">
+              <ion-button (click)="toggleAudioPlayer()" *ngIf="audioUrl && !audioError" 
+                          [class.audio-active]="showAudioPlayer">
+                <ion-icon name="headset-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button (click)="toggleFavorite()" [class.favorited]="isHymnFavorited">
+                <ion-icon [name]="isHymnFavorited ? 'heart' : 'heart-outline'" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button (click)="presentPopover($event)">
+                <ion-icon name="ellipsis-horizontal" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </div>
+
+        <!-- Dark Overlay -->
         <div class="overlay">
+          <!-- Hymn Info Overlay -->
           <div class="hymn-info">
-            <h1>{{ hymn.title.kinyarwanda }}</h1>
-            <p *ngIf="hymn.title.english" class="english-title">{{ hymn.title.english }}</p>
+            <div class="hymn-number-label">
+              {{ showEnglishTitles ? 'HYMN' : 'INDIRIMBO' }} {{ hymn.number }}
+            </div>
+            <h1 class="hymn-title">{{ showEnglishTitles && hymn.title.english ? hymn.title.english : hymn.title.kinyarwanda }}</h1>
+            <p *ngIf="showEnglishTitles && hymn.title.english" class="hymn-subtitle">
+              {{ hymn.title.kinyarwanda }}
+            </p>
+            <p *ngIf="!showEnglishTitles && hymn.title.english" class="hymn-subtitle">
+              {{ hymn.title.english }}
+            </p>
           </div>
         </div>
       </div>

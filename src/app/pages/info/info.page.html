@@ -112,6 +112,17 @@
             </ng-template>
           </ion-modal>
         </ion-item>
+        
+        <!-- View Today's Verse -->
+        <ion-item button detail lines="none" class="settings-item divider-top" (click)="openDailyVerse()">
+          <div class="item-icon">
+            <ion-icon name="eye-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ showEnglishTitles ? 'View Today\'s Verse' : 'Reba Ijambo ry\'Uyu Munsi' }}</h3>
+            <p>{{ showEnglishTitles ? 'Read today\'s scripture' : 'Soma ijambo ry\'umunsi' }}</p>
+          </ion-label>
+        </ion-item>
       </ion-list>
     </div>
   </div>
