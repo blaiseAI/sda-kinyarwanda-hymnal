@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
 import { ThemeService } from './services/theme.service';
 
 @Component({
@@ -13,13 +15,14 @@ export class AppComponent implements OnInit {
   constructor(
     private platform: Platform,
     private alertController: AlertController,
-    private themeService: ThemeService  // Theme service will auto-initialize
+    private themeService: ThemeService,  // Theme service will auto-initialize
+    private router: Router
   ) {
     this.initializeApp();
   }
 
   ngOnInit() {
-    // Implementation of OnInit interface
+    this.setupDeepLinks();
   }
 
   initializeApp() {
@@ -119,6 +122,77 @@ export class AppComponent implements OnInit {
       await alert.present();
     } catch (error) {
       console.error('Error showing update alert:', error);
+    }
+  }
+
+  private setupDeepLinks() {
+    // Handle app opened via deep link
+    App.addListener('appUrlOpen', (data: { url: string }) => {
+      console.log('Deep link received:', data.url);
+      this.handleDeepLink(data.url);
+    });
+
+    // Handle app state change (when app is already open and receives a deep link)
+    App.addListener('appStateChange', (state: { isActive: boolean }) => {
+      if (state.isActive) {
+        // App became active - could check for pending deep links here if needed
+        console.log('App state changed, isActive:', state.isActive);
+      }
+    });
+  }
+
+  private handleDeepLink(url: string) {
+    try {
+      // Parse the URL
+      const urlObj = new URL(url);
+      
+      // Handle different URL patterns
+      if (urlObj.hostname === 'sda-kinyarwanda-hymnal.vercel.app' || 
+          urlObj.hostname.includes('vercel.app')) {
+        // Website deep link: https://sda-kinyarwanda-hymnal.vercel.app/hymns/5
+        this.handleWebsiteDeepLink(urlObj);
+      } else if (urlObj.protocol === 'sdahymnal:') {
+        // Custom URL scheme: sdahymnal://hymns/5
+        this.handleCustomSchemeDeepLink(urlObj);
+      }
+    } catch (error) {
+      console.error('Error handling deep link:', error);
+      // If URL parsing fails, try to extract path manually
+      this.handleManualUrlParsing(url);
+    }
+  }
+
+  private handleWebsiteDeepLink(urlObj: URL) {
+    const pathParts = urlObj.pathname.split('/').filter(p => p);
+    
+    if (pathParts[0] === 'hymns' && pathParts[1]) {
+      const hymnNumber = pathParts[1];
+      // Navigate to hymn detail
+      this.router.navigate(['/tabs/hymns', hymnNumber], {
+        replaceUrl: true
+      });
+    }
+  }
+
+  private handleCustomSchemeDeepLink(urlObj: URL) {
+    const pathParts = urlObj.pathname.split('/').filter(p => p);
+    
+    if (pathParts[0] === 'hymns' && pathParts[1]) {
+      const hymnNumber = pathParts[1];
+      this.router.navigate(['/tabs/hymns', hymnNumber], {
+        replaceUrl: true
+      });
+    }
+  }
+
+  private handleManualUrlParsing(url: string) {
+    // Fallback: try to extract hymn number from URL string
+    const hymnMatch = url.match(/\/hymns\/(\d+)/);
+    if (hymnMatch && hymnMatch[1]) {
+      const hymnNumber = hymnMatch[1];
+      this.router.navigate(['/tabs/hymns', hymnNumber], {
+        replaceUrl: true
+      });
     }
   }
 }

@@ -1,3 +1,21 @@
 {
-  "xcodeProjectName": "SDA Kinyarwanda Hymnal"
+  "appId": "com.devseb.sdaKinyarwandaHymnal",
+  "appName": "SDA Kinyarwanda Hymnal",
+  "webDir": "www",
+  "server": {
+    "url": "https://sda-kinyarwanda-hymnal.vercel.app",
+    "cleartext": true
+  },
+  "plugins": {
+    "App": {
+      "launchUrl": "https://sda-kinyarwanda-hymnal.vercel.app"
+    }
+  },
+  "ios": {
+    "scheme": "sdahymnal",
+    "xcodeProjectName": "SDA Kinyarwanda Hymnal"
+  },
+  "android": {
+    "scheme": "sdahymnal"
+  }
 }
